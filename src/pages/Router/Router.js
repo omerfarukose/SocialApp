@@ -34,7 +34,7 @@ export const Router = ( ) => {
                 screenOptions={({ route }) => ({
                     headerShown: false,
                     tabBarShowLabel: false,
-                    tabBarActiveTintColor: "orange",
+                    tabBarActiveTintColor: "white",
                     tabBarInactiveTintColor: 'white',
                     tabBarStyle:{
                         backgroundColor: AppColors.mainColor,
@@ -61,7 +61,6 @@ export const Router = ( ) => {
                 <Stack.Screen name={"Login"} component={LoginScreen}/>
                 <Stack.Screen name={"SignUp"} component={SignUpScreen}/>
                 <Stack.Screen name={"HomeTabs"} component={HomeTabs}/>
-
 
             </Stack.Navigator>
 

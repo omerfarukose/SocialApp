@@ -16,6 +16,7 @@ export const HomeScreen = ( ) => {
             <MyNavbar/>
 
             <ScrollView
+                overScrollMode={"never"}
                 style={{
                     flex: 1,
                 }}>

@@ -46,7 +46,7 @@ export const LoginScreen = ({navigation}) => {
                                 fontSize: 55
                             }}>
 
-                            SOCIAL
+                            social
 
                         </Text>
 

@@ -11,8 +11,10 @@ export const MyCardView = ( props ) => {
         <View
             style={{
                 padding: 10,
+                paddingTop: 20,
                 borderBottomWidth: 1,
-                borderBottomColor: "#d7d5d5"
+                borderBottomColor: "#d7d5d5",
+                backgroundColor: "white",
             }}>
 
             {/*image & text*/}
@@ -29,7 +31,7 @@ export const MyCardView = ( props ) => {
                         width: 60,
                         height: 60,
                         borderRadius: 99,
-                        borderWidth: 2,
+                        borderWidth: 1,
                         borderColor: AppColors.mainColor,
                     }}/>
 
@@ -37,7 +39,8 @@ export const MyCardView = ( props ) => {
                     style={{
                         flex: 1,
                         padding: 10,
-                        fontWeight: "bold",
+                        paddingTop: 0,
+                        fontWeight: "400",
                         fontSize: 15,
                     }}>
 
