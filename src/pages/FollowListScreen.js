@@ -14,7 +14,8 @@ export const FollowListScreen = () => {
                 backgroundColor: "white"
             }}>
 
-            <MyNavbar/>
+            <MyNavbar
+                showGoBack={true}/>
 
             <ScrollView
                 overScrollMode={"never"}

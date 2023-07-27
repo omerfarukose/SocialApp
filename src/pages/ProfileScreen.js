@@ -5,6 +5,7 @@ import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { MyNavbar } from "../components/MyNavbar";
 import { TabView, SceneMap } from 'react-native-tab-view';
 import React from "react";
+import { navigate } from "./Router/RootNavigation";
 
 
 
@@ -72,7 +73,8 @@ export const ProfileScreen = ( ) => {
                             flexDirection: "row",
                         }}>
 
-                        <View
+                        <TouchableOpacity
+                            onPress={() => navigate("FollowList")}
                             style={{
                                 alignItems: "center",
                                 marginTop: 20,
@@ -100,7 +102,7 @@ export const ProfileScreen = ( ) => {
 
                             </Text>
 
-                        </View>
+                        </TouchableOpacity>
 
                         <Image
                             source={{uri: "https://cdn-icons-png.flaticon.com/512/1053/1053244.png"}}
@@ -113,7 +115,8 @@ export const ProfileScreen = ( ) => {
                                 marginTop: -65,
                             }}/>
 
-                        <View
+                        <TouchableOpacity
+                            onPress={() => navigate("FollowList")}
                             style={{
                                 alignItems: "center",
                                 marginTop: 20,
@@ -141,7 +144,7 @@ export const ProfileScreen = ( ) => {
 
                             </Text>
 
-                        </View>
+                        </TouchableOpacity>
 
                     </View>
 
