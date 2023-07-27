@@ -69,6 +69,7 @@ export const LoginScreen = ({navigation}) => {
                                 placeholder={"Parola"}/>
 
                             <MyButton
+                                onPress={() => navigation.navigate("HomeTabs")}
                                 title={"Giriş"}/>
 
                             <TouchableOpacity

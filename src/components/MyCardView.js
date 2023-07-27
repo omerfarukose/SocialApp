@@ -12,6 +12,7 @@ export const MyCardView = ( props ) => {
             style={{
                 padding: 10,
                 borderBottomWidth: 1,
+                borderBottomColor: "#d7d5d5"
             }}>
 
             {/*image & text*/}
@@ -19,13 +20,14 @@ export const MyCardView = ( props ) => {
                 style={{
                     flexDirection: "row",
                     marginBottom: 20,
+                    alignItems: "flex-start",
                 }}>
 
                 <Image
-                    source={{uri: "https://cdn1.ntv.com.tr/gorsel/1eHc83UgkUWFddmDZb5Smw.jpg?width=1000&mode=crop&scale=both"}}
+                    source={{uri: "https://cdn-icons-png.flaticon.com/512/1053/1053244.png"}}
                     style={{
-                        width: 70,
-                        height: 70,
+                        width: 60,
+                        height: 60,
                         borderRadius: 99,
                         borderWidth: 2,
                         borderColor: AppColors.mainColor,
@@ -36,10 +38,10 @@ export const MyCardView = ( props ) => {
                         flex: 1,
                         padding: 10,
                         fontWeight: "bold",
-                        fontSize: 18,
+                        fontSize: 15,
                     }}>
 
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
                 </Text>
 

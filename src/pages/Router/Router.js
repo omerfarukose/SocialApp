@@ -6,32 +6,12 @@ import { HomeScreen } from "../HomeScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AppColors } from "../../values/Colors";
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { ProfileScreen } from "../ProfileScreen";
 
 export const Router = ( ) => {
 
     const Stack = createNativeStackNavigator();
     const Tab = createBottomTabNavigator();
-
-    let screenOptions = {
-        tabBarStyle:{
-            backgroundColor:'white',
-            height:50,
-        },
-        tabBarItemStyle:{
-            margin:5,
-            width: 30,
-            borderRadius:10,
-        },
-        tabBarLabelStyle: {
-            fontWeight: "700",
-            fontSize: 15
-        },
-        tabBarLabelPosition: "beside-icon",
-        tabBarIconStyle: { display: "none" },
-        tabBarInactiveTintColor: "#aeb8b9",
-        tabBarActiveTintColor: "#0164FF",
-        headerShown: false
-    }
 
     const getTabBarIcon = ( routeName ) => {
         let iconName;
@@ -40,20 +20,8 @@ export const Router = ( ) => {
             case 'Home':
                 iconName = 'home';
                 break;
-            case 'ProfileStack':
+            case 'Profile':
                 iconName = 'user';
-                break;
-            case 'CreateProjectScreen':
-                iconName = 'plus-circle';
-                break;
-            case 'NotificationsScreen':
-                iconName = 'bell';
-                break;
-            case 'SearchScreen':
-                iconName = 'search';
-                break;
-            case 'LoginScreen':
-                iconName = 'log-in';
                 break;
         }
 
@@ -66,8 +34,8 @@ export const Router = ( ) => {
                 screenOptions={({ route }) => ({
                     headerShown: false,
                     tabBarShowLabel: false,
-                    tabBarActiveTintColor: AppColors.loginButtonColor,
-                    tabBarInactiveTintColor: 'gray',
+                    tabBarActiveTintColor: "orange",
+                    tabBarInactiveTintColor: 'white',
                     tabBarStyle:{
                         backgroundColor: AppColors.mainColor,
                         height:50,
@@ -76,6 +44,7 @@ export const Router = ( ) => {
                 })}>
 
                 <Tab.Screen name="Home" component={HomeScreen} />
+                <Tab.Screen name="Profile" component={ProfileScreen} />
 
             </Tab.Navigator>
         )
@@ -89,10 +58,10 @@ export const Router = ( ) => {
                     headerShown: false
                 }}>
 
-                <Stack.Screen name={"HomeTabs"} component={HomeTabs}/>
-
                 <Stack.Screen name={"Login"} component={LoginScreen}/>
                 <Stack.Screen name={"SignUp"} component={SignUpScreen}/>
+                <Stack.Screen name={"HomeTabs"} component={HomeTabs}/>
+
 
             </Stack.Navigator>
 

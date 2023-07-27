@@ -1,6 +1,6 @@
 import { SafeAreaView, ScrollView, Text, View } from "react-native";
-import { AppColors } from "../values/Colors";
 import { MyCardView } from "../components/MyCardView";
+import { MyNavbar } from "../components/MyNavbar";
 
 export const HomeScreen = ( ) => {
 
@@ -8,40 +8,26 @@ export const HomeScreen = ( ) => {
         <SafeAreaView
             style={{
                 flex: 1,
+                backgroundColor: "white",
                 alignItems: "center",
                 justifyContent: "space-evenly"
             }}>
 
-            <View
-                style={{
-                    backgroundColor: AppColors.mainColor,
-                    width: "100%",
-                    height: 50,
-                    alignItems: "center",
-                    justifyContent: "center",
-                }}>
+            <MyNavbar/>
 
-                <Text
-                    style={{
-                        color: "white",
-                        fontWeight: "bold",
-                        fontSize: 20
-                    }}>
-
-                    social
-
-                </Text>
-
-            </View>
-
-            <View
+            <ScrollView
                 style={{
                     flex: 1,
                 }}>
 
                 <MyCardView/>
+                <MyCardView/>
+                <MyCardView/>
+                <MyCardView/>
+                <MyCardView/>
+                <MyCardView/>
 
-            </View>
+            </ScrollView>
 
         </SafeAreaView>
     )
