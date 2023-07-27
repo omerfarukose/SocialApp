@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { ProfileScreen } from "../ProfileScreen";
 import { FollowListScreen } from "../FollowListScreen";
 import { navigationRef } from "./RootNavigation";
+import { AddPostScreen } from "../AddPostScreen";
 
 export const Router = ( ) => {
 
@@ -21,6 +22,9 @@ export const Router = ( ) => {
         switch (routeName) {
             case 'Home':
                 iconName = 'home';
+                break;
+            case 'AddPost':
+                iconName = 'plus';
                 break;
             case 'ProfileStack':
                 iconName = 'user';
@@ -47,7 +51,7 @@ export const Router = ( ) => {
 
                 <Tab.Screen name="Home" component={HomeScreen} />
 
-                {/* add */}
+                <Tab.Screen name="AddPost" component={AddPostScreen} />
 
                 <Tab.Screen name="ProfileStack" component={ProfileStack} />
 

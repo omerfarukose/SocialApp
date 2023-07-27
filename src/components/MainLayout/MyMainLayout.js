@@ -1,10 +1,10 @@
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, View } from "react-native";
 import { MyNavbar } from "../MyNavbar";
 import React from "react";
 
 export const MyMainLayout = ( props ) => {
 
-    let { showGoBack } = props;
+    let { showGoBack, layoutStyle } = props;
 
     return(
         <SafeAreaView
@@ -15,9 +15,17 @@ export const MyMainLayout = ( props ) => {
 
             <MyNavbar showGoBack={showGoBack}/>
 
-            {
-                props.children
-            }
+            <View
+                style={{
+                    flex: 1,
+                    ...layoutStyle
+                }}>
+
+                {
+                    props.children
+                }
+
+            </View>
 
         </SafeAreaView>
     )
