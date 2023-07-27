@@ -4,7 +4,6 @@ import {
     Platform,
     SafeAreaView,
     Text,
-    TextInput,
     TouchableOpacity,
     TouchableWithoutFeedback,
     View,
@@ -18,6 +17,12 @@ export const LoginScreen = ({navigation}) => {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+
+    const _handleLoginPress = ( ) => {
+
+        // Todo: check is all inputs exist
+
+    }
 
     return(
         <SafeAreaView

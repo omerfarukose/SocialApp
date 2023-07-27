@@ -1,14 +1,14 @@
 import { ScrollView } from "react-native";
 import { MyCardView } from "../components/MyCardView";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const HomeScreen = ( ) => {
 
+    const [postList, setPostList] =  useState([]);
+
     useEffect(() => {
-
-        // get all posts
-
+        // TODO: get all post, use flatlist instead of scroll view
     }, [])
 
     return(

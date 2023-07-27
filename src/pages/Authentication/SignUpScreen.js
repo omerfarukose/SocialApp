@@ -20,6 +20,11 @@ export const SignUpScreen = ({navigation}) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const _handleSignupPress = ( ) => {
+
+        // Todo: check inputs
+
+    }
 
     return(
         <SafeAreaView
