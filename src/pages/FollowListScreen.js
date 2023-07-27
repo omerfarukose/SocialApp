@@ -4,18 +4,13 @@ import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { AppColors } from "../values/Colors";
 import React from "react";
 import { MyUserItem } from "../components/MyUserItem";
+import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 
 export const FollowListScreen = () => {
 
     return(
-        <SafeAreaView
-            style={{
-                flex: 1,
-                backgroundColor: "white"
-            }}>
-
-            <MyNavbar
-                showGoBack={true}/>
+        <MyMainLayout
+            showGoBack={true}>
 
             <ScrollView
                 overScrollMode={"never"}
@@ -30,8 +25,6 @@ export const FollowListScreen = () => {
 
             </ScrollView>
 
-
-
-        </SafeAreaView>
+        </MyMainLayout>
     )
 }

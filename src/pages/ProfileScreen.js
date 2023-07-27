@@ -6,6 +6,7 @@ import { MyNavbar } from "../components/MyNavbar";
 import { TabView, SceneMap } from 'react-native-tab-view';
 import React from "react";
 import { navigate } from "./Router/RootNavigation";
+import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 
 
 
@@ -32,13 +33,7 @@ export const ProfileScreen = ( ) => {
     ]);
 
     return(
-        <SafeAreaView
-            style={{
-                flex: 1,
-                backgroundColor: "white",
-            }}>
-
-            <MyNavbar/>
+        <MyMainLayout>
 
             <View
                 style={{
@@ -185,7 +180,7 @@ export const ProfileScreen = ( ) => {
 
 
                 {/*post & likes*/}
-{/*                <TabView
+                {/*                <TabView
                     navigationState={{ index, routes }}
                     renderScene={renderScene}
                     onIndexChange={setIndex}
@@ -194,6 +189,6 @@ export const ProfileScreen = ( ) => {
 
             </View>
 
-        </SafeAreaView>
+        </MyMainLayout>
     )
 }

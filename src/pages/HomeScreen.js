@@ -1,19 +1,12 @@
 import { SafeAreaView, ScrollView, Text, View } from "react-native";
 import { MyCardView } from "../components/MyCardView";
 import { MyNavbar } from "../components/MyNavbar";
+import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 
 export const HomeScreen = ( ) => {
 
     return(
-        <SafeAreaView
-            style={{
-                flex: 1,
-                backgroundColor: "white",
-                alignItems: "center",
-                justifyContent: "space-evenly"
-            }}>
-
-            <MyNavbar/>
+        <MyMainLayout>
 
             <ScrollView
                 overScrollMode={"never"}
@@ -30,6 +23,6 @@ export const HomeScreen = ( ) => {
 
             </ScrollView>
 
-        </SafeAreaView>
+        </MyMainLayout>
     )
 }
