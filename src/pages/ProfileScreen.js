@@ -1,10 +1,34 @@
-import { Image, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import { Image, SafeAreaView, Text, TouchableOpacity, View, useWindowDimensions } from "react-native";
 import { AppColors } from "../values/Colors";
 import { MyButton } from "../components/MyButton";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { MyNavbar } from "../components/MyNavbar";
+import { TabView, SceneMap } from 'react-native-tab-view';
+import React from "react";
+
+
 
 export const ProfileScreen = ( ) => {
+    const layout = useWindowDimensions();
+
+    const FirstRoute = () => (
+        <View style={{ flex: 1, backgroundColor: '#ff4081' }} />
+    );
+
+    const SecondRoute = () => (
+        <View style={{ flex: 1, backgroundColor: '#673ab7' }} />
+    );
+
+    const renderScene = SceneMap({
+        first: FirstRoute,
+        second: SecondRoute,
+    });
+
+    const [index, setIndex] = React.useState(0);
+    const [routes] = React.useState([
+        { key: 'first', title: 'First' },
+        { key: 'second', title: 'Second' },
+    ]);
 
     return(
         <SafeAreaView
@@ -155,6 +179,15 @@ export const ProfileScreen = ( ) => {
                     </View>
 
                 </View>
+
+
+                {/*post & likes*/}
+{/*                <TabView
+                    navigationState={{ index, routes }}
+                    renderScene={renderScene}
+                    onIndexChange={setIndex}
+                    initialLayout={{ width: layout.width }}
+                />*/}
 
             </View>
 

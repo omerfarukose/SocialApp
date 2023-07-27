@@ -7,6 +7,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AppColors } from "../../values/Colors";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { ProfileScreen } from "../ProfileScreen";
+import { FollowListScreen } from "../FollowListScreen";
+import { navigationRef } from "./RootNavigation";
 
 export const Router = ( ) => {
 
@@ -20,7 +22,7 @@ export const Router = ( ) => {
             case 'Home':
                 iconName = 'home';
                 break;
-            case 'Profile':
+            case 'ProfileStack':
                 iconName = 'user';
                 break;
         }
@@ -44,14 +46,29 @@ export const Router = ( ) => {
                 })}>
 
                 <Tab.Screen name="Home" component={HomeScreen} />
-                <Tab.Screen name="Profile" component={ProfileScreen} />
+                <Tab.Screen name="ProfileStack" component={ProfileStack} />
 
             </Tab.Navigator>
         )
     }
 
+    function ProfileStack(){
+        return(
+            <Stack.Navigator
+                screenOptions={{
+                    headerShown: false
+                }}>
+
+                <Stack.Screen name={"FollowList"} component={FollowListScreen}/>
+                <Stack.Screen name={"Profile"} component={ProfileScreen}/>
+
+            </Stack.Navigator>
+        )
+    }
+
     return(
-        <NavigationContainer>
+        <NavigationContainer
+            ref={navigationRef}>
 
             <Stack.Navigator
                 screenOptions={{
