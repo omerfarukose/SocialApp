@@ -9,6 +9,8 @@ export const  AddPostScreen = ( ) => {
 
     const [post, setPost] = useState("")
 
+    // TODO: post upload request
+
     return(
         <MyMainLayout
             layoutStyle={{

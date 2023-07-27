@@ -1,16 +1,18 @@
-import { Image, SafeAreaView, ScrollView, Text, TouchableOpacity } from "react-native";
-import { MyNavbar } from "../components/MyNavbar";
-import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-import { AppColors } from "../values/Colors";
+import { FlatList, ScrollView } from "react-native";
 import React from "react";
 import { MyUserItem } from "../components/MyUserItem";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 
-export const FollowListScreen = () => {
+export const FollowListScreen = (props) => {
+
+    let { userList } = props;
+
+    // TODO: use flatList instead of ScrollView
 
     return(
         <MyMainLayout
             showGoBack={true}>
+
 
             <ScrollView
                 overScrollMode={"never"}

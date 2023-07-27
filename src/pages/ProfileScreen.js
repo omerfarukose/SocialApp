@@ -1,36 +1,63 @@
-import { Image, SafeAreaView, Text, TouchableOpacity, View, useWindowDimensions } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { AppColors } from "../values/Colors";
 import { MyButton } from "../components/MyButton";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-import { MyNavbar } from "../components/MyNavbar";
-import { TabView, SceneMap } from 'react-native-tab-view';
-import React from "react";
 import { navigate } from "./Router/RootNavigation";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 
-
-
 export const ProfileScreen = ( ) => {
-    const layout = useWindowDimensions();
 
-    const FirstRoute = () => (
-        <View style={{ flex: 1, backgroundColor: '#ff4081' }} />
-    );
+    useEffect(() => {
 
-    const SecondRoute = () => (
-        <View style={{ flex: 1, backgroundColor: '#673ab7' }} />
-    );
+        // --- get user info
+        // username
+        // avatar url
+        // follower value
+        // following value
+        // post list
+        // like list
 
-    const renderScene = SceneMap({
-        first: FirstRoute,
-        second: SecondRoute,
-    });
+    },[])
 
-    const [index, setIndex] = React.useState(0);
-    const [routes] = React.useState([
-        { key: 'first', title: 'First' },
-        { key: 'second', title: 'Second' },
-    ]);
+    const [avatarUrl, setAvatarUrl] = useState("https://cdn-icons-png.flaticon.com/512/1053/1053244.png");
+    const [followerCount, setFollowerCount] = useState(100);
+    const [followingCount, setFollowingCount] = useState(99);
+
+    const _renderFollowInfoText = ( title, value ) => {
+        return(
+            <TouchableOpacity
+                onPress={() => navigate("FollowList")}
+                style={{
+                    alignItems: "center",
+                    marginTop: 20,
+                }}>
+
+                <Text
+                    style={{
+                        fontSize: 20,
+                        fontWeight: "bold",
+                        color: AppColors.mainColor,
+                    }}>
+
+                    { value }
+
+                </Text>
+
+                <Text
+                    style={{
+                        fontSize: 20,
+                        fontWeight: "bold",
+                        color: AppColors.mainColor,
+                    }}>
+
+                    { title }
+
+                </Text>
+
+            </TouchableOpacity>
+        )
+    }
 
     return(
         <MyMainLayout>
@@ -68,39 +95,10 @@ export const ProfileScreen = ( ) => {
                             flexDirection: "row",
                         }}>
 
-                        <TouchableOpacity
-                            onPress={() => navigate("FollowList")}
-                            style={{
-                                alignItems: "center",
-                                marginTop: 20,
-                            }}>
-
-                            <Text
-                                style={{
-                                    fontSize: 20,
-                                    fontWeight: "bold",
-                                    color: AppColors.mainColor,
-                                }}>
-
-                                100
-
-                            </Text>
-
-                            <Text
-                                style={{
-                                    fontSize: 20,
-                                    fontWeight: "bold",
-                                    color: AppColors.mainColor,
-                                }}>
-
-                                Following
-
-                            </Text>
-
-                        </TouchableOpacity>
+                        { _renderFollowInfoText("Follower", followerCount) }
 
                         <Image
-                            source={{uri: "https://cdn-icons-png.flaticon.com/512/1053/1053244.png"}}
+                            source={{uri: avatarUrl}}
                             style={{
                                 width: 130,
                                 height: 130,
@@ -110,36 +108,8 @@ export const ProfileScreen = ( ) => {
                                 marginTop: -65,
                             }}/>
 
-                        <TouchableOpacity
-                            onPress={() => navigate("FollowList")}
-                            style={{
-                                alignItems: "center",
-                                marginTop: 20,
-                            }}>
+                        { _renderFollowInfoText("Following", followingCount) }
 
-                            <Text
-                                style={{
-                                    fontSize: 20,
-                                    fontWeight: "bold",
-                                    color: AppColors.mainColor,
-                                }}>
-
-                                100
-
-                            </Text>
-
-                            <Text
-                                style={{
-                                    fontSize: 20,
-                                    fontWeight: "bold",
-                                    color: AppColors.mainColor,
-                                }}>
-
-                                Follower
-
-                            </Text>
-
-                        </TouchableOpacity>
 
                     </View>
 
@@ -177,15 +147,6 @@ export const ProfileScreen = ( ) => {
                     </View>
 
                 </View>
-
-
-                {/*post & likes*/}
-                {/*                <TabView
-                    navigationState={{ index, routes }}
-                    renderScene={renderScene}
-                    onIndexChange={setIndex}
-                    initialLayout={{ width: layout.width }}
-                />*/}
 
             </View>
 
