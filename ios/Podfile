@@ -29,6 +29,7 @@ target 'SocialApp' do
   
   # for firebase
   use_frameworks! :linkage => :static
+  $RNFirebaseAsStaticFramework = true
 
   use_react_native!(
     :path => config[:reactNativePath],

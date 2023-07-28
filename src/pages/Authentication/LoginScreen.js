@@ -1,12 +1,6 @@
 import {
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-    SafeAreaView,
-    Text, TextInput,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    View,
+    Image, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, Text,
+    TouchableOpacity, TouchableWithoutFeedback, View,
 } from "react-native";
 import { AppColors } from "../../values/Colors";
 import { useState } from "react";
@@ -16,6 +10,7 @@ import auth from '@react-native-firebase/auth';
 import Toast from 'react-native-toast-message';
 import { validateEmail } from "../../helper/functions/MyHelperFunctions";
 import { navigate } from "../Router/RootNavigation";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 export const LoginScreen = ({navigation}) => {
 
@@ -83,16 +78,12 @@ export const LoginScreen = ({navigation}) => {
                             justifyContent: "space-evenly",
                         }}>
 
-                        <Text
+                        <Image
+                            source={require("../../assets/images/logo.png")}
                             style={{
-                                color: "white",
-                                fontWeight: "bold",
-                                fontSize: 55
-                            }}>
-
-                            social
-
-                        </Text>
+                                width: "80%",
+                                resizeMode: "contain"
+                            }}/>
 
                         <View
                             style={{

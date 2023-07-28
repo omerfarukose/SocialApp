@@ -1,4 +1,5 @@
 import {
+    Image,
     Keyboard,
     KeyboardAvoidingView,
     Platform,
@@ -122,16 +123,12 @@ export const SignUpScreen = ( ) => {
                             justifyContent: "space-evenly",
                         }}>
 
-                        <Text
+                        <Image
+                            source={require("../../assets/images/logo.png")}
                             style={{
-                                color: "white",
-                                fontWeight: "bold",
-                                fontSize: 55
-                            }}>
-
-                            SOCIAL
-
-                        </Text>
+                                width: "80%",
+                                resizeMode: "contain"
+                            }}/>
 
                         <View
                             style={{

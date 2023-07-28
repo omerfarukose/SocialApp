@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { AppColors } from "../values/Colors";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { goBack, navigate } from "../pages/Router/RootNavigation";
@@ -41,18 +41,14 @@ export const MyNavbar = ( props ) => {
                 </TouchableOpacity>
             }
 
-            <Text
+            <Image
+                source={require("../assets/images/logo.png")}
                 style={{
-                    color: "white",
-                    fontWeight: "bold",
-                    fontSize: hp(3.5),
+                    height: "85%",
+                    resizeMode: "contain",
                     position: "absolute",
                     alignSelf: "center",
-                }}>
-
-                social
-
-            </Text>
+                }}/>
 
             {
                 showLogout &&
