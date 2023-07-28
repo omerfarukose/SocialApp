@@ -3,7 +3,7 @@ import {
     KeyboardAvoidingView,
     Platform,
     SafeAreaView,
-    Text,
+    Text, TextInput,
     TouchableOpacity,
     TouchableWithoutFeedback,
     View,
@@ -12,15 +12,51 @@ import { AppColors } from "../../values/Colors";
 import { useState } from "react";
 import { MyButton } from "../../components/MyButton";
 import { MyTextInput } from "../../components/Input/MyTextInput";
+import auth from '@react-native-firebase/auth';
+import Toast from 'react-native-toast-message';
+import { validateEmail } from "../../helper/functions/MyHelperFunctions";
+import { navigate } from "../Router/RootNavigation";
 
 export const LoginScreen = ({navigation}) => {
 
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const showToast = (text, type = "error") => {
+        Toast.show({
+            type: type,
+            text2: text
+        });
+    }
 
     const _handleLoginPress = ( ) => {
 
-        // Todo: check is all inputs exist
+        if (validateEmail(email)) {
+
+            if (password) {
+
+                auth()
+                    .signInWithEmailAndPassword(email, password)
+                    .then(() => {
+                        console.log('user login success !');
+
+                        navigate("HomeTabs")
+                    })
+                    .catch(error => {
+                        console.error(error);
+
+                        showToast("Kullanıcı Adı & Parola hatalı")
+                    });
+
+            } else {
+                // show password alert !
+                showToast("Parola Giriniz")
+            }
+
+        } else {
+            // show username alert !
+            showToast("Geçersiz E-mail")
+        }
 
     }
 
@@ -64,9 +100,9 @@ export const LoginScreen = ({navigation}) => {
                             }}>
 
                             <MyTextInput
-                                value={username}
-                                setValue={setUsername}
-                                placeholder={"Kullanıcı Adı"}/>
+                                value={email}
+                                setValue={setEmail}
+                                placeholder={"E-mail"}/>
 
                             <MyTextInput
                                 value={password}
@@ -74,7 +110,7 @@ export const LoginScreen = ({navigation}) => {
                                 placeholder={"Parola"}/>
 
                             <MyButton
-                                onPress={() => navigation.navigate("HomeTabs")}
+                                onPress={() => _handleLoginPress()}
                                 title={"Giriş"}/>
 
                             <TouchableOpacity

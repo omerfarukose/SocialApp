@@ -3,7 +3,7 @@ import { heightPercentageToDP, widthPercentageToDP as wp } from "react-native-re
 
 export const MyTextInput = ( props ) => {
 
-    let { value, setValue, placeholder, inputStyle } = props;
+    let { value, setValue, placeholder, inputStyle, secureText } = props;
 
     return(
         <TextInput
@@ -11,6 +11,7 @@ export const MyTextInput = ( props ) => {
             onChangeText={setValue}
             placeholder={placeholder}
             multiline={true}
+            secureTextEntry={secureText}
             style={{
                 backgroundColor: "white",
                 width: wp(80),

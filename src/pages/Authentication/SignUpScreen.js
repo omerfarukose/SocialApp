@@ -4,7 +4,6 @@ import {
     Platform,
     SafeAreaView,
     Text,
-    TextInput,
     TouchableOpacity,
     TouchableWithoutFeedback,
     View,
@@ -13,16 +12,79 @@ import { AppColors } from "../../values/Colors";
 import { useState } from "react";
 import { MyTextInput } from "../../components/Input/MyTextInput";
 import { MyButton } from "../../components/MyButton";
+import auth from '@react-native-firebase/auth';
+import Toast from 'react-native-toast-message';
+import { navigate } from "../Router/RootNavigation";
+import { validateEmail } from "../../helper/functions/MyHelperFunctions";
 
-export const SignUpScreen = ({navigation}) => {
+
+export const SignUpScreen = ( ) => {
 
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const showToast = (text, type = "error") => {
+        Toast.show({
+            type: type,
+            text2: text
+        });
+    }
+
     const _handleSignupPress = ( ) => {
 
-        // Todo: check inputs
+        if (username) {
+
+            if (validateEmail(email)) {
+
+                // least 6 char
+                if (password) {
+
+                    if (password.length >= 6) {
+
+                        auth()
+                        .createUserWithEmailAndPassword(email, password)
+                        .then(() => {
+                            console.log('User account created & signed in!');
+
+                            showToast("Kullanıcı Oluşturuldu", "success");
+
+                            navigate("Login");
+                        })
+                        .catch(error => {
+                            if (error.code === 'auth/email-already-in-use') {
+                                console.log('That email address is already in use!');
+
+                                showToast("E-mail adresi zaten kullanılıyor");
+                            }
+
+                            if (error.code === 'auth/invalid-email') {
+                                console.log('That email address is invalid');
+                                showToast("Geçersiz e-mail");
+                            }
+
+                            console.error(error);
+                        });
+
+                    } else {
+                        // show password alert !
+                        showToast("Parola en az 6 karakter olmalı");
+                    }
+
+                } else {
+                    // show password alert !
+                    showToast("Parola Giriniz")
+                }
+
+            } else {
+                // show username alert !
+                showToast("Geçersiz E-mail")
+            }
+
+        }  else {
+            // show username alert !
+            showToast("Kullanıcı Adı Giriniz")
+        }
 
     }
 
@@ -81,10 +143,11 @@ export const SignUpScreen = ({navigation}) => {
                                 placeholder={"Parola"}/>
 
                             <MyButton
+                                onPress={() => _handleSignupPress()}
                                 title={"Kayıt"}/>
 
                             <TouchableOpacity
-                                onPress={() => navigation.navigate("Login")}>
+                                onPress={() => navigate("Login")}>
 
                                 <Text
                                     style={{
