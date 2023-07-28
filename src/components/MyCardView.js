@@ -35,18 +35,36 @@ export const MyCardView = ( props ) => {
                         borderColor: AppColors.mainColor,
                     }}/>
 
-                <Text
-                    style={{
-                        flex: 1,
-                        padding: 10,
-                        paddingTop: 0,
-                        fontWeight: "400",
-                        fontSize: 15,
-                    }}>
+                <View>
 
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    <Text
+                        style={{
+                            flex: 1,
+                            paddingLeft: 10,
+                            paddingTop: 0,
+                            fontWeight: "bold",
+                            fontSize: 20,
+                        }}>
 
-                </Text>
+                        { cardData.username}
+
+                    </Text>
+
+                    <Text
+                        style={{
+                            flex: 1,
+                            padding: 10,
+                            paddingTop: 0,
+                            fontWeight: "400",
+                            fontSize: 15,
+                        }}>
+
+                        { cardData.value}
+
+                    </Text>
+
+
+                </View>
 
             </View>
 

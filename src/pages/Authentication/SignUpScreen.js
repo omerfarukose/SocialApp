@@ -9,20 +9,24 @@ import {
     View,
 } from "react-native";
 import { AppColors } from "../../values/Colors";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { MyTextInput } from "../../components/Input/MyTextInput";
 import { MyButton } from "../../components/MyButton";
 import auth from '@react-native-firebase/auth';
 import Toast from 'react-native-toast-message';
 import { navigate } from "../Router/RootNavigation";
 import { validateEmail } from "../../helper/functions/MyHelperFunctions";
+import firestore from "@react-native-firebase/firestore";
+import { UserContext } from "../../contexts/UserContext";
 
 
 export const SignUpScreen = ( ) => {
 
-    const [username, setUsername] = useState("");
+    const [myUsername, setMyUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    let { setUsername } = useContext(UserContext)
 
     const showToast = (text, type = "error") => {
         Toast.show({
@@ -33,7 +37,7 @@ export const SignUpScreen = ( ) => {
 
     const _handleSignupPress = ( ) => {
 
-        if (username) {
+        if (myUsername) {
 
             if (validateEmail(email)) {
 
@@ -47,8 +51,18 @@ export const SignUpScreen = ( ) => {
                         .then(() => {
                             console.log('User account created & signed in!');
 
-                            showToast("Kullanıcı Oluşturuldu", "success");
+                            setUsername(myUsername);
 
+                            firestore()
+                                .collection('Users')
+                                .add({
+                                    username: myUsername,
+                                })
+                                .then(() => {
+                                    console.log('Post added!');
+                                });
+
+                            showToast("Kullanıcı Oluşturuldu", "success");
                             navigate("Login");
                         })
                         .catch(error => {
@@ -128,8 +142,8 @@ export const SignUpScreen = ( ) => {
                             }}>
 
                             <MyTextInput
-                                value={username}
-                                setValue={setUsername}
+                                value={myUsername}
+                                setValue={setMyUsername}
                                 placeholder={"Kullanıcı Adı"}/>
 
                             <MyTextInput

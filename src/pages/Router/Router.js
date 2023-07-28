@@ -50,9 +50,7 @@ export const Router = ( ) => {
                 })}>
 
                 <Tab.Screen name="Home" component={HomeScreen} />
-
                 <Tab.Screen name="AddPost" component={AddPostScreen} />
-
                 <Tab.Screen name="ProfileStack" component={ProfileStack} />
 
             </Tab.Navigator>
@@ -82,9 +80,9 @@ export const Router = ( ) => {
                     headerShown: false
                 }}>
 
+                <Stack.Screen name={"HomeTabs"} component={HomeTabs}/>
                 <Stack.Screen name={"Login"} component={LoginScreen}/>
                 <Stack.Screen name={"SignUp"} component={SignUpScreen}/>
-                <Stack.Screen name={"HomeTabs"} component={HomeTabs}/>
 
             </Stack.Navigator>
 

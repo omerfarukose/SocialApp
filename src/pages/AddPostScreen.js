@@ -1,15 +1,32 @@
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import { Keyboard, KeyboardAvoidingView, Platform, Text, TouchableWithoutFeedback, View } from "react-native";
 import { MyTextInput } from "../components/Input/MyTextInput";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { heightPercentageToDP, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { MyButton } from "../components/MyButton";
+import firestore from '@react-native-firebase/firestore';
+import { UserContext } from "../contexts/UserContext";
 
 export const  AddPostScreen = ( ) => {
 
     const [post, setPost] = useState("")
 
-    // TODO: post upload request
+    let {username} = useContext(UserContext)
+
+    const _handleAddPost = ( ) => {
+
+        firestore()
+            .collection('Posts')
+            .add({
+                id: 0,
+                username: username,
+                value: post
+            })
+            .then(() => {
+                console.log('Post added!');
+            });
+
+    }
 
     return(
         <MyMainLayout
@@ -43,7 +60,7 @@ export const  AddPostScreen = ( ) => {
                             }}/>
 
                         <MyButton
-                            onPress={() => {}}
+                            onPress={() => _handleAddPost()}
                             title={"Paylaş"}
                             style={{
                                 width: wp(30),
