@@ -60,7 +60,7 @@ export const ProfileScreen = ( ) => {
     }
 
     return(
-        <MyMainLayout>
+        <MyMainLayout showLogout={true}>
 
             <View
                 style={{

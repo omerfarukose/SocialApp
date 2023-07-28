@@ -40,6 +40,9 @@ export const LoginScreen = ({navigation}) => {
                     .then(() => {
                         console.log('user login success !');
 
+                        setPassword("");
+                        setEmail("");
+
                         navigate("HomeTabs")
                     })
                     .catch(error => {

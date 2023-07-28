@@ -4,7 +4,7 @@ import React from "react";
 
 export const MyMainLayout = ( props ) => {
 
-    let { showGoBack, layoutStyle } = props;
+    let { showGoBack, showLogout, layoutStyle } = props;
 
     return(
         <SafeAreaView
@@ -13,7 +13,7 @@ export const MyMainLayout = ( props ) => {
                 backgroundColor: "white",
             }}>
 
-            <MyNavbar showGoBack={showGoBack}/>
+            <MyNavbar showGoBack={showGoBack} showLogout={showLogout}/>
 
             <View
                 style={{
