@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import firestore from "@react-native-firebase/firestore";
 import { UserInfo } from "../helper/functions/UserInfo";
 import { post } from "axios";
+import { GetUserInfoById } from "../helper/functions/firebase/Firestore";
 
 export const MyCardView = ( props ) => {
 
@@ -16,25 +17,14 @@ export const MyCardView = ( props ) => {
     const [avatarUri, setAvatarUri] = useState("");
 
     useEffect(() => {
-        // get user info
-        _getUserInfoById(cardData.userId);
+
+        GetUserInfoById(cardData.userId)
+            .then((res) => {
+                setUsername(res.username);
+                setAvatarUri(res.avatar);
+            })
 
     },[])
-
-    const _getUserInfoById = async (id) => {
-
-        await firestore()
-            .collection('Users')
-            .where('id', '==', id)
-            .get()
-            .then(querySnapshot => {
-                let userInfo = querySnapshot.docs[0].data();
-                console.log("user card info : ", userInfo);
-
-                setUsername(userInfo.username);
-                setAvatarUri(userInfo.avatar);
-            });
-    }
 
     const _getUserPotsList = async ( ) => {
 

@@ -1,17 +1,17 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export class UserInfo{
+export async function GetUserId(){
+    return await AsyncStorage.getItem("userId");
+}
 
-    async GetUserId() {
-        let id = await AsyncStorage.getItem("userId");
+export async function SetUserId(id){
+     await AsyncStorage.setItem("userId", id);
+}
 
-        return id || "";
-    }
+export async function GetUserName(){
+    return await AsyncStorage.getItem("username");
+}
 
-    async GetUserName() {
-        let name = await AsyncStorage.getItem("username");
-
-        return name;
-    }
-
+export async function SetUsername(name){
+    await AsyncStorage.setItem("username", name);
 }

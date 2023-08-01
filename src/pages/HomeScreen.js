@@ -1,26 +1,19 @@
 import { MyCardView } from "../components/MyCardView";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import { useEffect, useState } from "react";
-import firestore from '@react-native-firebase/firestore';
 import { FlatList } from "react-native";
+import { GetAllPosts } from "../helper/functions/firebase/Firestore";
 
 export const HomeScreen = ( ) => {
 
     const [postList, setPostList] =  useState([]);
 
     useEffect(() => {
-
-        getPostList();
-
+        GetAllPosts()
+            .then((res) => {
+                setPostList(res);
+            })
     }, [])
-
-    const getPostList = async ( ) => {
-
-        const posts = await firestore().collection('Posts').get();
-        console.log("post list : ", posts.docs[0].data());
-
-        setPostList(posts.docs);
-    }
 
     return(
         <MyMainLayout>

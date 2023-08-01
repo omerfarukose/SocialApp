@@ -6,13 +6,12 @@ import { AppColors } from "../../values/Colors";
 import { useState } from "react";
 import { MyButton } from "../../components/MyButton";
 import { MyTextInput } from "../../components/Input/MyTextInput";
-import auth from '@react-native-firebase/auth';
 import Toast from 'react-native-toast-message';
 import { validateEmail } from "../../helper/functions/MyHelperFunctions";
 import { navigate } from "../Router/RootNavigation";
-import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-import firestore from "@react-native-firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SignIn } from "../../helper/functions/firebase/Auth";
+import { GetUserInfoByEmail } from "../../helper/functions/firebase/Firestore";
 
 export const LoginScreen = ({navigation}) => {
 
@@ -26,55 +25,37 @@ export const LoginScreen = ({navigation}) => {
         });
     }
 
-    const _getUserInfoByEmail = async ( ) => {
-
-        await firestore()
-            .collection('Users')
-            .where('email', '==', email)
-            .get()
-            .then(querySnapshot => {
-                console.log("res : ", querySnapshot.docs[0].data());
-                let userInfo = querySnapshot.docs[0].data();
-
-                console.log("user info : ", userInfo);
-
-                AsyncStorage.setItem('userId', userInfo.id);
-                AsyncStorage.setItem('username', userInfo.username);
-            });
-    }
-
     const _handleLoginPress = ( ) => {
 
         if (validateEmail(email)) {
 
             if (password) {
 
-                auth()
-                    .signInWithEmailAndPassword(email, password)
+                SignIn(email, password)
                     .then(() => {
-                        console.log('user login success !');
-
                         setPassword("");
                         setEmail("");
 
-                        _getUserInfoByEmail();
+                        GetUserInfoByEmail(email)
+                            .then((userInfo) => {
+                                AsyncStorage.setItem('userId', userInfo.id);
+                                AsyncStorage.setItem('username', userInfo.username);
+                            })
 
                         navigate("HomeTabs")
                     })
-                    .catch(error => {
-                        console.error(error);
-
-                        showToast("Kullanıcı Adı & Parola hatalı")
-                    });
+                    .catch(() => {
+                        showToast("Kullanıcı Adı & Parola hatalı");
+                    })
 
             } else {
                 // show password alert !
-                showToast("Parola Giriniz")
+                showToast("Parola Giriniz");
             }
 
         } else {
             // show username alert !
-            showToast("Geçersiz E-mail")
+            showToast("Geçersiz E-mail");
         }
 
     }

@@ -1,22 +1,16 @@
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
-import { Keyboard, KeyboardAvoidingView, Platform, Text, TouchableWithoutFeedback, View } from "react-native";
+import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, View } from "react-native";
 import { MyTextInput } from "../components/Input/MyTextInput";
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import { heightPercentageToDP, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { MyButton } from "../components/MyButton";
-import firestore from '@react-native-firebase/firestore';
-import { UserContext } from "../contexts/UserContext";
 import { navigate } from "./Router/RootNavigation";
 import Toast from "react-native-toast-message";
-import { UserInfo } from "../helper/functions/UserInfo";
-import uuid from "react-native-uuid";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { CreatePost } from "../helper/functions/firebase/Firestore";
 
 export const  AddPostScreen = ( ) => {
 
     const [post, setPost] = useState("")
-
-    let {username, userId} = useContext(UserContext);
 
     const showToast = (text, type = "success") => {
         Toast.show({
@@ -26,30 +20,13 @@ export const  AddPostScreen = ( ) => {
     }
 
     const _handleAddPost = async ( ) => {
-
-        let userInfo = new UserInfo();
-        let userId = await userInfo.GetUserId();
-        let postId = uuid.v4();
-
-        console.log("user id for post : ", userId);
-
-        firestore()
-            .collection('Posts')
-            .add({
-                id: postId,
-                text: post,
-                userId: userId
-            })
+        CreatePost(post)
             .then(() => {
-                console.log('Post added!');
-
                 setPost("");
 
                 showToast("Post paylaşıldı !");
-
                 navigate("Home");
-            });
-
+            })
     }
 
     return(
@@ -93,8 +70,6 @@ export const  AddPostScreen = ( ) => {
                             }}/>
 
                     </View>
-
-
 
                 </TouchableWithoutFeedback>
 

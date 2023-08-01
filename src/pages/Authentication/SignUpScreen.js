@@ -10,25 +10,20 @@ import {
     View,
 } from "react-native";
 import { AppColors } from "../../values/Colors";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { MyTextInput } from "../../components/Input/MyTextInput";
 import { MyButton } from "../../components/MyButton";
-import auth from '@react-native-firebase/auth';
 import Toast from 'react-native-toast-message';
 import { navigate } from "../Router/RootNavigation";
 import { validateEmail } from "../../helper/functions/MyHelperFunctions";
-import firestore from "@react-native-firebase/firestore";
-import { UserContext } from "../../contexts/UserContext";
-import uuid from 'react-native-uuid';
-
+import { CreateUser } from "../../helper/functions/firebase/Firestore";
+import { SignUp } from "../../helper/functions/firebase/Auth";
 
 export const SignUpScreen = ( ) => {
 
     const [myUsername, setMyUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
-    let { setUsername, setUserId } = useContext(UserContext)
 
     const showToast = (text, type = "error") => {
         Toast.show({
@@ -48,32 +43,27 @@ export const SignUpScreen = ( ) => {
 
                     if (password.length >= 6) {
 
-                        auth()
-                        .createUserWithEmailAndPassword(email, password)
-                        .then(() => {
-                            console.log('User account created & signed in!');
-
-                            _firebaseCreateUserObject(myUsername, email);
-
-                            showToast("Kullanıcı Oluşturuldu", "success");
-                            navigate("Login");
-                        })
-                        .catch(error => {
-                            if (error.code === 'auth/email-already-in-use') {
-                                console.log('That email address is already in use!');
-
-                                _firebaseCreateUserObject(myUsername, email);
-
-                                showToast("E-mail adresi zaten kullanılıyor");
-                            }
-
-                            if (error.code === 'auth/invalid-email') {
-                                console.log('That email address is invalid');
-                                showToast("Geçersiz e-mail");
-                            }
-
-                            console.error(error);
-                        });
+                        SignUp(email, password)
+                            .then(() => {
+                                CreateUser(myUsername, email).then(() => {
+                                    showToast("Kullanıcı Oluşturuldu", "success");
+                                    navigate("Login");
+                                })
+                            })
+                            .catch((errorCode) => {
+                                switch (errorCode) {
+                                    case 'auth/email-already-in-use':
+                                        console.log('That email address is already in use!');
+                                        showToast("E-mail adresi zaten kullanılıyor");
+                                        break;
+                                    case 'auth/invalid-email':
+                                        console.log('That email address is invalid');
+                                        showToast("Geçersiz e-mail");
+                                        break;
+                                    default:
+                                        showToast("Kullanıcı oluşturulamadı");
+                                }
+                            })
 
                     } else {
                         // show password alert !
@@ -95,30 +85,6 @@ export const SignUpScreen = ( ) => {
             showToast("Kullanıcı Adı Giriniz")
         }
 
-    }
-
-    const _firebaseCreateUserObject = (username, email) => {
-
-        let userId = uuid.v4();
-
-        setUserId(userId);
-
-        firestore()
-            .collection('Users')
-            .doc(userId.toString())
-            .set({
-                id: userId,
-                username: username,
-                email: email,
-                avatar: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-                followers: [],
-                following: [],
-                posts: [],
-                likes: [],
-            })
-            .then(() => {
-                console.log('Post added!');
-            });
     }
 
     return(
