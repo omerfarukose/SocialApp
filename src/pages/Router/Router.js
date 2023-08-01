@@ -10,11 +10,17 @@ import { ProfileScreen } from "../ProfileScreen";
 import { FollowListScreen } from "../FollowListScreen";
 import { navigationRef } from "./RootNavigation";
 import { AddPostScreen } from "../AddPostScreen";
+import auth from '@react-native-firebase/auth';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const Router = ( ) => {
 
     const Stack = createNativeStackNavigator();
     const Tab = createBottomTabNavigator();
+
+    let isUserExist = auth().currentUser;
+
+    let localMail = AsyncStorage.getItem("email");
 
     const getTabBarIcon = ( routeName ) => {
         let iconName;
@@ -76,13 +82,14 @@ export const Router = ( ) => {
             ref={navigationRef}>
 
             <Stack.Navigator
+                initialRouteName={isUserExist ? "HomeTabs" : "Login"}
                 screenOptions={{
                     headerShown: false
                 }}>
 
-                <Stack.Screen name={"HomeTabs"} component={HomeTabs}/>
                 <Stack.Screen name={"Login"} component={LoginScreen}/>
                 <Stack.Screen name={"SignUp"} component={SignUpScreen}/>
+                <Stack.Screen name={"HomeTabs"} component={HomeTabs}/>
 
             </Stack.Navigator>
 

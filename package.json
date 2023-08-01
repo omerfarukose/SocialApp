@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.19.1",
     "@react-native-firebase/app": "^18.3.0",
     "@react-native-firebase/auth": "^18.3.0",
     "@react-native-firebase/firestore": "^18.3.0",
@@ -25,6 +26,7 @@
     "react-native-screens": "^3.22.1",
     "react-native-tab-view": "^3.5.2",
     "react-native-toast-message": "^2.1.6",
+    "react-native-uuid": "^2.0.1",
     "react-native-vector-icons": "^9.2.0"
   },
   "devDependencies": {

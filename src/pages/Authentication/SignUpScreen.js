@@ -19,6 +19,7 @@ import { navigate } from "../Router/RootNavigation";
 import { validateEmail } from "../../helper/functions/MyHelperFunctions";
 import firestore from "@react-native-firebase/firestore";
 import { UserContext } from "../../contexts/UserContext";
+import uuid from 'react-native-uuid';
 
 
 export const SignUpScreen = ( ) => {
@@ -27,7 +28,7 @@ export const SignUpScreen = ( ) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    let { setUsername } = useContext(UserContext)
+    let { setUsername, setUserId } = useContext(UserContext)
 
     const showToast = (text, type = "error") => {
         Toast.show({
@@ -52,16 +53,7 @@ export const SignUpScreen = ( ) => {
                         .then(() => {
                             console.log('User account created & signed in!');
 
-                            setUsername(myUsername);
-
-                            firestore()
-                                .collection('Users')
-                                .add({
-                                    username: myUsername,
-                                })
-                                .then(() => {
-                                    console.log('Post added!');
-                                });
+                            _firebaseCreateUserObject(myUsername, email);
 
                             showToast("Kullanıcı Oluşturuldu", "success");
                             navigate("Login");
@@ -69,6 +61,8 @@ export const SignUpScreen = ( ) => {
                         .catch(error => {
                             if (error.code === 'auth/email-already-in-use') {
                                 console.log('That email address is already in use!');
+
+                                _firebaseCreateUserObject(myUsername, email);
 
                                 showToast("E-mail adresi zaten kullanılıyor");
                             }
@@ -101,6 +95,30 @@ export const SignUpScreen = ( ) => {
             showToast("Kullanıcı Adı Giriniz")
         }
 
+    }
+
+    const _firebaseCreateUserObject = (username, email) => {
+
+        let userId = uuid.v4();
+
+        setUserId(userId);
+
+        firestore()
+            .collection('Users')
+            .doc(userId.toString())
+            .set({
+                id: userId,
+                username: username,
+                email: email,
+                avatar: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+                followers: [],
+                following: [],
+                posts: [],
+                likes: [],
+            })
+            .then(() => {
+                console.log('Post added!');
+            });
     }
 
     return(

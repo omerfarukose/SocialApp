@@ -2,10 +2,97 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { AppColors } from "../values/Colors";
 import { MyIconButton } from "./MyIconButton";
+import { useEffect, useState } from "react";
+import firestore from "@react-native-firebase/firestore";
+import { UserInfo } from "../helper/functions/UserInfo";
+import { post } from "axios";
 
 export const MyCardView = ( props ) => {
 
     let { cardData } = props;
+    console.log("card data : ", cardData);
+
+    const [username, setUsername] = useState("");
+    const [avatarUri, setAvatarUri] = useState("");
+
+    useEffect(() => {
+        // get user info
+        _getUserInfoById(cardData.userId);
+
+    },[])
+
+    const _getUserInfoById = async (id) => {
+
+        await firestore()
+            .collection('Users')
+            .where('id', '==', id)
+            .get()
+            .then(querySnapshot => {
+                let userInfo = querySnapshot.docs[0].data();
+                console.log("user card info : ", userInfo);
+
+                setUsername(userInfo.username);
+                setAvatarUri(userInfo.avatar);
+            });
+    }
+
+    const _getUserPotsList = async ( ) => {
+
+        let userinfo = new UserInfo();
+        let userId = await userinfo.GetUserId();
+
+        let data = null;
+
+        console.log("id : ", userId);
+
+        await firestore()
+            .collection('Users')
+            .where('id', '==', userId)
+            .get()
+            .then(querySnapshot => {
+                let userInfo = querySnapshot.docs[0].data();
+                console.log("user card info : ", userInfo);
+
+                data = userInfo;
+            });
+
+        return data;
+    }
+
+    const _handleRepost = async ( ) => {
+
+        let userInfo = await _getUserPotsList();
+
+        console.log("userInfo.posts : ",userInfo.posts);
+        console.log("cardData.id : ",cardData.id);
+
+        let postList = []
+
+        if (postList.includes(cardData.id)) {
+            // TODO: remove from list
+            console.log("remove from list !!!!");
+        } else {
+            if (userInfo.posts) {
+                postList = [...userInfo.posts, cardData.id]
+            } else {
+                postList.push(cardData.id)
+            }
+        }
+
+        console.log("postList : ", postList);
+
+        console.log("handle post info : ", userInfo);
+
+        firestore()
+            .collection('Users')
+            .doc(userInfo.id)
+            .update({
+                'posts': postList,
+            })
+            .then(() => {
+                console.log('User updated!');
+            });
+    }
 
     return(
         <View
@@ -26,7 +113,7 @@ export const MyCardView = ( props ) => {
                 }}>
 
                 <Image
-                    source={{uri: "https://cdn-icons-png.flaticon.com/512/1053/1053244.png"}}
+                    source={{uri: avatarUri}}
                     style={{
                         width: 60,
                         height: 60,
@@ -46,7 +133,7 @@ export const MyCardView = ( props ) => {
                             fontSize: 20,
                         }}>
 
-                        { cardData.username}
+                        { username }
 
                     </Text>
 
@@ -59,7 +146,7 @@ export const MyCardView = ( props ) => {
                             fontSize: 15,
                         }}>
 
-                        { cardData.value}
+                        { cardData.text }
 
                     </Text>
 
@@ -78,6 +165,7 @@ export const MyCardView = ( props ) => {
                 }}>
 
                 <MyIconButton
+                    onPress={() => _handleRepost()}
                     iconName={"retweet"}/>
 
                 <MyIconButton

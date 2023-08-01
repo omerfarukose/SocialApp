@@ -1,29 +1,53 @@
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import { Keyboard, KeyboardAvoidingView, Platform, Text, TouchableWithoutFeedback, View } from "react-native";
 import { MyTextInput } from "../components/Input/MyTextInput";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { heightPercentageToDP, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { MyButton } from "../components/MyButton";
 import firestore from '@react-native-firebase/firestore';
 import { UserContext } from "../contexts/UserContext";
+import { navigate } from "./Router/RootNavigation";
+import Toast from "react-native-toast-message";
+import { UserInfo } from "../helper/functions/UserInfo";
+import uuid from "react-native-uuid";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const  AddPostScreen = ( ) => {
 
     const [post, setPost] = useState("")
 
-    let {username} = useContext(UserContext)
+    let {username, userId} = useContext(UserContext);
 
-    const _handleAddPost = ( ) => {
+    const showToast = (text, type = "success") => {
+        Toast.show({
+            type: type,
+            text2: text
+        });
+    }
+
+    const _handleAddPost = async ( ) => {
+
+        let userInfo = new UserInfo();
+        let userId = await userInfo.GetUserId();
+        let postId = uuid.v4();
+
+        console.log("user id for post : ", userId);
 
         firestore()
             .collection('Posts')
             .add({
-                id: 0,
-                username: username,
-                value: post
+                id: postId,
+                text: post,
+                userId: userId
             })
             .then(() => {
                 console.log('Post added!');
+
+                setPost("");
+
+                showToast("Post paylaşıldı !");
+
+                navigate("Home");
             });
 
     }

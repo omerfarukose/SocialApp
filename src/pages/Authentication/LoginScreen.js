@@ -11,6 +11,8 @@ import Toast from 'react-native-toast-message';
 import { validateEmail } from "../../helper/functions/MyHelperFunctions";
 import { navigate } from "../Router/RootNavigation";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import firestore from "@react-native-firebase/firestore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const LoginScreen = ({navigation}) => {
 
@@ -22,6 +24,23 @@ export const LoginScreen = ({navigation}) => {
             type: type,
             text2: text
         });
+    }
+
+    const _getUserInfoByEmail = async ( ) => {
+
+        await firestore()
+            .collection('Users')
+            .where('email', '==', email)
+            .get()
+            .then(querySnapshot => {
+                console.log("res : ", querySnapshot.docs[0].data());
+                let userInfo = querySnapshot.docs[0].data();
+
+                console.log("user info : ", userInfo);
+
+                AsyncStorage.setItem('userId', userInfo.id);
+                AsyncStorage.setItem('username', userInfo.username);
+            });
     }
 
     const _handleLoginPress = ( ) => {
@@ -37,6 +56,8 @@ export const LoginScreen = ({navigation}) => {
 
                         setPassword("");
                         setEmail("");
+
+                        _getUserInfoByEmail();
 
                         navigate("HomeTabs")
                     })
