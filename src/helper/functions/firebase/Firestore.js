@@ -79,9 +79,90 @@ export function GetUserInfoById(userId) {
     }))
 }
 
+export async function GetCurrentUserInfo() {
+    let userId = await GetUserId();
+    console.log("Firestore : GetCurrentUserInfo local userId - ", userId);
+
+    return new Promise(((resolve, reject) => {
+        GetUserInfoById(userId)
+            .then((res) => {
+                console.log("Firestore : GetCurrentUserInfo userId - ", userId);
+                resolve(res);
+            })
+            .catch((err) => {
+                console.log("Firestore :  GetCurrentUserInfo error : ", err);
+                reject(err);
+            })
+    }))
+}
+
+export function HandleRepost(postId) {
+    console.log("Firestore : HandleRepost postId - ", postId);
+
+    return new Promise(((resolve, reject) => {
+        GetCurrentUserInfo()
+            .then((userInfo) => {
+                let currentPostList = userInfo.posts;
+                let finalPostList = [];
+
+                if (currentPostList.includes(postId)) {
+                    // TODO: already reposted - remove from list
+                    console.log("Firestore : HandleRepost - already reposted remove from list");
+
+                } else {
+
+                    if (currentPostList) {
+                        finalPostList = [...currentPostList, postId]
+                    } else {
+                        finalPostList.push(postId)
+                    }
+
+                    UpdateUserPostList(userInfo.id, finalPostList)
+                        .then(() => {
+                            console.log("Firestore : HandleRepost - completed");
+                            resolve();
+                        })
+                        .catch(() => {
+                            console.log("Firestore : HandleRepost - error");
+                            reject();
+                        })
+                }
+
+            })
+            .catch(() => {
+                reject();
+            })
+    }))
+}
+
+function UpdateUserPostList(userId, postList){
+    console.log("Firestore : UpdateUserPostList userId - ", userId);
+    console.log("Firestore : UpdateUserPostList postList - ", postList);
+
+    let data = {
+        'posts': postList,
+    }
+
+    return new Promise(((resolve, reject) => {
+        firestore()
+            .collection('Users')
+            .doc(userId)
+            .update(data)
+            .then(() => {
+                console.log("Firestore : UpdateUserPostList - updated");
+                resolve();
+            })
+            .catch((error) => {
+                console.log("Firestore : UpdateUserPostList error : ", error);
+                reject();
+            })
+    }))
+}
+
 // - - - POSTS COLLECTION FUNCTIONS - - -
 
 export function GetAllPosts() {
+    console.log("Firestore : GetAllPosts");
 
     return new Promise(((resolve, reject) => {
         firestore()

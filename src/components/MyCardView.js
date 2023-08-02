@@ -1,12 +1,8 @@
-import { Image, Text, TouchableOpacity, View } from "react-native";
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import { Image, Text, View } from "react-native";
 import { AppColors } from "../values/Colors";
 import { MyIconButton } from "./MyIconButton";
 import { useEffect, useState } from "react";
-import firestore from "@react-native-firebase/firestore";
-import { UserInfo } from "../helper/functions/UserInfo";
-import { post } from "axios";
-import { GetUserInfoById } from "../helper/functions/firebase/Firestore";
+import { GetUserInfoById, HandleRepost } from "../helper/functions/firebase/Firestore";
 
 export const MyCardView = ( props ) => {
 
@@ -26,62 +22,14 @@ export const MyCardView = ( props ) => {
 
     },[])
 
-    const _getUserPotsList = async ( ) => {
-
-        let userinfo = new UserInfo();
-        let userId = await userinfo.GetUserId();
-
-        let data = null;
-
-        console.log("id : ", userId);
-
-        await firestore()
-            .collection('Users')
-            .where('id', '==', userId)
-            .get()
-            .then(querySnapshot => {
-                let userInfo = querySnapshot.docs[0].data();
-                console.log("user card info : ", userInfo);
-
-                data = userInfo;
-            });
-
-        return data;
-    }
-
     const _handleRepost = async ( ) => {
-
-        let userInfo = await _getUserPotsList();
-
-        console.log("userInfo.posts : ",userInfo.posts);
-        console.log("cardData.id : ",cardData.id);
-
-        let postList = []
-
-        if (postList.includes(cardData.id)) {
-            // TODO: remove from list
-            console.log("remove from list !!!!");
-        } else {
-            if (userInfo.posts) {
-                postList = [...userInfo.posts, cardData.id]
-            } else {
-                postList.push(cardData.id)
-            }
-        }
-
-        console.log("postList : ", postList);
-
-        console.log("handle post info : ", userInfo);
-
-        firestore()
-            .collection('Users')
-            .doc(userInfo.id)
-            .update({
-                'posts': postList,
-            })
+        HandleRepost(cardData.id)
             .then(() => {
-                console.log('User updated!');
-            });
+                console.log("_handleRepost then");
+            })
+            .catch(() => {
+                console.log("_handleRepost catch");
+            })
     }
 
     return(
