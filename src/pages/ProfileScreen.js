@@ -5,24 +5,22 @@ import { MyButton } from "../components/MyButton";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { navigate } from "./Router/RootNavigation";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
+import { GetCurrentUserInfo } from "../helper/functions/firebase/Firestore";
 
 export const ProfileScreen = ( ) => {
-
-    useEffect(() => {
-
-        // --- get user info
-        // username
-        // avatar url
-        // follower value
-        // following value
-        // post list
-        // like list
-
-    },[])
 
     const [avatarUrl, setAvatarUrl] = useState("https://cdn-icons-png.flaticon.com/512/1053/1053244.png");
     const [followerCount, setFollowerCount] = useState(100);
     const [followingCount, setFollowingCount] = useState(99);
+
+    useEffect(() => {
+
+        GetCurrentUserInfo()
+            .then((res) => {
+
+            })
+
+    },[])
 
     const _renderFollowInfoText = ( title, value ) => {
         return(

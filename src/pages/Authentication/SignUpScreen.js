@@ -63,7 +63,7 @@ export const SignUpScreen = ( ) => {
                                     default:
                                         showToast("Kullanıcı oluşturulamadı");
                                 }
-                            })
+                            });
 
                     } else {
                         // show password alert !

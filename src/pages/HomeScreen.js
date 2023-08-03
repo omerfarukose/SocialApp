@@ -19,6 +19,7 @@ export const HomeScreen = ( ) => {
         <MyMainLayout>
 
             <FlatList
+                overScrollMode={"never"}
                 data={postList}
                 renderItem={({item}) => <MyCardView cardData={item.data()}/>}
                 keyExtractor={(item, index) => item.id}/>

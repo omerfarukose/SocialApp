@@ -26,7 +26,7 @@ export async function CreateUser(username, email) {
             .doc(userId.toString())
             .set(userData)
             .then(() => {
-                console.log('Firestore : CreateUser - user created');
+                console.log('Firestore : CreateUser - success');
                 resolve();
             })
             .catch((err) => {
@@ -119,7 +119,7 @@ export function HandleRepost(postId) {
 
                     UpdateUserPostList(userInfo.id, finalPostList)
                         .then(() => {
-                            console.log("Firestore : HandleRepost - completed");
+                            console.log("Firestore : HandleRepost - success");
                             resolve();
                         })
                         .catch(() => {
@@ -149,7 +149,7 @@ function UpdateUserPostList(userId, postList){
             .doc(userId)
             .update(data)
             .then(() => {
-                console.log("Firestore : UpdateUserPostList - updated");
+                console.log("Firestore : UpdateUserPostList - success");
                 resolve();
             })
             .catch((error) => {
@@ -171,7 +171,6 @@ export function GetAllPosts() {
             .then(querySnapshot => {
                 let postList = querySnapshot.docs;
                 console.log("Firestore : GetAllPosts - response : ", postList);
-
                 resolve(postList);
             })
             .catch((err) => {
@@ -196,9 +195,10 @@ export async function CreatePost(text) {
     return new Promise(((resolve, reject) => {
         firestore()
             .collection('Posts')
-            .add(postData)
+            .doc(postId.toString())
+            .set(postData)
             .then(() => {
-                console.log('Firestore : CreatePost - post created');
+                console.log('Firestore : CreatePost - success');
                 resolve();
             })
             .catch((err) => {

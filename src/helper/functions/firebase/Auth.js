@@ -1,4 +1,5 @@
 import auth from "@react-native-firebase/auth";
+import { navigate } from "../../../pages/Router/RootNavigation";
 
 export function SignUp(email, password) {
     console.log('Auth : SignUp - email : ', email);
@@ -33,5 +34,22 @@ export function SignIn(email, password) {
                 console.log('Auth : SignIn error : ', error);
                 reject(error.code);
             });
+    }))
+}
+
+export function Logout() {
+    console.log('Auth : Logout');
+
+    return new Promise(((resolve, reject) => {
+        auth()
+            .signOut()
+            .then(() => {
+                console.log('Auth : Logout - success');
+                resolve();
+            })
+            .catch((error) => {
+                console.log('Auth : Logout error : ', error);
+                reject();
+            })
     }))
 }

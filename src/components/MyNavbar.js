@@ -3,19 +3,17 @@ import { AppColors } from "../values/Colors";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { goBack, navigate } from "../pages/Router/RootNavigation";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-import auth from '@react-native-firebase/auth';
-
+import { Logout } from "../helper/functions/firebase/Auth";
 
 export const MyNavbar = ( props ) => {
 
     let { showGoBack, showLogout } = props;
 
     const _handleSignOut = ( ) => {
-        auth()
-            .signOut()
+        Logout()
             .then(() => {
                 navigate("Login");
-            });
+            })
     }
 
     return(
@@ -34,7 +32,10 @@ export const MyNavbar = ( props ) => {
                     style={{
                         marginLeft: hp(2),
                     }}
-                    onPress={() => goBack()}>
+                    onPress={() => {
+                        console.log("Go Back !!!");
+                        goBack();
+                    }}>
 
                     <Icon name={"arrow-left"} size={hp(2.4)} color={"white"} />
 
