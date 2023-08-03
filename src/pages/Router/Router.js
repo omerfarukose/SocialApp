@@ -12,6 +12,7 @@ import { navigationRef } from "./RootNavigation";
 import { AddPostScreen } from "../AddPostScreen";
 import auth from '@react-native-firebase/auth';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { UserProfileScreen } from "../UserProfileScreen";
 
 export const Router = ( ) => {
 
@@ -26,7 +27,7 @@ export const Router = ( ) => {
         let iconName;
 
         switch (routeName) {
-            case 'Home':
+            case 'HomeStack':
                 iconName = 'home';
                 break;
             case 'AddPost':
@@ -55,7 +56,7 @@ export const Router = ( ) => {
                     tabBarIcon: ({ color, size }) => <Icon name={getTabBarIcon(route.name)} size={size} color={color} />,
                 })}>
 
-                <Tab.Screen name="Home" component={HomeScreen} />
+                <Tab.Screen name="HomeStack" component={HomeStack} />
                 <Tab.Screen name="AddPost" component={AddPostScreen} />
                 <Tab.Screen name="ProfileStack" component={ProfileStack} />
 
@@ -72,6 +73,21 @@ export const Router = ( ) => {
 
                 <Stack.Screen name={"Profile"} component={ProfileScreen}/>
                 <Stack.Screen name={"FollowList"} component={FollowListScreen}/>
+                <Stack.Screen name={"UserProfile"} component={UserProfileScreen}/>
+
+            </Stack.Navigator>
+        )
+    }
+
+    function HomeStack(){
+        return(
+            <Stack.Navigator
+                screenOptions={{
+                    headerShown: false
+                }}>
+
+                <Stack.Screen name={"Home"} component={HomeScreen}/>
+                <Stack.Screen name={"UserProfile"} component={UserProfileScreen}/>
 
             </Stack.Navigator>
         )
@@ -87,9 +103,9 @@ export const Router = ( ) => {
                     headerShown: false
                 }}>
 
+                <Stack.Screen name={"HomeTabs"} component={HomeTabs}/>
                 <Stack.Screen name={"Login"} component={LoginScreen}/>
                 <Stack.Screen name={"SignUp"} component={SignUpScreen}/>
-                <Stack.Screen name={"HomeTabs"} component={HomeTabs}/>
 
             </Stack.Navigator>
 

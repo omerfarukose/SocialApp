@@ -1,31 +1,40 @@
 import React, { useEffect, useState } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { AppColors } from "../values/Colors";
 import { MyButton } from "../components/MyButton";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { navigate } from "./Router/RootNavigation";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
-import { GetCurrentUserInfo } from "../helper/functions/firebase/Firestore";
+import { GetCurrentUserInfo, GetUserInfoById } from "../helper/functions/firebase/Firestore";
+import { MyCardView } from "../components/MyCardView";
 
-export const ProfileScreen = ( ) => {
+export const ProfileScreen = () => {
 
+    const [username, setUsername] = useState("")
     const [avatarUrl, setAvatarUrl] = useState("https://cdn-icons-png.flaticon.com/512/1053/1053244.png");
-    const [followerCount, setFollowerCount] = useState(100);
-    const [followingCount, setFollowingCount] = useState(99);
+    const [followerList, setFollowerList] = useState([]);
+    const [followingList, setFollowingList] = useState([]);
+    const [postList, setPostList] = useState([]);
+    const [likeList, setLikeList] = useState([]);
 
     useEffect(() => {
 
         GetCurrentUserInfo()
-            .then((res) => {
-
-            })
+            .then((userInfo) => {
+                setUsername(userInfo.username);
+                setAvatarUrl(userInfo.avatar);
+                setFollowerList(userInfo.followers);
+                setFollowingList(userInfo.following);
+                setPostList(userInfo.posts);
+                setLikeList(userInfo.likes);
+            });
 
     },[])
 
-    const _renderFollowInfoText = ( title, value ) => {
+    const _renderFollowInfoText = ( title, list ) => {
         return(
             <TouchableOpacity
-                onPress={() => navigate("FollowList")}
+                onPress={() => navigate("FollowList", {list: list})}
                 style={{
                     alignItems: "center",
                     marginTop: 20,
@@ -38,7 +47,7 @@ export const ProfileScreen = ( ) => {
                         color: AppColors.mainColor,
                     }}>
 
-                    { value }
+                    { list.length }
 
                 </Text>
 
@@ -59,6 +68,12 @@ export const ProfileScreen = ( ) => {
 
     return(
         <MyMainLayout showLogout={true}>
+
+            <ScrollView
+                overScrollMode={"never"}
+                style={{
+                    flex: 1,
+                }}>
 
             <View
                 style={{
@@ -93,7 +108,7 @@ export const ProfileScreen = ( ) => {
                             flexDirection: "row",
                         }}>
 
-                        { _renderFollowInfoText("Follower", followerCount) }
+                        { _renderFollowInfoText("Follower", followerList) }
 
                         <Image
                             source={{uri: avatarUrl}}
@@ -106,7 +121,7 @@ export const ProfileScreen = ( ) => {
                                 marginTop: -65,
                             }}/>
 
-                        { _renderFollowInfoText("Following", followingCount) }
+                        { _renderFollowInfoText("Following", followingList) }
 
 
                     </View>
@@ -121,9 +136,10 @@ export const ProfileScreen = ( ) => {
                                 fontWeight: "bold",
                                 fontSize: hp(4),
                                 color: AppColors.mainColor,
+                                textAlign: "center"
                             }}>
 
-                            Ömer Faruk
+                            { username }
 
                         </Text>
 
@@ -147,6 +163,22 @@ export const ProfileScreen = ( ) => {
                 </View>
 
             </View>
+
+            {/*posts view*/}
+            <View>
+
+                {
+                    postList.length > 0 &&
+                    <FlatList
+                        overScrollMode={"never"}
+                        data={postList}
+                        renderItem={({item}) => <MyCardView postId={item}/>}
+                        keyExtractor={(item, index) => item}/>
+                }
+
+            </View>
+
+            </ScrollView>
 
         </MyMainLayout>
     )

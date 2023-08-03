@@ -1,29 +1,40 @@
-import { Image, Text, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { AppColors } from "../values/Colors";
 import { MyIconButton } from "./MyIconButton";
 import { useEffect, useState } from "react";
-import { GetUserInfoById, HandleRepost } from "../helper/functions/firebase/Firestore";
+import { GetPostDataById, GetUserInfoById, HandleRepost } from "../helper/functions/firebase/Firestore";
+import { navigate } from "../pages/Router/RootNavigation";
 
 export const MyCardView = ( props ) => {
 
-    let { cardData } = props;
-    console.log("card data : ", cardData);
+    let { postId } = props;
+    console.log("test-- card postId : ", postId);
 
+    const [userId,setUserId] = useState("");
     const [username, setUsername] = useState("");
-    const [avatarUri, setAvatarUri] = useState("");
+    const [avatarUri, setAvatarUri] = useState("https://cdn-icons-png.flaticon.com/512/1053/1053244.png");
+    const [cardText, setCardText] = useState("");
 
     useEffect(() => {
 
-        GetUserInfoById(cardData.userId)
-            .then((res) => {
-                setUsername(res.username);
-                setAvatarUri(res.avatar);
-            })
+        GetPostDataById(postId)
+            .then((postData) => {
+                console.log("Post data : ", postData);
+                setCardText(postData.text)
+
+                GetUserInfoById(postData.userId)
+                    .then((res) => {
+                        setUsername(res.username);
+                        setAvatarUri(res.avatar);
+                        setUserId(res.id);
+                    });
+
+            });
 
     },[])
 
     const _handleRepost = async ( ) => {
-        HandleRepost(cardData.id)
+        HandleRepost(postId)
             .then(() => {
                 console.log("_handleRepost then");
             })
@@ -50,15 +61,20 @@ export const MyCardView = ( props ) => {
                     alignItems: "flex-start",
                 }}>
 
-                <Image
-                    source={{uri: avatarUri}}
-                    style={{
-                        width: 60,
-                        height: 60,
-                        borderRadius: 99,
-                        borderWidth: 1,
-                        borderColor: AppColors.mainColor,
-                    }}/>
+                <TouchableOpacity
+                    onPress={() => navigate("UserProfile", {userId: userId})}>
+
+                    <Image
+                        source={{uri: avatarUri}}
+                        style={{
+                            width: 60,
+                            height: 60,
+                            borderRadius: 99,
+                            borderWidth: 1,
+                            borderColor: AppColors.mainColor,
+                        }}/>
+
+                </TouchableOpacity>
 
                 <View>
 
@@ -84,7 +100,7 @@ export const MyCardView = ( props ) => {
                             fontSize: 15,
                         }}>
 
-                        { cardData.text }
+                        { cardText }
 
                     </Text>
 

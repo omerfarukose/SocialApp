@@ -207,3 +207,24 @@ export async function CreatePost(text) {
             })
     }))
 }
+
+export function GetPostDataById(postId) {
+    console.log("Firestore : GetPostDataById  postId - ", postId);
+
+    return new Promise(((resolve, reject) => {
+        firestore()
+            .collection('Posts')
+            .where('id', '==', postId)
+            .get()
+            .then(querySnapshot => {
+                let postData = querySnapshot.docs[0].data();
+                console.log("Firestore : GetPostDataById - response : ", postData);
+
+                resolve(postData);
+            })
+            .catch((err) => {
+                console.log("Firestore : GetPostDataById error : ", err);
+                reject(err);
+            })
+    }))
+}

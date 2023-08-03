@@ -2,7 +2,7 @@ import { MyCardView } from "../components/MyCardView";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import { useEffect, useState } from "react";
 import { FlatList } from "react-native";
-import { GetAllPosts } from "../helper/functions/firebase/Firestore";
+import { GetAllPosts, GetPostDataById } from "../helper/functions/firebase/Firestore";
 
 export const HomeScreen = ( ) => {
 
@@ -21,7 +21,7 @@ export const HomeScreen = ( ) => {
             <FlatList
                 overScrollMode={"never"}
                 data={postList}
-                renderItem={({item}) => <MyCardView cardData={item.data()}/>}
+                renderItem={({item}) => <MyCardView postId={item.data().id}/>}
                 keyExtractor={(item, index) => item.id}/>
 
         </MyMainLayout>
