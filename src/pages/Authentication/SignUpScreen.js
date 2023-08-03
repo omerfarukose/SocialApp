@@ -48,7 +48,7 @@ export const SignUpScreen = ( ) => {
                                 CreateUser(myUsername, email).then(() => {
                                     showToast("Kullanıcı Oluşturuldu", "success");
                                     navigate("Login");
-                                })
+                                });
                             })
                             .catch((errorCode) => {
                                 switch (errorCode) {

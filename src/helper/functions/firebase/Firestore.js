@@ -5,7 +5,7 @@ import uuid from "react-native-uuid";
 // - - - USERS COLLECTION FUNCTIONS - - -
 
 export async function CreateUser(username, email) {
-    let userId = await GetUserId();
+    let userId  = uuid.v4();
 
     let userData = {
         id: userId,
@@ -117,7 +117,11 @@ export function HandleRepost(postId) {
                         finalPostList.push(postId)
                     }
 
-                    UpdateUserPostList(userInfo.id, finalPostList)
+                    let updateData = {
+                        'posts' : finalPostList
+                    }
+
+                    UpdateUserParameter(userInfo.id, updateData)
                         .then(() => {
                             console.log("Firestore : HandleRepost - success");
                             resolve();
@@ -126,6 +130,16 @@ export function HandleRepost(postId) {
                             console.log("Firestore : HandleRepost - error");
                             reject();
                         })
+/*
+                    UpdateUserPostList(userInfo.id, finalPostList)
+                        .then(() => {
+                            console.log("Firestore : HandleRepost - success");
+                            resolve();
+                        })
+                        .catch(() => {
+                            console.log("Firestore : HandleRepost - error");
+                            reject();
+                        })*/
                 }
 
             })
@@ -154,6 +168,145 @@ function UpdateUserPostList(userId, postList){
             })
             .catch((error) => {
                 console.log("Firestore : UpdateUserPostList error : ", error);
+                reject();
+            })
+    }))
+}
+
+function UpdateUserParameter(userId, data){
+    console.log("Firestore : UpdateUserFollowingList userId - ", userId);
+    console.log("Firestore : UpdateUserFollowingList data - ", data);
+
+    return new Promise(((resolve, reject) => {
+        firestore()
+            .collection('Users')
+            .doc(userId)
+            .update(data)
+            .then(() => {
+                console.log("Firestore : UpdateUserFollowingList - success");
+                resolve();
+            })
+            .catch((error) => {
+                console.log("Firestore : UpdateUserFollowingList error : ", error);
+                reject();
+            })
+    }))
+}
+
+function UpdateUserFollowingList(userId, followingList){
+    console.log("Firestore : UpdateUserFollowingList userId - ", userId);
+    console.log("Firestore : UpdateUserFollowingList followingList - ", followingList);
+
+    let data = {
+        'following': followingList,
+    }
+
+    return new Promise(((resolve, reject) => {
+        firestore()
+            .collection('Users')
+            .doc(userId)
+            .update(data)
+            .then(() => {
+                console.log("Firestore : UpdateUserFollowingList - success");
+                resolve();
+            })
+            .catch((error) => {
+                console.log("Firestore : UpdateUserFollowingList error : ", error);
+                reject();
+            })
+    }))
+}
+
+export async function HandleFollow(userId, userIdToFollow){
+    console.log("Firestore : HandleFollow userId - ", userId);
+
+    return new Promise(((resolve, reject) => {
+        GetCurrentUserInfo()
+            .then((userInfo) => {
+                let currentFollowingList = userInfo.following;
+                let finalFollowingList = [];
+
+                if (currentFollowingList.includes(userId)) {
+                    // TODO: already reposted - remove from list
+                    console.log("Firestore : HandleRepost - already reposted remove from list");
+
+                } else {
+
+                    if (currentFollowingList) {
+                        finalFollowingList = [...currentFollowingList, userId]
+                    } else {
+                        finalFollowingList.push(userId)
+                    }
+
+                    let updateData = {
+                        "following" : finalFollowingList
+                    }
+
+                    UpdateUserParameter(userIdToFollow, updateData)
+                        .then(() => {
+                            console.log("Firestore : HandleFollow - success");
+
+                            UpdateUserFollowerList(userIdToFollow, userId)
+                                .then(() => {
+                                    resolve();
+                                })
+                                .catch(() => {
+                                    reject();
+                                })
+                        })
+                        .catch(() => {
+                            console.log("Firestore : HandleFollow - error");
+                            reject();
+                        })
+
+                }
+
+            })
+            .catch(() => {
+                reject();
+            })
+    }))
+}
+
+export async function UpdateUserFollowerList(userId, followerUser) {
+    console.log("Firestore : UpdateUserFollowerList userId - ", userId);
+
+    return new Promise(((resolve, reject) => {
+        GetUserInfoById(userId)
+            .then((userInfo) => {
+                let currentFollowerList = userInfo.followers;
+                let finalFollowerList = [];
+
+                if (currentFollowerList.includes(userId)) {
+                    // TODO: already reposted - remove from list
+                    console.log("Firestore : HandleRepost - already reposted remove from list");
+
+                } else {
+
+                    if (currentFollowerList) {
+                        finalFollowerList = [...currentFollowerList, followerUser]
+                    } else {
+                        finalFollowerList.push(followerUser)
+                    }
+
+                    let updateData = {
+                        'followers' : finalFollowerList
+                    }
+
+                    UpdateUserParameter(userId, updateData)
+                        .then(() => {
+                            console.log("Firestore : HandleFollow - success");
+                            resolve();
+                        })
+                        .catch(() => {
+                            console.log("Firestore : HandleFollow - error");
+                            reject();
+                        })
+
+                }
+
+            })
+            .catch(() => {
                 reject();
             })
     }))

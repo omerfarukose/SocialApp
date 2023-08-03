@@ -5,27 +5,31 @@ import { MyButton } from "../components/MyButton";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { navigate } from "./Router/RootNavigation";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
-import { GetUserInfoById } from "../helper/functions/firebase/Firestore";
+import { GetUserInfoById, HandleFollow } from "../helper/functions/firebase/Firestore";
 import { MyCardView } from "../components/MyCardView";
 
 export const UserProfileScreen = ({route}) => {
 
     const { userId } = route.params;
 
+    const [profileId, setProfileId] = useState("");
     const [username, setUsername] = useState("")
     const [avatarUrl, setAvatarUrl] = useState("https://cdn-icons-png.flaticon.com/512/1053/1053244.png");
     const [followerList, setFollowerList] = useState([]);
     const [followingList, setFollowingList] = useState([]);
     const [postList, setPostList] = useState([]);
     const [likeList, setLikeList] = useState([]);
+    const [isFollowing, setIsFollowing] = useState(false);
 
     useEffect(() => {
 
         GetUserInfoById(userId)
             .then((userInfo) => {
+                setProfileId(userInfo.id)
                 setUsername(userInfo.username);
                 setAvatarUrl(userInfo.avatar);
                 setFollowerList(userInfo.followers);
+                // is current user exist in list ? setIsFollowing true : setIsFollowing false
                 setFollowingList(userInfo.following);
                 setPostList(userInfo.posts);
                 setLikeList(userInfo.likes);
@@ -68,8 +72,16 @@ export const UserProfileScreen = ({route}) => {
         )
     }
 
+    const _handleFollowPress = ( ) => {
+
+        HandleFollow(userId, profileId)
+            .then(() => {
+                setIsFollowing(!isFollowing);
+            })
+    }
+
     return(
-        <MyMainLayout showLogout={true}>
+        <MyMainLayout showGoBack={true}>
 
             <ScrollView
                 overScrollMode={"never"}
@@ -146,6 +158,7 @@ export const UserProfileScreen = ({route}) => {
                             </Text>
 
                             <MyButton
+                                onPress={() => _handleFollowPress()}
                                 style={{
                                     backgroundColor: "white",
                                     borderColor: AppColors.mainColor,
@@ -158,7 +171,7 @@ export const UserProfileScreen = ({route}) => {
                                     color: AppColors.mainColor,
                                     fontWeight: "bold",
                                 }}
-                                title={"Follow"}/>
+                                title={isFollowing ? "Unfollow" : "Follow"}/>
 
                         </View>
 

@@ -143,21 +143,6 @@ export const ProfileScreen = () => {
 
                         </Text>
 
-                        <MyButton
-                            style={{
-                                backgroundColor: "white",
-                                borderColor: AppColors.mainColor,
-                                borderWidth: 2,
-                                borderRadius: 20,
-                                alignItems: "center",
-                                marginTop: 20,
-                            }}
-                            textStyle={{
-                                color: AppColors.mainColor,
-                                fontWeight: "bold",
-                            }}
-                            title={"Follow"}/>
-
                     </View>
 
                 </View>
