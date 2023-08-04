@@ -38,24 +38,33 @@ export const ProfileScreen = () => {
 
     },[])
 
-
     const chooseFile = async  () => {
         const path = await ImagePicker.launchImageLibrary(ImagePicker.ImageLibraryOptions);
-        console.log("res : ", path.assets[0].uri);
+
+/*        console.log("res : ", path.assets[0].uri);
+        console.log("path : ", path)*/
+
+        let uri = path.assets[0].uri.replace('file://', '')
 
 /*
-        const reference = storage().ref(userId);
-
-        await reference.putFile(path.toString());
+        console.log("uri : ", uri)
 */
 
         const task = storage()
             .ref(userId)
-            .putFile(path.toString());
+            .putFile(uri);
 
         // set progress state
-        task.on('state_changed', snapshot => {
-            console.log("state_changed : ", snapshot);
+        task.on('state_changed', async snapshot => {
+            setIsImageModalVisible(false)
+
+            const url = await storage().ref(userId).getDownloadURL();
+
+            setAvatarUrl(url)
+
+/*
+            console.log("url : ", url)
+*/
         });
 
         try {
