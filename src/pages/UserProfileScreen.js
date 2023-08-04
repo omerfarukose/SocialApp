@@ -7,10 +7,13 @@ import { navigate } from "./Router/RootNavigation";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import { GetUserInfoById, HandleFollow } from "../helper/functions/firebase/Firestore";
 import { MyCardView } from "../components/MyCardView";
+import { GetUserId } from "../helper/functions/UserInfo";
 
 export const UserProfileScreen = ({route}) => {
 
     const { userId } = route.params;
+
+    console.log("UserProfileScreen userID : ", userId);
 
     const [profileId, setProfileId] = useState("");
     const [username, setUsername] = useState("")
@@ -20,8 +23,13 @@ export const UserProfileScreen = ({route}) => {
     const [postList, setPostList] = useState([]);
     const [likeList, setLikeList] = useState([]);
     const [isFollowing, setIsFollowing] = useState(false);
+    const [isOurProfile, setIsOurProfile] = useState(false);
 
-    useEffect(() => {
+    useEffect( () => {
+
+        _resetAllInfo();
+
+        // TODO: check is our profile and hide follow button
 
         GetUserInfoById(userId)
             .then((userInfo) => {
@@ -35,12 +43,17 @@ export const UserProfileScreen = ({route}) => {
                 setLikeList(userInfo.likes);
             });
 
-    },[])
+    },[userId])
+
+    const _resetAllInfo = ( ) => {
+        setUsername("");
+        setAvatarUrl("ttps://cdn-icons-png.flaticon.com/512/1053/1053244.png")
+    }
 
     const _renderFollowInfoText = ( title, list ) => {
         return(
             <TouchableOpacity
-                onPress={() => navigate("FollowList", {list: list})}
+                onPress={() => navigate("FollowList", {userList: list})}
                 style={{
                     alignItems: "center",
                     marginTop: 20,

@@ -88,6 +88,7 @@ export const Router = ( ) => {
 
                 <Stack.Screen name={"Home"} component={HomeScreen}/>
                 <Stack.Screen name={"UserProfile"} component={UserProfileScreen}/>
+                <Stack.Screen name={"FollowList"} component={FollowListScreen}/>
 
             </Stack.Navigator>
         )
