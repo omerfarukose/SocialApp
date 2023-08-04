@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Router } from "./src/pages/Router/Router";
 import Toast, {ErrorToast} from "react-native-toast-message";
 import { UserContextProvider } from "./src/contexts/UserContext";
+import { ThemeContextProvider } from "./src/contexts/ThemeContext";
 
 export const App = ( ) => {
 
@@ -18,9 +19,11 @@ export const App = ( ) => {
     };
 
     return(
-        <UserContextProvider>
-            <Router/>
-            <Toast config={toastConfig} />
-        </UserContextProvider>
+        <ThemeContextProvider>
+            <UserContextProvider>
+                <Router/>
+                <Toast config={toastConfig} />
+            </UserContextProvider>
+        </ThemeContextProvider>
     )
 }

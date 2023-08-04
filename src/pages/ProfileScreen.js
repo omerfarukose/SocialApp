@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FlatList, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { AppColors } from "../values/Colors";
-import { MyButton } from "../components/MyButton";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { navigate } from "./Router/RootNavigation";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import { GetCurrentUserInfo, GetUserInfoById } from "../helper/functions/firebase/Firestore";
 import { MyCardView } from "../components/MyCardView";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 export const ProfileScreen = () => {
+
+    let { theme } = useContext(ThemeContext);
 
     const [username, setUsername] = useState("")
     const [avatarUrl, setAvatarUrl] = useState("https://cdn-icons-png.flaticon.com/512/1053/1053244.png");
@@ -44,7 +45,7 @@ export const ProfileScreen = () => {
                     style={{
                         fontSize: 20,
                         fontWeight: "bold",
-                        color: AppColors.mainColor,
+                        color: theme.mainColor,
                     }}>
 
                     { list.length }
@@ -55,7 +56,7 @@ export const ProfileScreen = () => {
                     style={{
                         fontSize: 20,
                         fontWeight: "bold",
-                        color: AppColors.mainColor,
+                        color: theme.mainColor,
                     }}>
 
                     { title }
@@ -117,7 +118,7 @@ export const ProfileScreen = () => {
                                 height: 130,
                                 borderRadius: 99,
                                 borderWidth: 2,
-                                borderColor: AppColors.mainColor,
+                                borderColor: theme.mainColor,
                                 marginTop: -65,
                             }}/>
 
@@ -135,7 +136,7 @@ export const ProfileScreen = () => {
                             style={{
                                 fontWeight: "bold",
                                 fontSize: hp(4),
-                                color: AppColors.mainColor,
+                                color: theme.mainColor,
                                 textAlign: "center"
                             }}>
 

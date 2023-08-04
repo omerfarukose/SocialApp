@@ -1,10 +1,13 @@
 import { TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import { AppColors } from "../values/Colors";
+import { useContext } from "react";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 export const MyIconButton = ( props ) => {
 
     let { iconName, onPress, style, iconSize, iconColor }  = props;
+
+    let { theme } = useContext(ThemeContext);
 
     return(
         <TouchableOpacity
@@ -13,7 +16,7 @@ export const MyIconButton = ( props ) => {
                 ...style
             }}>
 
-            <Icon name={iconName ? iconName : "home"} size={iconSize ? iconSize : 20} color={iconColor ? iconColor : AppColors.mainColor} />
+            <Icon name={iconName ? iconName : "home"} size={iconSize ? iconSize : 20} color={iconColor ? iconColor : theme.mainColor} />
 
         </TouchableOpacity>
     )

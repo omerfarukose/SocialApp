@@ -1,13 +1,16 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import { AppColors } from "../values/Colors";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { goBack, navigate } from "../pages/Router/RootNavigation";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { Logout } from "../helper/functions/firebase/Auth";
+import { useContext } from "react";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 export const MyNavbar = ( props ) => {
 
-    let { showGoBack, showLogout } = props;
+    let { theme } = useContext(ThemeContext);
+
+    let { showGoBack, showLogout, showSettings } = props;
 
     const _handleSignOut = ( ) => {
         Logout()
@@ -19,10 +22,10 @@ export const MyNavbar = ( props ) => {
     return(
         <View
             style={{
-                backgroundColor: AppColors.mainColor,
+                backgroundColor: theme.mainColor,
                 width: "100%",
                 height: 50,
-                alignItems: "flex-start",
+                alignItems: "flex-end",
                 justifyContent: "center"
             }}>
 
@@ -51,7 +54,7 @@ export const MyNavbar = ( props ) => {
                     alignSelf: "center",
                 }}/>
 
-            {
+{/*            {
                 showLogout &&
                 <TouchableOpacity
                     style={{
@@ -60,6 +63,19 @@ export const MyNavbar = ( props ) => {
                     onPress={() => _handleSignOut()}>
 
                     <Icon name={"sign-in-alt"} size={hp(2.4)} color={"white"} />
+
+                </TouchableOpacity>
+            }*/}
+
+            {
+                showLogout &&
+                <TouchableOpacity
+                    style={{
+                        marginRight: hp(2),
+                    }}
+                    onPress={() => navigate("Settings")}>
+
+                    <Icon name={"radiation"} size={hp(2.4)} color={"white"} />
 
                 </TouchableOpacity>
             }

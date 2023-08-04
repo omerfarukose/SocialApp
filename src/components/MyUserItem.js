@@ -1,13 +1,15 @@
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-import { AppColors } from "../values/Colors";
 import { Image, Text, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { navigate } from "../pages/Router/RootNavigation";
 import { GetUserInfoById } from "../helper/functions/firebase/Firestore";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 export const MyUserItem = (params) => {
 
     let { userId } = params;
+
+    let { theme } = useContext(ThemeContext);
 
     console.log("MyUserItem userid : ", userId);
 
@@ -40,13 +42,13 @@ export const MyUserItem = (params) => {
                     marginHorizontal: hp(2),
                     borderRadius: 99,
                     borderWidth: 2,
-                    borderColor: AppColors.mainColor,
+                    borderColor: theme.mainColor,
                 }}/>
 
             <Text
                 style={{
                     fontSize: hp(2.6),
-                    color: AppColors.mainColor,
+                    color: theme.mainColor,
                 }}>
 
                 { username }

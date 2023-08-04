@@ -9,8 +9,7 @@ import {
     TouchableWithoutFeedback,
     View,
 } from "react-native";
-import { AppColors } from "../../values/Colors";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { MyTextInput } from "../../components/Input/MyTextInput";
 import { MyButton } from "../../components/MyButton";
 import Toast from 'react-native-toast-message';
@@ -18,8 +17,12 @@ import { navigate } from "../Router/RootNavigation";
 import { validateEmail } from "../../helper/functions/MyHelperFunctions";
 import { CreateUser } from "../../helper/functions/firebase/Firestore";
 import { SignUp } from "../../helper/functions/firebase/Auth";
+import { ThemeContext } from "../../contexts/ThemeContext";
 
 export const SignUpScreen = ( ) => {
+
+    let { theme } = useContext(ThemeContext);
+
 
     const [myUsername, setMyUsername] = useState("");
     const [email, setEmail] = useState("");
@@ -91,7 +94,7 @@ export const SignUpScreen = ( ) => {
         <SafeAreaView
             style={{
                 flex: 1,
-                backgroundColor: AppColors.mainColor,
+                backgroundColor: theme.mainColor,
             }}>
 
             <KeyboardAvoidingView

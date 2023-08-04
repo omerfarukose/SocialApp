@@ -1,14 +1,16 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import { AppColors } from "../values/Colors";
 import { MyIconButton } from "./MyIconButton";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GetPostDataById, GetUserInfoById, HandleRepost } from "../helper/functions/firebase/Firestore";
 import { navigate } from "../pages/Router/RootNavigation";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 export const MyCardView = ( props ) => {
 
     let { postId } = props;
     console.log("test-- card postId : ", postId);
+
+    let { theme } = useContext(ThemeContext);
 
     const [userId,setUserId] = useState("");
     const [username, setUsername] = useState("");
@@ -71,7 +73,7 @@ export const MyCardView = ( props ) => {
                             height: 60,
                             borderRadius: 99,
                             borderWidth: 1,
-                            borderColor: AppColors.mainColor,
+                            borderColor: theme.mainColor,
                         }}/>
 
                 </TouchableOpacity>

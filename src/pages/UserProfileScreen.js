@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FlatList, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { AppColors } from "../values/Colors";
 import { MyButton } from "../components/MyButton";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { navigate } from "./Router/RootNavigation";
@@ -8,12 +7,16 @@ import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import { GetUserInfoById, HandleFollow } from "../helper/functions/firebase/Firestore";
 import { MyCardView } from "../components/MyCardView";
 import { GetUserId } from "../helper/functions/UserInfo";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 export const UserProfileScreen = ({route}) => {
 
     const { userId } = route.params;
 
     console.log("UserProfileScreen userID : ", userId);
+
+    let { theme } = useContext(ThemeContext);
+
 
     const [profileId, setProfileId] = useState("");
     const [username, setUsername] = useState("")
@@ -63,7 +66,7 @@ export const UserProfileScreen = ({route}) => {
                     style={{
                         fontSize: 20,
                         fontWeight: "bold",
-                        color: AppColors.mainColor,
+                        color: theme.mainColor,
                     }}>
 
                     { list.length }
@@ -74,7 +77,7 @@ export const UserProfileScreen = ({route}) => {
                     style={{
                         fontSize: 20,
                         fontWeight: "bold",
-                        color: AppColors.mainColor,
+                        color: theme.mainColor,
                     }}>
 
                     { title }
@@ -144,7 +147,7 @@ export const UserProfileScreen = ({route}) => {
                                     height: 130,
                                     borderRadius: 99,
                                     borderWidth: 2,
-                                    borderColor: AppColors.mainColor,
+                                    borderColor: theme.mainColor,
                                     marginTop: -65,
                                 }}/>
 
@@ -162,7 +165,7 @@ export const UserProfileScreen = ({route}) => {
                                 style={{
                                     fontWeight: "bold",
                                     fontSize: hp(4),
-                                    color: AppColors.mainColor,
+                                    color: theme.mainColor,
                                     textAlign: "center"
                                 }}>
 
@@ -174,14 +177,14 @@ export const UserProfileScreen = ({route}) => {
                                 onPress={() => _handleFollowPress()}
                                 style={{
                                     backgroundColor: "white",
-                                    borderColor: AppColors.mainColor,
+                                    borderColor: theme.mainColor,
                                     borderWidth: 2,
                                     borderRadius: 20,
                                     alignItems: "center",
                                     marginTop: 20,
                                 }}
                                 textStyle={{
-                                    color: AppColors.mainColor,
+                                    color: theme.mainColor,
                                     fontWeight: "bold",
                                 }}
                                 title={isFollowing ? "Unfollow" : "Follow"}/>

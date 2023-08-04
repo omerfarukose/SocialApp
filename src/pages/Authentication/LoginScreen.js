@@ -2,8 +2,7 @@ import {
     Image, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, Text,
     TouchableOpacity, TouchableWithoutFeedback, View,
 } from "react-native";
-import { AppColors } from "../../values/Colors";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { MyButton } from "../../components/MyButton";
 import { MyTextInput } from "../../components/Input/MyTextInput";
 import Toast from 'react-native-toast-message';
@@ -12,8 +11,12 @@ import { navigate } from "../Router/RootNavigation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SignIn } from "../../helper/functions/firebase/Auth";
 import { GetUserInfoByEmail } from "../../helper/functions/firebase/Firestore";
+import { ThemeContext } from "../../contexts/ThemeContext";
 
 export const LoginScreen = ({navigation}) => {
+
+    let { theme } = useContext(ThemeContext);
+
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -64,7 +67,7 @@ export const LoginScreen = ({navigation}) => {
         <SafeAreaView
             style={{
                 flex: 1,
-                backgroundColor: AppColors.mainColor,
+                backgroundColor: theme.mainColor,
             }}>
 
             <KeyboardAvoidingView

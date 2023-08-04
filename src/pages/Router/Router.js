@@ -4,7 +4,6 @@ import { LoginScreen } from "../Authentication/LoginScreen";
 import { SignUpScreen } from "../Authentication/SignUpScreen";
 import { HomeScreen } from "../HomeScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { AppColors } from "../../values/Colors";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { ProfileScreen } from "../ProfileScreen";
 import { FollowListScreen } from "../FollowListScreen";
@@ -13,8 +12,13 @@ import { AddPostScreen } from "../AddPostScreen";
 import auth from '@react-native-firebase/auth';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserProfileScreen } from "../UserProfileScreen";
+import { SettingsScreen } from "../SettingsScreen";
+import { useContext } from "react";
+import { ThemeContext } from "../../contexts/ThemeContext";
 
 export const Router = ( ) => {
+
+    let { theme } = useContext(ThemeContext);
 
     const Stack = createNativeStackNavigator();
     const Tab = createBottomTabNavigator();
@@ -50,7 +54,7 @@ export const Router = ( ) => {
                     tabBarActiveTintColor: "white",
                     tabBarInactiveTintColor: 'white',
                     tabBarStyle:{
-                        backgroundColor: AppColors.mainColor,
+                        backgroundColor: theme.mainColor,
                         height:50,
                     },
                     tabBarIcon: ({ color, size }) => <Icon name={getTabBarIcon(route.name)} size={size} color={color} />,
@@ -74,6 +78,7 @@ export const Router = ( ) => {
                 <Stack.Screen name={"Profile"} component={ProfileScreen}/>
                 <Stack.Screen name={"FollowList"} component={FollowListScreen}/>
                 <Stack.Screen name={"UserProfile"} component={UserProfileScreen}/>
+                <Stack.Screen name={"Settings"} component={SettingsScreen}/>
 
             </Stack.Navigator>
         )
@@ -82,6 +87,7 @@ export const Router = ( ) => {
     function HomeStack(){
         return(
             <Stack.Navigator
+                initialRouteName={"Home"}
                 screenOptions={{
                     headerShown: false
                 }}>
