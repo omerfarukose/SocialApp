@@ -4,6 +4,8 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-nat
 import { Switch, Text, View } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
+import { Logout } from "../helper/functions/firebase/Auth";
+import { navigate } from "./Router/RootNavigation";
 
 export const SettingsScreen = ( ) => {
 
@@ -16,6 +18,13 @@ export const SettingsScreen = ( ) => {
 
         setIsDark(!isDark);
     };
+
+    const _handleLogout = ( ) => {
+        Logout()
+            .then(() => {
+                navigate("Login");
+            })
+    }
 
     return(
         <MyMainLayout
@@ -67,6 +76,7 @@ export const SettingsScreen = ( ) => {
 
             <MyButton
                 title={"Çıkış Yap"}
+                onPress={() => _handleLogout()}
                 textStyle={{
                     fontWeight: "bold",
                     fontSize: hp(2.4)

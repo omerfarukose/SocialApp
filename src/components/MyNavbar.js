@@ -12,13 +12,6 @@ export const MyNavbar = ( props ) => {
 
     let { showGoBack, showLogout, showSettings } = props;
 
-    const _handleSignOut = ( ) => {
-        Logout()
-            .then(() => {
-                navigate("Login");
-            })
-    }
-
     return(
         <View
             style={{
