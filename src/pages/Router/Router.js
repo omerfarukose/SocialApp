@@ -15,6 +15,8 @@ import { UserProfileScreen } from "../UserProfileScreen";
 import { SettingsScreen } from "../SettingsScreen";
 import { useContext } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
+import {Platform} from "react-native";
+import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 
 export const Router = ( ) => {
 
@@ -55,7 +57,7 @@ export const Router = ( ) => {
                     tabBarInactiveTintColor: 'white',
                     tabBarStyle:{
                         backgroundColor: theme.mainColor,
-                        height:50,
+                        height: Platform.OS === "ios" ? hp(10) : hp(5),
                     },
                     tabBarIcon: ({ color, size }) => <Icon name={getTabBarIcon(route.name)} size={size} color={color} />,
                 })}>

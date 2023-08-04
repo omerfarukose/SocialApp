@@ -58,22 +58,6 @@ export const SettingsScreen = ( ) => {
 
             </View>
 
-
-
-            <MyButton
-                title={"Tema"}
-                textStyle={{
-                    fontWeight: "bold",
-                    fontSize: hp(2.4)
-                }}
-                style={{
-                    width: wp(85),
-                    alignSelf: "center",
-                    alignItems: "center",
-                    backgroundColor: "red",
-                    marginBottom: hp(2)
-                }}/>
-
             <MyButton
                 title={"Çıkış Yap"}
                 onPress={() => _handleLogout()}

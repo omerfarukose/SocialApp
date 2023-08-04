@@ -1,4 +1,4 @@
-import { SafeAreaView, View } from "react-native";
+import {SafeAreaView, StatusBar, View} from "react-native";
 import { MyNavbar } from "../MyNavbar";
 import React from "react";
 
@@ -10,14 +10,22 @@ export const MyMainLayout = ( props ) => {
         <SafeAreaView
             style={{
                 flex: 1,
-                backgroundColor: "white",
+                backgroundColor: "#4655F6",
             }}>
+
+            <StatusBar
+                animated={true}
+                backgroundColor="#4655F6"
+                barStyle={"light-content"}
+                showHideTransition={"fade"}
+                hidden={false}/>
 
             <MyNavbar showGoBack={showGoBack} showLogout={showLogout}/>
 
             <View
                 style={{
                     flex: 1,
+                    backgroundColor: "white",
                     ...layoutStyle
                 }}>
 
