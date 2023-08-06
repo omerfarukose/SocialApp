@@ -1,16 +1,19 @@
 import {SafeAreaView, StatusBar, View} from "react-native";
 import { MyNavbar } from "../MyNavbar";
-import React from "react";
+import React, {useContext} from "react";
+import {ThemeContext} from "../../contexts/ThemeContext";
 
 export const MyMainLayout = ( props ) => {
 
-    let { showGoBack, showLogout, layoutStyle } = props;
+    let { theme } = useContext(ThemeContext);
+
+    let { showGoBack, showLogout, showSettings, layoutStyle } = props;
 
     return(
         <SafeAreaView
             style={{
                 flex: 1,
-                backgroundColor: "#4655F6",
+                backgroundColor: theme.mainColor,
             }}>
 
             <StatusBar
@@ -20,7 +23,7 @@ export const MyMainLayout = ( props ) => {
                 showHideTransition={"fade"}
                 hidden={false}/>
 
-            <MyNavbar showGoBack={showGoBack} showLogout={showLogout}/>
+            <MyNavbar showGoBack={showGoBack} showSettings={showSettings} showLogout={showLogout}/>
 
             <View
                 style={{

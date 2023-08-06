@@ -1,5 +1,6 @@
 export const lightTheme = {
-    mainColor: "#4655F6",
+    mainColor: "#59C3C3",
+    secondColor: "#36558F",
     loginButtonColor: "#06D6A0",
 };
 

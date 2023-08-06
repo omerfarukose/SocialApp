@@ -40,7 +40,7 @@ export const Router = ( ) => {
                 iconName = 'plus';
                 break;
             case 'ProfileStack':
-                iconName = 'user';
+                iconName = 'user-alt';
                 break;
         }
 
@@ -53,7 +53,7 @@ export const Router = ( ) => {
                 screenOptions={({ route }) => ({
                     headerShown: false,
                     tabBarShowLabel: false,
-                    tabBarActiveTintColor: "white",
+                    tabBarActiveTintColor: theme.secondColor,
                     tabBarInactiveTintColor: 'white',
                     tabBarStyle:{
                         backgroundColor: theme.mainColor,

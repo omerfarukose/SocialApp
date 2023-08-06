@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { FlatList, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, ScrollView, Text, TouchableOpacity, View, ActivityIndicator} from "react-native";
 import { MyButton } from "../components/MyButton";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { navigate } from "./Router/RootNavigation";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import { GetUserInfoById, HandleFollow } from "../helper/functions/firebase/Firestore";
 import { MyCardView } from "../components/MyCardView";
-import { GetUserId } from "../helper/functions/UserInfo";
 import { ThemeContext } from "../contexts/ThemeContext";
 
 export const UserProfileScreen = ({route}) => {
@@ -50,7 +49,7 @@ export const UserProfileScreen = ({route}) => {
 
     const _resetAllInfo = ( ) => {
         setUsername("");
-        setAvatarUrl("ttps://cdn-icons-png.flaticon.com/512/1053/1053244.png")
+        setAvatarUrl("https://cdn-icons-png.flaticon.com/512/1053/1053244.png")
     }
 
     const _renderFollowInfoText = ( title, list ) => {

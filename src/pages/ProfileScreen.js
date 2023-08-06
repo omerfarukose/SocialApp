@@ -86,9 +86,9 @@ export const ProfileScreen = () => {
 
                 <Text
                     style={{
-                        fontSize: 20,
-                        fontWeight: "bold",
-                        color: theme.mainColor,
+                        fontSize: hp(2.3),
+                        fontWeight: "400",
+                        color: theme.secondColor,
                     }}>
 
                     { list.length }
@@ -97,9 +97,9 @@ export const ProfileScreen = () => {
 
                 <Text
                     style={{
-                        fontSize: 20,
-                        fontWeight: "bold",
-                        color: theme.mainColor,
+                        fontSize: hp(2),
+                        fontWeight: "500",
+                        color: theme.secondColor,
                     }}>
 
                     { title }
@@ -150,6 +150,9 @@ export const ProfileScreen = () => {
                     <View
                         style={{
                             flexDirection: "row",
+                            width: wp(70),
+                            alignSelf: "center",
+                            justifyContent: "space-evenly"
                         }}>
 
                         { _renderFollowInfoText("Follower", followerList) }
@@ -157,16 +160,24 @@ export const ProfileScreen = () => {
                         <TouchableOpacity
                             onPress={() => setIsImageModalVisible(true)}>
 
-                        <Image
-                            source={{uri: avatarUrl}}
+                        <View
                             style={{
-                                width: 130,
-                                height: 130,
-                                borderRadius: 99,
-                                borderWidth: 2,
-                                borderColor: theme.mainColor,
-                                marginTop: -65,
-                            }}/>
+                                width: wp(50),
+                                alignItems: "center"
+                            }}>
+
+                            <Image
+                                source={{uri: avatarUrl}}
+                                style={{
+                                    width: wp(30),
+                                    height: wp(30),
+                                    borderRadius: 99,
+                                    borderWidth: 2,
+                                    borderColor: theme.mainColor,
+                                    marginTop: -45,
+                                }}/>
+
+                        </View>
 
                         </TouchableOpacity>
 
@@ -183,7 +194,7 @@ export const ProfileScreen = () => {
                         <Text
                             style={{
                                 fontWeight: "bold",
-                                fontSize: hp(4),
+                                fontSize: hp(3.5),
                                 color: theme.mainColor,
                                 textAlign: "center"
                             }}>
