@@ -18,6 +18,7 @@ import { validateEmail } from "../../helper/functions/MyHelperFunctions";
 import { CreateUser } from "../../helper/functions/firebase/Firestore";
 import { SignUp } from "../../helper/functions/firebase/Auth";
 import { ThemeContext } from "../../contexts/ThemeContext";
+import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 
 export const SignUpScreen = ( ) => {
 
@@ -94,7 +95,7 @@ export const SignUpScreen = ( ) => {
         <SafeAreaView
             style={{
                 flex: 1,
-                backgroundColor: theme.mainColor,
+                backgroundColor: theme.secondColor,
             }}>
 
             <KeyboardAvoidingView
@@ -142,6 +143,11 @@ export const SignUpScreen = ( ) => {
 
                             <MyButton
                                 onPress={() => _handleSignupPress()}
+                                style={{
+                                    backgroundColor: theme.mainColor,
+                                    width: wp(30),
+                                    alignItems: "center"
+                                }}
                                 title={"Kayıt"}/>
 
                             <TouchableOpacity

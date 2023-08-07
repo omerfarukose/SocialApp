@@ -12,6 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SignIn } from "../../helper/functions/firebase/Auth";
 import { GetUserInfoByEmail } from "../../helper/functions/firebase/Firestore";
 import { ThemeContext } from "../../contexts/ThemeContext";
+import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 
 export const LoginScreen = ({navigation}) => {
 
@@ -67,7 +68,7 @@ export const LoginScreen = ({navigation}) => {
         <SafeAreaView
             style={{
                 flex: 1,
-                backgroundColor: theme.mainColor,
+                backgroundColor: theme.secondColor,
             }}>
 
             <KeyboardAvoidingView
@@ -110,6 +111,11 @@ export const LoginScreen = ({navigation}) => {
 
                             <MyButton
                                 onPress={() => _handleLoginPress()}
+                                style={{
+                                    backgroundColor: theme.mainColor,
+                                    width: wp(30),
+                                    alignItems: "center"
+                                }}
                                 title={"Giriş"}/>
 
                             <TouchableOpacity

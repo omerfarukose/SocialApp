@@ -174,8 +174,8 @@ function UpdateUserPostList(userId, postList){
 }
 
 function UpdateUserParameter(userId, data){
-    console.log("Firestore : UpdateUserFollowingList userId - ", userId);
-    console.log("Firestore : UpdateUserFollowingList data - ", data);
+    console.log("Firestore : UpdateUserParameter userId - ", userId);
+    console.log("Firestore : UpdateUserParameter data - ", data);
 
     return new Promise(((resolve, reject) => {
         firestore()
@@ -183,11 +183,11 @@ function UpdateUserParameter(userId, data){
             .doc(userId)
             .update(data)
             .then(() => {
-                console.log("Firestore : UpdateUserFollowingList - success");
+                console.log("Firestore : UpdateUserParameter - success");
                 resolve();
             })
             .catch((error) => {
-                console.log("Firestore : UpdateUserFollowingList error : ", error);
+                console.log("Firestore : UpdateUserParameter error : ", error);
                 reject();
             })
     }))
@@ -217,36 +217,38 @@ function UpdateUserFollowingList(userId, followingList){
     }))
 }
 
-export async function HandleFollow(userId, userIdToFollow){
-    console.log("Firestore : HandleFollow userId - ", userId);
+export async function HandleFollow(userIdToFollow){
+    console.log("Firestore : HandleFollow userIdToFollow - ", userIdToFollow);
 
     return new Promise(((resolve, reject) => {
         GetCurrentUserInfo()
             .then((userInfo) => {
                 let currentFollowingList = userInfo.following;
                 let finalFollowingList = [];
+                
+                console.log("current user following list : ", currentFollowingList)
 
-                if (currentFollowingList.includes(userId)) {
+                if (currentFollowingList.includes(userIdToFollow)) {
                     // TODO: already reposted - remove from list
                     console.log("Firestore : HandleRepost - already reposted remove from list");
 
                 } else {
 
                     if (currentFollowingList) {
-                        finalFollowingList = [...currentFollowingList, userId]
+                        finalFollowingList = [...currentFollowingList, userIdToFollow]
                     } else {
-                        finalFollowingList.push(userId)
+                        finalFollowingList.push(userIdToFollow)
                     }
 
                     let updateData = {
                         "following" : finalFollowingList
                     }
 
-                    UpdateUserParameter(userIdToFollow, updateData)
+                    UpdateUserParameter(userInfo.id, updateData)
                         .then(() => {
                             console.log("Firestore : HandleFollow - success");
 
-                            UpdateUserFollowerList(userIdToFollow, userId)
+                            UpdateUserFollowerList(userIdToFollow, userInfo.id)
                                 .then(() => {
                                     resolve();
                                 })
@@ -276,8 +278,8 @@ export async function UpdateUserFollowerList(userId, followerUser) {
             .then((userInfo) => {
                 let currentFollowerList = userInfo.followers;
                 let finalFollowerList = [];
-
-                if (currentFollowerList.includes(userId)) {
+9
+                if (currentFollowerList.includes(userInfo.id)) {
                     // TODO: already reposted - remove from list
                     console.log("Firestore : HandleRepost - already reposted remove from list");
 
@@ -293,7 +295,7 @@ export async function UpdateUserFollowerList(userId, followerUser) {
                         'followers' : finalFollowerList
                     }
 
-                    UpdateUserParameter(userId, updateData)
+                    UpdateUserParameter(userInfo.id, updateData)
                         .then(() => {
                             console.log("Firestore : HandleFollow - success");
                             resolve();

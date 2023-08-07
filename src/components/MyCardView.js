@@ -8,7 +8,6 @@ import { ThemeContext } from "../contexts/ThemeContext";
 export const MyCardView = ( props ) => {
 
     let { postId } = props;
-    console.log("test-- card postId : ", postId);
 
     let { theme } = useContext(ThemeContext);
 

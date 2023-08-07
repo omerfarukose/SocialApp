@@ -26,6 +26,8 @@ export const Router = ( ) => {
     const Tab = createBottomTabNavigator();
 
     let isUserExist = auth().currentUser;
+    
+    console.log("current user : ", isUserExist)
 
     let localMail = AsyncStorage.getItem("email");
 
@@ -57,7 +59,7 @@ export const Router = ( ) => {
                     tabBarInactiveTintColor: 'white',
                     tabBarStyle:{
                         backgroundColor: theme.mainColor,
-                        height: Platform.OS === "ios" ? hp(10) : hp(5),
+                        height: Platform.OS === "ios" ? hp(10) : hp(6.3),
                     },
                     tabBarIcon: ({ color, size }) => <Icon name={getTabBarIcon(route.name)} size={size} color={color} />,
                 })}>
