@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { ProfileScreen } from "../ProfileScreen";
 import { FollowListScreen } from "../FollowListScreen";
-import { navigationRef } from "./RootNavigation";
+import {navigate, navigationRef} from "./RootNavigation";
 import { AddPostScreen } from "../AddPostScreen";
 import auth from '@react-native-firebase/auth';
 import { UserProfileScreen } from "../UserProfileScreen";
@@ -54,6 +54,10 @@ export const Router = ( ) => {
 
         return iconName;
     }
+    
+    function onTabPressHome() {
+        navigate("Home")
+    }
 
     function HomeTabs() {
         return(
@@ -70,7 +74,15 @@ export const Router = ( ) => {
                     tabBarIcon: ({ color, size }) => <Icon name={getTabBarIcon(route.name)} size={size} color={color} />,
                 })}>
 
-                <Tab.Screen name="HomeStack" component={HomeStack} />
+                <Tab.Screen
+                    listeners={({ navigation }) => ({
+                        tabPress: e => {
+                            onTabPressHome()
+                        },
+                    })}
+                    name="HomeStack"
+                    component={HomeStack}/>
+                
                 <Tab.Screen name="AddPost" component={AddPostScreen} />
                 <Tab.Screen name="ProfileStack" component={ProfileStack} />
 

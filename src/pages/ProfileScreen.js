@@ -331,10 +331,10 @@ export const ProfileScreen = (props) => {
                                 justifyContent: "space-evenly",
                             }}>
                             
-                            <MyIconButton
+{/*                            <MyIconButton
                                 onPress={() => chooseFile()}
                                 iconName={"trash-alt"}
-                                iconSize={wp(6)}/>
+                                iconSize={wp(6)}/>*/}
                             
                             <MyIconButton
                                 onPress={() => chooseFile()}

@@ -1,7 +1,7 @@
 import { MyCardView } from "../components/MyCardView";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import React, { useEffect, useState } from "react";
-import {ActivityIndicator, FlatList, View} from "react-native";
+import {ActivityIndicator, FlatList, RefreshControl, View} from "react-native";
 import { GetAllPosts } from "../helper/functions/firebase/Firestore";
 
 export const HomeScreen = (props) => {
@@ -10,14 +10,16 @@ export const HomeScreen = (props) => {
     const [isReady, setIsReady] = useState(false);
 
     useEffect(() => {
-        
+        _getPosts();
+    }, [props])
+    
+    const _getPosts = ( ) => {
         GetAllPosts()
             .then((res) => {
                 setPostList(res);
                 setIsReady(true)
             })
-        
-    }, [props])
+    }
 
     return(
         <MyMainLayout>

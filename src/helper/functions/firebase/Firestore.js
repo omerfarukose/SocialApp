@@ -113,7 +113,7 @@ export function HandleRepost(postId) {
                 } else {
 
                     if (currentPostList) {
-                        finalPostList = [...currentPostList, postId]
+                        finalPostList = [postId, ...currentPostList]
                     } else {
                         finalPostList.push(postId)
                     }
@@ -157,7 +157,7 @@ export function HandleLike(postId) {
                 } else {
                     
                     if (currentLikeList) {
-                        finalLikeList = [...currentLikeList, postId]
+                        finalLikeList = [postId, ...currentLikeList]
                     } else {
                         finalLikeList.push(postId)
                     }
@@ -221,7 +221,7 @@ export async function HandleFollow(userIdToFollow){
                 } else {
 
                     if (currentFollowingList) {
-                        finalFollowingList = [...currentFollowingList, userIdToFollow]
+                        finalFollowingList = [userIdToFollow, ...currentFollowingList]
                     } else {
                         finalFollowingList.push(userIdToFollow)
                     }
@@ -272,7 +272,7 @@ export async function UpdateUserFollowerList(userId, followerUser) {
                 } else {
 
                     if (currentFollowerList) {
-                        finalFollowerList = [...currentFollowerList, followerUser]
+                        finalFollowerList = [followerUser, ...currentFollowerList]
                     } else {
                         finalFollowerList.push(followerUser)
                     }
