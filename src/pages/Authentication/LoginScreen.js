@@ -13,10 +13,12 @@ import { GetUserInfoByEmail } from "../../helper/functions/firebase/Firestore";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 import SyncStorage from 'sync-storage';
+import {UserContext} from "../../contexts/UserContext";
 
 export const LoginScreen = ({navigation}) => {
 
     let { theme } = useContext(ThemeContext);
+    let { setUserAvatar, setUserLikes, setUserPosts } = useContext(UserContext);
 
 
     const [email, setEmail] = useState("");
@@ -44,6 +46,10 @@ export const LoginScreen = ({navigation}) => {
                             .then((userInfo) => {
                                 SyncStorage.set('userId', userInfo.id);
                                 SyncStorage.set('username', userInfo.username);
+                                console.log("login user info : ", userInfo)
+                                setUserAvatar(userInfo.avatar);
+                                setUserLikes(userInfo.likes);
+                                setUserPosts(userInfo.posts);
                             })
 
                         navigate("HomeTabs")

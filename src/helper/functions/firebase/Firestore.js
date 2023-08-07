@@ -141,6 +141,50 @@ export function HandleRepost(postId) {
     }))
 }
 
+export function HandleLike(postId) {
+    console.log("Firestore : HandleLike postId - ", postId);
+    
+    return new Promise(((resolve, reject) => {
+        GetCurrentUserInfo()
+            .then((userInfo) => {
+                let currentLikeList = userInfo.likes;
+                let finalLikeList = [];
+                
+                if (currentLikeList.includes(postId)) {
+                    // TODO: already reposted - remove from list
+                    console.log("Firestore : HandleRepost - already reposted remove from list");
+                    
+                } else {
+                    
+                    if (currentLikeList) {
+                        finalLikeList = [...currentLikeList, postId]
+                    } else {
+                        finalLikeList.push(postId)
+                    }
+                    
+                    let updateData = {
+                        'likes' : finalLikeList
+                    }
+                    
+                    UpdateUserParameter(userInfo.id, updateData)
+                        .then(() => {
+                            console.log("Firestore : HandleRepost - success");
+                            resolve();
+                        })
+                        .catch(() => {
+                            console.log("Firestore : HandleRepost - error");
+                            reject();
+                        })
+                    
+                }
+                
+            })
+            .catch(() => {
+                reject();
+            })
+    }))
+}
+
 function UpdateUserParameter(userId, data){
     console.log("Firestore : UpdateUserParameter userId - ", userId);
     console.log("Firestore : UpdateUserParameter data - ", data);
@@ -290,7 +334,11 @@ export async function UpdateUserProfileImage(uri){
     }))
 }
 
-// - - - POSTS COLLECTION FUNCTIONS - - -
+// - - - - - - - - - - - - - - - - - - - - - - - -
+
+// - - - - - POSTS COLLECTION FUNCTIONS - - - - - -
+
+// - - - - - - - - - - - - - - - - - - - - - - - -
 
 export function GetAllPosts() {
     console.log("Firestore : GetAllPosts");

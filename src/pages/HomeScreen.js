@@ -2,7 +2,7 @@ import { MyCardView } from "../components/MyCardView";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import React, { useEffect, useState } from "react";
 import {ActivityIndicator, FlatList, View} from "react-native";
-import { GetAllPosts, GetPostDataById } from "../helper/functions/firebase/Firestore";
+import { GetAllPosts } from "../helper/functions/firebase/Firestore";
 
 export const HomeScreen = ( ) => {
 
@@ -10,11 +10,13 @@ export const HomeScreen = ( ) => {
     const [isReady, setIsReady] = useState(false);
 
     useEffect(() => {
+        
         GetAllPosts()
             .then((res) => {
                 setPostList(res);
+                setIsReady(true)
             })
-            .finally(() => setIsReady(true))
+        
     }, [])
 
     return(

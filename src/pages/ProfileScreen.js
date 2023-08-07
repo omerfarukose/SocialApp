@@ -11,7 +11,7 @@ import * as ImagePicker from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 import {MyIconButton} from "../components/MyIconButton";
 
-export const ProfileScreen = () => {
+export const ProfileScreen = ( props ) => {
 
     let { theme } = useContext(ThemeContext);
 
@@ -24,6 +24,7 @@ export const ProfileScreen = () => {
     const [likeList, setLikeList] = useState([]);
     const [isImageModalVisible, setIsImageModalVisible] = useState(false);
     const [isReady, setIsReady] = useState(false);
+    const [postsSelected, setPostSelected] = useState(true);
     
     useEffect(() => {
 
@@ -39,7 +40,7 @@ export const ProfileScreen = () => {
             })
             .finally(() => setIsReady(true))
 
-    },[])
+    },[props])
 
     const chooseFile = async  () => {
         const path = await ImagePicker.launchImageLibrary(ImagePicker.ImageLibraryOptions);
@@ -192,6 +193,60 @@ export const ProfileScreen = () => {
                         
                         </View>
                         
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                borderColor: theme.mainColor,
+                                borderBottomWidth: 1,
+                                height: hp(6)
+                            }}>
+                            
+                            <TouchableOpacity
+                                onPress={() => setPostSelected(true)}
+                                style={{
+                                    flex: 1,
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    borderBottomWidth: postsSelected ? 2 : 0,
+                                    borderColor: theme.mainColor
+                                }}>
+                                
+                                <Text
+                                    style={{
+                                        color: theme.mainColor,
+                                        fontSize: hp(2.3)
+                                    }}>
+                                    
+                                    Posts
+                                    
+                                </Text>
+                                
+                            </TouchableOpacity>
+                            
+                            <TouchableOpacity
+                                onPress={() => setPostSelected(false)}
+                                style={{
+                                    flex: 1,
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    borderBottomWidth: !postsSelected ? 2 : 0,
+                                    borderColor: theme.mainColor
+                                }}>
+                                
+                                <Text
+                                    style={{
+                                        color: theme.mainColor,
+                                        fontSize: hp(2.3)
+                                    }}>
+                                    
+                                    Likes
+                                    
+                                </Text>
+                            
+                            </TouchableOpacity>
+                            
+                        </View>
+                        
                         {/*posts view*/}
                         <View>
                             
@@ -199,7 +254,7 @@ export const ProfileScreen = () => {
                                 postList.length > 0 &&
                                 <FlatList
                                     overScrollMode={"never"}
-                                    data={postList}
+                                    data={postsSelected ? postList : likeList}
                                     renderItem={({item}) => <MyCardView postId={item}/>}
                                     keyExtractor={(item, index) => item}/>
                             }

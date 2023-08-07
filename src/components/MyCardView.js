@@ -1,20 +1,24 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { MyIconButton } from "./MyIconButton";
 import { useContext, useEffect, useState } from "react";
-import { GetPostDataById, GetUserInfoById, HandleRepost } from "../helper/functions/firebase/Firestore";
+import {GetPostDataById, GetUserInfoById, HandleLike, HandleRepost} from "../helper/functions/firebase/Firestore";
 import { navigate } from "../pages/Router/RootNavigation";
 import { ThemeContext } from "../contexts/ThemeContext";
+import {UserContext} from "../contexts/UserContext";
 
 export const MyCardView = ( props ) => {
 
     let { postId } = props;
 
     let { theme } = useContext(ThemeContext);
+    let { userPosts, userLikes } = useContext(UserContext);
 
     const [userId,setUserId] = useState("");
     const [username, setUsername] = useState("");
     const [avatarUri, setAvatarUri] = useState("https://cdn-icons-png.flaticon.com/512/149/149071.png");
     const [cardText, setCardText] = useState("");
+    const [isLiked, setIsLiked] = useState(false);
+    const [isPosted, setIsPosted] = useState(false);
 
     useEffect(() => {
 
@@ -23,24 +27,46 @@ export const MyCardView = ( props ) => {
                 setCardText(postData.text)
 
                 GetUserInfoById(postData.userId)
-                    .then((res) => {
-                        setUsername(res.username);
-                        setAvatarUri(res.avatar);
-                        setUserId(res.id);
+                    .then((userInfo) => {
+                        setUsername(userInfo.username);
+                        setAvatarUri(userInfo.avatar);
+                        setUserId(userInfo.id);
+                        
+                        console.log("posts id : ", postId)
+                        console.log("posts : ", userPosts)
+                        console.log("likes : ", userPosts)
+                        
+                        setIsLiked(userLikes.includes(postId))
+                        setIsPosted(userPosts.includes(postId))
+                        
                     });
 
             });
 
     },[])
 
-    const _handleRepost = async ( ) => {
-        HandleRepost(postId)
-            .then(() => {
-                console.log("_handleRepost then");
-            })
-            .catch(() => {
-                console.log("_handleRepost catch");
-            })
+    const _handleIconPress = async ( type ) => {
+        switch (type) {
+            case "repost":
+                HandleRepost(postId)
+                    .then(() => {
+                        console.log("_handleRepost then");
+                    })
+                    .catch(() => {
+                        console.log("_handleRepost catch");
+                    })
+                break;
+            case "like":
+                HandleLike(postId)
+                    .then(() => {
+                        console.log("_handleRepost then");
+                    })
+                    .catch(() => {
+                        console.log("_handleRepost catch");
+                    })
+                break;
+        }
+
     }
 
     return(
@@ -119,10 +145,13 @@ export const MyCardView = ( props ) => {
                 }}>
 
                 <MyIconButton
-                    onPress={() => _handleRepost()}
+                    onPress={() => _handleIconPress("repost")}
+                    iconColor={isPosted ? "red" : "gray"}
                     iconName={"retweet"}/>
 
                 <MyIconButton
+                    onPress={() => _handleIconPress("like")}
+                    iconColor={isLiked ? "red" : "gray"}
                     iconName={"heart"}/>
 
             </View>
