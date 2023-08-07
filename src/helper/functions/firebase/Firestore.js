@@ -377,8 +377,15 @@ export function CreatePost(text) {
             .doc(postId.toString())
             .set(postData)
             .then(() => {
-                console.log('Firestore : CreatePost - success');
-                resolve();
+                HandleRepost(postId)
+                    .then(() => {
+                        console.log('Firestore : CreatePost - success');
+                        resolve();
+                    })
+                    .catch((err) => {
+                        console.log("Firestore : CreatePost error : ", err);
+                        reject(err);
+                    })
             })
             .catch((err) => {
                 console.log("Firestore : CreatePost error : ", err);

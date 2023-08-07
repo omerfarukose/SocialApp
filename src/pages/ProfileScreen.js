@@ -11,7 +11,7 @@ import * as ImagePicker from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 import {MyIconButton} from "../components/MyIconButton";
 
-export const ProfileScreen = ( props ) => {
+export const ProfileScreen = (props) => {
 
     let { theme } = useContext(ThemeContext);
 

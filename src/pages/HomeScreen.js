@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import {ActivityIndicator, FlatList, View} from "react-native";
 import { GetAllPosts } from "../helper/functions/firebase/Firestore";
 
-export const HomeScreen = ( ) => {
+export const HomeScreen = (props) => {
 
     const [postList, setPostList] =  useState([]);
     const [isReady, setIsReady] = useState(false);
@@ -17,7 +17,7 @@ export const HomeScreen = ( ) => {
                 setIsReady(true)
             })
         
-    }, [])
+    }, [props])
 
     return(
         <MyMainLayout>

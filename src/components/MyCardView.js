@@ -38,7 +38,6 @@ export const MyCardView = ( props ) => {
                         
                         setIsLiked(userLikes.includes(postId))
                         setIsPosted(userPosts.includes(postId))
-                        
                     });
 
             });
