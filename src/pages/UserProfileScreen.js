@@ -27,14 +27,14 @@ export const UserProfileScreen = ({route}) => {
     const [likeList, setLikeList] = useState([]);
     const [isFollowing, setIsFollowing] = useState(false);
     const [showFollow, setShowFollow] = useState(false);
-    
+    const [isReady, setIsReady] = useState(false);
 
     useEffect( () => {
-
+        
+        let currentUserId = GetUserId();
+        
         _resetAllInfo();
-
-        // TODO: check is our profile and hide follow button
-
+        
         GetUserInfoById(userId)
             .then((userInfo) => {
                 setProfileId(userInfo.id)
@@ -44,16 +44,10 @@ export const UserProfileScreen = ({route}) => {
                 setFollowingList(userInfo.following);
                 setPostList(userInfo.posts);
                 setLikeList(userInfo.likes);
-                
-                let currentUserId = GetUserId();
-                
                 setShowFollow(userInfo.id !== currentUserId);
-                console.log("follower list : ", userInfo.followers)
-                console.log("currentUserId : ", currentUserId)
-                console.log("userInfo.followers.includes(currentUserId) : ", userInfo.followers.includes(currentUserId))
-                
                 setIsFollowing(userInfo.followers.includes(currentUserId));
-            });
+            })
+            .finally(() => setIsReady(true))
 
     },[userId])
 
@@ -107,118 +101,138 @@ export const UserProfileScreen = ({route}) => {
 
     return(
         <MyMainLayout showGoBack={true}>
-
-            <ScrollView
-                overScrollMode={"never"}
-                style={{
-                    flex: 1,
-                }}>
-
-                <View
-                    style={{
-                        width: "100%",
-                    }}>
-
-                    {/*banner*/}
-                    <View
+            
+            {
+                isReady ?
+                    
+                    <ScrollView
+                        overScrollMode={"never"}
                         style={{
-                            width: "100%",
-                            backgroundColor: "orange"
+                            flex: 1,
                         }}>
-
-                        <Image
-                            source={require("../assets/images/banner.jpg")}
+                        
+                        <View
                             style={{
                                 width: "100%",
-                                height: 150,
-                            }}/>
-
-                    </View>
-
-                    {/*info view*/}
+                            }}>
+                            
+                            {/*banner*/}
+                            <View
+                                style={{
+                                    width: "100%",
+                                    backgroundColor: "orange"
+                                }}>
+                                
+                                <Image
+                                    source={require("../assets/images/banner.jpg")}
+                                    style={{
+                                        width: "100%",
+                                        height: 150,
+                                    }}/>
+                            
+                            </View>
+                            
+                            {/*info view*/}
+                            <View
+                                style={{
+                                    alignItems: "center",
+                                    justifyContent: "space-evenly",
+                                }}>
+                                
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                    }}>
+                                    
+                                    { _renderFollowInfoText("Follower", followerList) }
+                                    
+                                    <Image
+                                        source={{uri: avatarUrl}}
+                                        style={{
+                                            width: 130,
+                                            height: 130,
+                                            borderRadius: 99,
+                                            borderWidth: 2,
+                                            borderColor: theme.mainColor,
+                                            marginTop: -65,
+                                        }}/>
+                                    
+                                    { _renderFollowInfoText("Following", followingList) }
+                                
+                                
+                                </View>
+                                
+                                <View
+                                    style={{
+                                        marginTop: 20,
+                                    }}>
+                                    
+                                    <Text
+                                        style={{
+                                            fontWeight: "bold",
+                                            fontSize: hp(4),
+                                            color: theme.mainColor,
+                                            textAlign: "center"
+                                        }}>
+                                        
+                                        { username }
+                                    
+                                    </Text>
+                                    
+                                    {
+                                        showFollow &&
+                                        <MyButton
+                                            onPress={() => _handleFollowPress()}
+                                            style={{
+                                                backgroundColor: "white",
+                                                borderColor: theme.mainColor,
+                                                borderWidth: 2,
+                                                borderRadius: 20,
+                                                alignItems: "center",
+                                                marginTop: 20,
+                                            }}
+                                            textStyle={{
+                                                color: theme.mainColor,
+                                                fontWeight: "bold",
+                                            }}
+                                            title={isFollowing ? "Unfollow" : "Follow"}/>
+                                    }
+                                
+                                </View>
+                            
+                            </View>
+                        
+                        </View>
+                        
+                        {/*posts view*/}
+                        <View>
+                            
+                            {
+                                postList.length > 0 &&
+                                <FlatList
+                                    overScrollMode={"never"}
+                                    data={postList}
+                                    renderItem={({item}) => <MyCardView postId={item}/>}
+                                    keyExtractor={(item, index) => item}/>
+                            }
+                        
+                        </View>
+                    
+                    </ScrollView>
+                    
+                    :
+                    
                     <View
                         style={{
+                            flex: 1,
                             alignItems: "center",
-                            justifyContent: "space-evenly",
+                            justifyContent: "center"
                         }}>
-
-                        <View
-                            style={{
-                                flexDirection: "row",
-                            }}>
-
-                            { _renderFollowInfoText("Follower", followerList) }
-
-                            <Image
-                                source={{uri: avatarUrl}}
-                                style={{
-                                    width: 130,
-                                    height: 130,
-                                    borderRadius: 99,
-                                    borderWidth: 2,
-                                    borderColor: theme.mainColor,
-                                    marginTop: -65,
-                                }}/>
-
-                            { _renderFollowInfoText("Following", followingList) }
-
-
-                        </View>
-
-                        <View
-                            style={{
-                                marginTop: 20,
-                            }}>
-
-                            <Text
-                                style={{
-                                    fontWeight: "bold",
-                                    fontSize: hp(4),
-                                    color: theme.mainColor,
-                                    textAlign: "center"
-                                }}>
-
-                                { username }
-
-                            </Text>
-
-                            <MyButton
-                                onPress={() => _handleFollowPress()}
-                                style={{
-                                    backgroundColor: "white",
-                                    borderColor: theme.mainColor,
-                                    borderWidth: 2,
-                                    borderRadius: 20,
-                                    alignItems: "center",
-                                    marginTop: 20,
-                                }}
-                                textStyle={{
-                                    color: theme.mainColor,
-                                    fontWeight: "bold",
-                                }}
-                                title={isFollowing ? "Unfollow" : "Follow"}/>
-
-                        </View>
-
+                        
+                        <ActivityIndicator size={"large"}/>
+                    
                     </View>
-
-                </View>
-
-                {/*posts view*/}
-                <View>
-
-                    {
-                        postList.length > 0 &&
-                        <FlatList
-                            overScrollMode={"never"}
-                            data={postList}
-                            renderItem={({item}) => <MyCardView postId={item}/>}
-                            keyExtractor={(item, index) => item}/>
-                    }
-
-                </View>
-
-            </ScrollView>
+            }
 
         </MyMainLayout>
     )

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { FlatList, Image, Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {ActivityIndicator, FlatList, Image, Modal, ScrollView, Text, TouchableOpacity, View} from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { navigate } from "./Router/RootNavigation";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
@@ -22,7 +22,8 @@ export const ProfileScreen = () => {
     const [postList, setPostList] = useState([]);
     const [likeList, setLikeList] = useState([]);
     const [isImageModalVisible, setIsImageModalVisible] = useState(false);
-
+    const [isReady, setIsReady] = useState(false);
+    
     useEffect(() => {
 
         GetCurrentUserInfo()
@@ -34,22 +35,16 @@ export const ProfileScreen = () => {
                 setFollowingList(userInfo.following);
                 setPostList(userInfo.posts);
                 setLikeList(userInfo.likes);
-            });
+            })
+            .finally(() => setIsReady(true))
 
     },[])
 
     const chooseFile = async  () => {
         const path = await ImagePicker.launchImageLibrary(ImagePicker.ImageLibraryOptions);
 
-/*        console.log("res : ", path.assets[0].uri);
-        console.log("path : ", path)*/
-
         let uri = path.assets[0].uri.replace('file://', '')
-
-/*
-        console.log("uri : ", uri)
-*/
-
+        
         const task = storage()
             .ref(userId)
             .putFile(uri);
@@ -62,9 +57,6 @@ export const ProfileScreen = () => {
 
             setAvatarUrl(url)
 
-/*
-            console.log("url : ", url)
-*/
         });
 
         try {
@@ -112,118 +104,140 @@ export const ProfileScreen = () => {
 
     return(
         <MyMainLayout showLogout={true}>
-
-            <ScrollView
-                overScrollMode={"never"}
-                style={{
-                    flex: 1,
-                }}>
-
-            <View
-                style={{
-                    width: "100%",
-                }}>
-
-                {/*banner*/}
-                <View
-                    style={{
-                        width: "100%",
-                        backgroundColor: "orange"
-                    }}>
-
-                    <Image
-                        source={require("../assets/images/banner.jpg")}
+            
+            {
+                isReady ?
+                    
+                    <ScrollView
+                        overScrollMode={"never"}
                         style={{
-                            width: "100%",
-                            height: 150,
-                        }}/>
-
-                </View>
-
-                {/*info view*/}
-                <View
-                    style={{
-                        alignItems: "center",
-                        justifyContent: "space-evenly",
-                    }}>
-
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            width: wp(70),
-                            alignSelf: "center",
-                            justifyContent: "space-evenly"
+                            flex: 1,
                         }}>
-
-                        { _renderFollowInfoText("Follower", followerList) }
-
-                        <TouchableOpacity
-                            onPress={() => setIsImageModalVisible(true)}>
-
+                        
                         <View
                             style={{
-                                width: wp(50),
-                                alignItems: "center"
+                                width: "100%",
                             }}>
-
-                            <Image
-                                source={{uri: avatarUrl}}
+                            
+                            {/*banner*/}
+                            <View
                                 style={{
-                                    width: wp(30),
-                                    height: wp(30),
-                                    borderRadius: 99,
-                                    borderWidth: 2,
-                                    borderColor: theme.mainColor,
-                                    marginTop: -45,
-                                }}/>
-
+                                    width: "100%",
+                                    backgroundColor: "orange"
+                                }}>
+                                
+                                <Image
+                                    source={require("../assets/images/banner.jpg")}
+                                    style={{
+                                        width: "100%",
+                                        height: 150,
+                                    }}/>
+                            
+                            </View>
+                            
+                            {/*info view*/}
+                            <View
+                                style={{
+                                    alignItems: "center",
+                                    justifyContent: "space-evenly",
+                                }}>
+                                
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        width: wp(70),
+                                        alignSelf: "center",
+                                        justifyContent: "space-evenly"
+                                    }}>
+                                    
+                                    { _renderFollowInfoText("Follower", followerList) }
+                                    
+                                    <TouchableOpacity
+                                        onPress={() => setIsImageModalVisible(true)}>
+                                        
+                                        <View
+                                            style={{
+                                                width: wp(50),
+                                                alignItems: "center"
+                                            }}>
+                                            
+                                            <Image
+                                                source={{uri: avatarUrl}}
+                                                style={{
+                                                    width: wp(30),
+                                                    height: wp(30),
+                                                    borderRadius: 99,
+                                                    borderWidth: 2,
+                                                    borderColor: theme.mainColor,
+                                                    marginTop: -45,
+                                                }}/>
+                                        
+                                        </View>
+                                    
+                                    </TouchableOpacity>
+                                    
+                                    { _renderFollowInfoText("Following", followingList) }
+                                
+                                
+                                </View>
+                                
+                                <View
+                                    style={{
+                                        marginTop: 20,
+                                    }}>
+                                    
+                                    <Text
+                                        style={{
+                                            fontWeight: "bold",
+                                            fontSize: hp(3.5),
+                                            color: theme.mainColor,
+                                            textAlign: "center"
+                                        }}>
+                                        
+                                        { username }
+                                    
+                                    </Text>
+                                
+                                </View>
+                            
+                            </View>
+                        
                         </View>
-
-                        </TouchableOpacity>
-
-                        { _renderFollowInfoText("Following", followingList) }
-
-
-                    </View>
-
+                        
+                        {/*posts view*/}
+                        <View>
+                            
+                            {
+                                postList.length > 0 &&
+                                <FlatList
+                                    overScrollMode={"never"}
+                                    data={postList}
+                                    renderItem={({item}) => <MyCardView postId={item}/>}
+                                    keyExtractor={(item, index) => item}/>
+                            }
+                        
+                        </View>
+                    
+                    </ScrollView>
+                    
+                    :
+                    
                     <View
                         style={{
-                            marginTop: 20,
+                            flex: 1,
+                            alignItems: "center",
+                            justifyContent: "center"
                         }}>
-
-                        <Text
-                            style={{
-                                fontWeight: "bold",
-                                fontSize: hp(3.5),
-                                color: theme.mainColor,
-                                textAlign: "center"
-                            }}>
-
-                            { username }
-
-                        </Text>
-
+                        
+                        <ActivityIndicator size={"large"}/>
+                    
                     </View>
+                    
+            }
 
-                </View>
 
-            </View>
+            
 
-            {/*posts view*/}
-            <View>
-
-                {
-                    postList.length > 0 &&
-                    <FlatList
-                        overScrollMode={"never"}
-                        data={postList}
-                        renderItem={({item}) => <MyCardView postId={item}/>}
-                        keyExtractor={(item, index) => item}/>
-                }
-
-            </View>
-
-            </ScrollView>
 
             <Modal
                 transparent={true}

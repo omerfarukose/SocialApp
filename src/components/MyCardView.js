@@ -13,14 +13,13 @@ export const MyCardView = ( props ) => {
 
     const [userId,setUserId] = useState("");
     const [username, setUsername] = useState("");
-    const [avatarUri, setAvatarUri] = useState("https://cdn-icons-png.flaticon.com/512/1053/1053244.png");
+    const [avatarUri, setAvatarUri] = useState("https://cdn-icons-png.flaticon.com/512/149/149071.png");
     const [cardText, setCardText] = useState("");
 
     useEffect(() => {
 
         GetPostDataById(postId)
             .then((postData) => {
-                console.log("Post data : ", postData);
                 setCardText(postData.text)
 
                 GetUserInfoById(postData.userId)
