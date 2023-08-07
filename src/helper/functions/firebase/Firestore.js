@@ -1,6 +1,7 @@
 import firestore from "@react-native-firebase/firestore";
 import { GetUserId } from "../UserInfo";
 import uuid from "react-native-uuid";
+import storage from "@react-native-firebase/storage";
 
 // - - - USERS COLLECTION FUNCTIONS - - -
 
@@ -219,7 +220,7 @@ export async function UpdateUserFollowerList(userId, followerUser) {
             .then((userInfo) => {
                 let currentFollowerList = userInfo.followers;
                 let finalFollowerList = [];
-9
+
                 if (currentFollowerList.includes(userInfo.id)) {
                     // TODO: already reposted - remove from list
                     console.log("Firestore : HandleRepost - already reposted remove from list");
@@ -252,6 +253,40 @@ export async function UpdateUserFollowerList(userId, followerUser) {
             .catch(() => {
                 reject();
             })
+    }))
+}
+
+export async function UpdateUserProfileImage(uri){
+    let userId = GetUserId();
+    
+    return new Promise(((resolve, reject) => {
+        
+        const task = storage()
+            .ref(userId)
+            .putFile(uri);
+        
+        // set progress state
+        task.on('state_changed', async snapshot => {
+            
+            if(snapshot.state === "success") {
+                const url = await storage().ref(userId).getDownloadURL();
+                
+                let data  = {
+                    'avatar' : url
+                }
+                
+                UpdateUserParameter(userId, data)
+                    .then(() => {
+                        console.log("Firestore : UpdateUserProfileImage - success");
+                        resolve(url);
+                    })
+                    .catch(() => {
+                        console.log("Firestore : UpdateUserProfileImage - error");
+                        reject();
+                    })
+            }
+            
+        });
     }))
 }
 

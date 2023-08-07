@@ -3,12 +3,13 @@ import {ActivityIndicator, FlatList, Image, Modal, ScrollView, Text, TouchableOp
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { navigate } from "./Router/RootNavigation";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
-import { GetCurrentUserInfo } from "../helper/functions/firebase/Firestore";
+import {GetCurrentUserInfo, UpdateUserProfileImage} from "../helper/functions/firebase/Firestore";
 import { MyCardView } from "../components/MyCardView";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { MyButton } from "../components/MyButton";
 import * as ImagePicker from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
+import {MyIconButton} from "../components/MyIconButton";
 
 export const ProfileScreen = () => {
 
@@ -43,27 +44,14 @@ export const ProfileScreen = () => {
     const chooseFile = async  () => {
         const path = await ImagePicker.launchImageLibrary(ImagePicker.ImageLibraryOptions);
 
-        let uri = path.assets[0].uri.replace('file://', '')
+        let uri = path.assets[0].uri.replace('file://', '');
         
-        const task = storage()
-            .ref(userId)
-            .putFile(uri);
-
-        // set progress state
-        task.on('state_changed', async snapshot => {
-            setIsImageModalVisible(false)
-
-            const url = await storage().ref(userId).getDownloadURL();
-
-            setAvatarUrl(url)
-
-        });
-
-        try {
-            await task;
-        } catch (e) {
-            console.error(e);
-        }
+        setIsImageModalVisible(false);
+        
+        UpdateUserProfileImage(uri)
+            .then((imageUrl) => {
+                setAvatarUrl(imageUrl);
+            })
 
     };
 
@@ -235,10 +223,6 @@ export const ProfileScreen = () => {
                     
             }
 
-
-            
-
-
             <Modal
                 transparent={true}
                 visible={isImageModalVisible}>
@@ -247,7 +231,8 @@ export const ProfileScreen = () => {
                     style={{
                         flex: 1,
                         alignItems: "center",
-                        justifyContent: "center"
+                        justifyContent: "center",
+                        backgroundColor: 'rgba(52, 52, 52, 0.4)' // transparent background
                     }}>
 
                     <View
@@ -261,15 +246,16 @@ export const ProfileScreen = () => {
                             borderColor: "#eceff1",
                             borderWidth: 1
                         }}>
-
-                        <MyButton
+                        
+                        <MyIconButton
+                            onPress={() => setIsImageModalVisible(false)}
+                            iconName={"times-circle"}
+                            iconSize={wp(6)}
                             style={{
                                 position: "absolute",
-                                top: 0,
-                                right: 0,
-                                width: 30
-                            }}
-                            onPress={() => setIsImageModalVisible(false)}/>
+                                top: 10,
+                                right: 10,
+                            }}/>
 
                         <Image
                             source={{uri: avatarUrl}}
@@ -281,15 +267,27 @@ export const ProfileScreen = () => {
                                 borderColor: theme.mainColor,
                                 alignSelf: "center"
                             }}/>
-
-                        <MyButton
-                            onPress={async  () => chooseFile()}
-                            title={"Güncelle"}
+                        
+                        <View
                             style={{
-                                width: wp(30),
-                                alignSelf: "center"
-                            }}/>
-
+                                flexDirection: "row",
+                                width: wp(50),
+                                alignSelf: "center",
+                                justifyContent: "space-evenly",
+                            }}>
+                            
+                            <MyIconButton
+                                onPress={() => chooseFile()}
+                                iconName={"trash-alt"}
+                                iconSize={wp(6)}/>
+                            
+                            <MyIconButton
+                                onPress={() => chooseFile()}
+                                iconName={"photo-video"}
+                                iconSize={wp(6)}/>
+                            
+                        </View>
+                        
                     </View>
 
                 </View>
