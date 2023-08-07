@@ -79,8 +79,8 @@ export function GetUserInfoById(userId) {
     }))
 }
 
-export async function GetCurrentUserInfo() {
-    let userId = await GetUserId();
+export function GetCurrentUserInfo() {
+    let userId = GetUserId();
     console.log("Firestore : GetCurrentUserInfo local userId - ", userId);
 
     return new Promise(((resolve, reject) => {
@@ -276,8 +276,8 @@ export function GetAllPosts() {
     }))
 }
 
-export async function CreatePost(text) {
-    let userId = await GetUserId();
+export function CreatePost(text) {
+    let userId = GetUserId();
     let postId = uuid.v4();
 
     let postData = {

@@ -7,6 +7,7 @@ import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import { GetUserInfoById, HandleFollow } from "../helper/functions/firebase/Firestore";
 import { MyCardView } from "../components/MyCardView";
 import { ThemeContext } from "../contexts/ThemeContext";
+import {GetUserId} from "../helper/functions/UserInfo";
 
 export const UserProfileScreen = ({route}) => {
 
@@ -25,7 +26,8 @@ export const UserProfileScreen = ({route}) => {
     const [postList, setPostList] = useState([]);
     const [likeList, setLikeList] = useState([]);
     const [isFollowing, setIsFollowing] = useState(false);
-    const [isOurProfile, setIsOurProfile] = useState(false);
+    const [showFollow, setShowFollow] = useState(false);
+    
 
     useEffect( () => {
 
@@ -39,10 +41,18 @@ export const UserProfileScreen = ({route}) => {
                 setUsername(userInfo.username);
                 setAvatarUrl(userInfo.avatar);
                 setFollowerList(userInfo.followers);
-                // is current user exist in list ? setIsFollowing true : setIsFollowing false
                 setFollowingList(userInfo.following);
                 setPostList(userInfo.posts);
                 setLikeList(userInfo.likes);
+                
+                let currentUserId = GetUserId();
+                
+                setShowFollow(userInfo.id !== currentUserId);
+                console.log("follower list : ", userInfo.followers)
+                console.log("currentUserId : ", currentUserId)
+                console.log("userInfo.followers.includes(currentUserId) : ", userInfo.followers.includes(currentUserId))
+                
+                setIsFollowing(userInfo.followers.includes(currentUserId));
             });
 
     },[userId])

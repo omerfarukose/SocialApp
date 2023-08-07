@@ -8,11 +8,11 @@ import { MyTextInput } from "../../components/Input/MyTextInput";
 import Toast from 'react-native-toast-message';
 import { validateEmail } from "../../helper/functions/MyHelperFunctions";
 import { navigate } from "../Router/RootNavigation";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SignIn } from "../../helper/functions/firebase/Auth";
 import { GetUserInfoByEmail } from "../../helper/functions/firebase/Firestore";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import {widthPercentageToDP as wp} from "react-native-responsive-screen";
+import SyncStorage from 'sync-storage';
 
 export const LoginScreen = ({navigation}) => {
 
@@ -42,8 +42,8 @@ export const LoginScreen = ({navigation}) => {
 
                         GetUserInfoByEmail(email)
                             .then((userInfo) => {
-                                AsyncStorage.setItem('userId', userInfo.id);
-                                AsyncStorage.setItem('username', userInfo.username);
+                                SyncStorage.set('userId', userInfo.id);
+                                SyncStorage.set('username', userInfo.username);
                             })
 
                         navigate("HomeTabs")

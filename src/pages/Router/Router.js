@@ -10,26 +10,32 @@ import { FollowListScreen } from "../FollowListScreen";
 import { navigationRef } from "./RootNavigation";
 import { AddPostScreen } from "../AddPostScreen";
 import auth from '@react-native-firebase/auth';
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserProfileScreen } from "../UserProfileScreen";
 import { SettingsScreen } from "../SettingsScreen";
-import { useContext } from "react";
+import {useContext, useEffect} from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import {Platform} from "react-native";
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
+import SyncStorage from "sync-storage";
 
 export const Router = ( ) => {
 
     let { theme } = useContext(ThemeContext);
+    
+    useEffect(() => {
+        _initStorage()
+    }, [])
+    
+    const _initStorage = async ( ) => {
+        const data = await SyncStorage.init();
+        console.log('AsyncStorage is ready!', data);
+    }
 
     const Stack = createNativeStackNavigator();
     const Tab = createBottomTabNavigator();
 
     let isUserExist = auth().currentUser;
-    
     console.log("current user : ", isUserExist)
-
-    let localMail = AsyncStorage.getItem("email");
 
     const getTabBarIcon = ( routeName ) => {
         let iconName;
