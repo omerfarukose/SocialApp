@@ -17,25 +17,45 @@ import { ThemeContext } from "../../contexts/ThemeContext";
 import {Platform} from "react-native";
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 import SyncStorage from "sync-storage";
+import {GetUserInfoByEmail} from "../../helper/functions/firebase/Firestore";
+import {UserContext} from "../../contexts/UserContext";
 
 export const Router = ( ) => {
 
     let { theme } = useContext(ThemeContext);
+    let { setUserAvatar, setUserLikes, setUserPosts } = useContext(UserContext);
+    
+    let currentUser = auth().currentUser;
+    console.log("current user : ", currentUser)
+    
+    const Stack = createNativeStackNavigator();
+    const Tab = createBottomTabNavigator();
     
     useEffect(() => {
-        _initStorage()
-    }, [])
+        _initStorage();
+        
+        _checkUser();
+    }, []);
+    
+    const _checkUser = ( ) => {
+        if (currentUser) {
+            GetUserInfoByEmail(currentUser.email)
+                .then((userInfo) => {
+                    SyncStorage.set('userId', userInfo.id);
+                    SyncStorage.set('username', userInfo.username);
+                    console.log("login user info : ", userInfo)
+                    setUserAvatar(userInfo.avatar);
+                    setUserLikes(userInfo.likes);
+                    setUserPosts(userInfo.posts);
+                })
+        }
+
+    }
     
     const _initStorage = async ( ) => {
         const data = await SyncStorage.init();
         console.log('AsyncStorage is ready!', data);
     }
-
-    const Stack = createNativeStackNavigator();
-    const Tab = createBottomTabNavigator();
-
-    let isUserExist = auth().currentUser;
-    console.log("current user : ", isUserExist)
 
     const getTabBarIcon = ( routeName ) => {
         let iconName;
@@ -55,8 +75,8 @@ export const Router = ( ) => {
         return iconName;
     }
     
-    function onTabPressHome() {
-        navigate("Home")
+    function onTabPress(route) {
+        navigate(route)
     }
 
     function HomeTabs() {
@@ -77,14 +97,21 @@ export const Router = ( ) => {
                 <Tab.Screen
                     listeners={({ navigation }) => ({
                         tabPress: e => {
-                            onTabPressHome()
+                            onTabPress("Home")
                         },
                     })}
                     name="HomeStack"
                     component={HomeStack}/>
                 
                 <Tab.Screen name="AddPost" component={AddPostScreen} />
-                <Tab.Screen name="ProfileStack" component={ProfileStack} />
+                
+                <Tab.Screen
+                    listeners={({ navigation }) => ({
+                        tabPress: e => {
+                            onTabPress("Profile")
+                        },
+                    })}
+                    name="ProfileStack" component={ProfileStack} />
 
             </Tab.Navigator>
         )
@@ -127,7 +154,7 @@ export const Router = ( ) => {
             ref={navigationRef}>
 
             <Stack.Navigator
-                initialRouteName={isUserExist ? "HomeTabs" : "Login"}
+                initialRouteName={currentUser ? "HomeTabs" : "Login"}
                 screenOptions={{
                     headerShown: false
                 }}>

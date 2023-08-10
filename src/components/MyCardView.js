@@ -145,7 +145,7 @@ export const MyCardView = ( props ) => {
 
                 <MyIconButton
                     onPress={() => _handleIconPress("repost")}
-                    iconColor={isPosted ? "red" : "gray"}
+                    iconColor={isPosted ? theme.secondColor : "gray"}
                     iconName={"retweet"}/>
 
                 <MyIconButton

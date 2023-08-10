@@ -6,9 +6,7 @@ import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import {GetCurrentUserInfo, UpdateUserProfileImage} from "../helper/functions/firebase/Firestore";
 import { MyCardView } from "../components/MyCardView";
 import { ThemeContext } from "../contexts/ThemeContext";
-import { MyButton } from "../components/MyButton";
 import * as ImagePicker from 'react-native-image-picker';
-import storage from '@react-native-firebase/storage';
 import {MyIconButton} from "../components/MyIconButton";
 
 export const ProfileScreen = (props) => {
@@ -250,14 +248,11 @@ export const ProfileScreen = (props) => {
                         {/*posts view*/}
                         <View>
                             
-                            {
-                                postList.length > 0 &&
-                                <FlatList
-                                    overScrollMode={"never"}
-                                    data={postsSelected ? postList : likeList}
-                                    renderItem={({item}) => <MyCardView postId={item}/>}
-                                    keyExtractor={(item, index) => item}/>
-                            }
+                            <FlatList
+                                overScrollMode={"never"}
+                                data={postsSelected ? postList : likeList}
+                                renderItem={({item}) => <MyCardView postId={item}/>}
+                                keyExtractor={(item, index) => item}/>
                         
                         </View>
                     
@@ -269,7 +264,7 @@ export const ProfileScreen = (props) => {
                         style={{
                             flex: 1,
                             alignItems: "center",
-                            justifyContent: "center"
+                            justifyContent: "center",
                         }}>
                         
                         <ActivityIndicator size={"large"}/>
