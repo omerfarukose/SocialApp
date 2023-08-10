@@ -18,6 +18,7 @@ import { MyCardView } from "../components/MyCardView";
 import { ThemeContext } from "../contexts/ThemeContext";
 import * as ImagePicker from 'react-native-image-picker';
 import {MyIconButton} from "../components/MyIconButton";
+import {MyActivityIndicator} from "../components/MyActivityIndicator";
 
 export const ProfileScreen = (props) => {
 
@@ -290,16 +291,7 @@ export const ProfileScreen = (props) => {
                     
                     :
                     
-                    <View
-                        style={{
-                            flex: 1,
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}>
-                        
-                        <ActivityIndicator size={"large"}/>
-                    
-                    </View>
+                    <MyActivityIndicator/>
                     
             }
 

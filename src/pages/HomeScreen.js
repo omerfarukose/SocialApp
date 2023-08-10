@@ -3,6 +3,7 @@ import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import React, {useCallback, useEffect, useState} from "react";
 import {ActivityIndicator, FlatList, RefreshControl, View} from "react-native";
 import { GetAllPosts } from "../helper/functions/firebase/Firestore";
+import {MyActivityIndicator} from "../components/MyActivityIndicator";
 
 export const HomeScreen = (props) => {
 
@@ -49,16 +50,7 @@ export const HomeScreen = (props) => {
                     
                     :
                     
-                    <View
-                        style={{
-                            flex: 1,
-                            alignItems: "center",
-                            justifyContent: "center"
-                        }}>
-                        
-                        <ActivityIndicator size={"large"}/>
-                    
-                    </View>
+                    <MyActivityIndicator/>
             }
 
 
