@@ -15,15 +15,20 @@ import React, {useState} from "react";
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 import {MyCardView} from "../components/MyCardView";
 import {GetUserInfoByUsername} from "../helper/functions/firebase/Firestore";
+import {MyUserItem} from "../components/MyUserItem";
 
 export const SearchScreen = ( ) => {
     
     const [searchValue, setSearchValue] = useState("");
-    const [searchResultList, setSearchResultList] = useState([1,2,4,]);
+    const [searchResultList, setSearchResultList] = useState([]);
     
     const _handleSearch = ( ) => {
+        setSearchResultList([]);
+        
         GetUserInfoByUsername(searchValue)
-            .then()
+            .then((userInfo) => {
+                setSearchResultList(current => [...current, userInfo])
+            })
     }
     
     return(
@@ -65,13 +70,7 @@ export const SearchScreen = ( ) => {
                         <FlatList
                             overScrollMode={"never"}
                             data={searchResultList}
-                            renderItem={({item}) => {
-                                return(
-                                    <Text>
-                                        test
-                                    </Text>
-                                )
-                            }}
+                            renderItem={({item}) => <MyUserItem userInfo={item}/>}
                             keyExtractor={(item, index) => item}/>
                         
                     </View>

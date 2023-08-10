@@ -12,7 +12,7 @@ export const HomeScreen = (props) => {
     const [refreshing, setRefreshing] = useState(false);
     
     useEffect(() => {
-        _getPosts();
+        /*_getPosts();*/
     }, [props])
     
     const _getPosts = ( ) => {

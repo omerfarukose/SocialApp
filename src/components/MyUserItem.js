@@ -7,26 +7,34 @@ import { ThemeContext } from "../contexts/ThemeContext";
 
 export const MyUserItem = (params) => {
 
-    let { userId } = params;
+    let { userId, userInfo } = params;
 
     let { theme } = useContext(ThemeContext);
 
     console.log("MyUserItem userid : ", userId);
+    console.log("MyUserItem userInfo : ", userInfo);
 
     const [avatar, setAvatar] = useState("https://cdn-icons-png.flaticon.com/512/1053/1053244.png");
     const [username, setUsername] = useState("");
-
+    let id = userId || userInfo.id;
+    
     useEffect(() => {
-        GetUserInfoById(userId)
-            .then((userInfo) => {
-                setAvatar(userInfo.avatar);
-                setUsername(userInfo.username);
-            })
+        if (userInfo) {
+            setAvatar(userInfo.avatar);
+            setUsername(userInfo.username);
+        } else {
+            GetUserInfoById(userId)
+                .then((userInfo) => {
+                    setAvatar(userInfo.avatar);
+                    setUsername(userInfo.username);
+                })
+        }
+
     }, [])
 
     return(
         <TouchableOpacity
-            onPress={() => navigate("UserProfile", {userId: userId})}
+            onPress={() => navigate("UserProfile", {userId: id})}
             style={{
                 backgroundColor: "white",
                 height: hp(10),
