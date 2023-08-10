@@ -69,7 +69,7 @@ export const ProfileScreen = (props) => {
     const _renderFollowInfoText = ( title, list ) => {
         return(
             <TouchableOpacity
-                onPress={() => navigate("FollowList", {list: list})}
+                onPress={() => navigate("FollowList", {userList: list})}
                 style={{
                     alignItems: "center",
                     marginTop: 20,
