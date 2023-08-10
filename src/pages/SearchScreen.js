@@ -11,16 +11,23 @@ import {
 } from "react-native";
 import {MyTextInput} from "../components/Input/MyTextInput";
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 import {MyCardView} from "../components/MyCardView";
 import {GetUserInfoByUsername} from "../helper/functions/firebase/Firestore";
 import {MyUserItem} from "../components/MyUserItem";
 
-export const SearchScreen = ( ) => {
+export const SearchScreen = ({ navigation }) => {
     
     const [searchValue, setSearchValue] = useState("");
     const [searchResultList, setSearchResultList] = useState([]);
+    
+    useEffect(() => {
+        return(() => {
+            setSearchResultList([]);
+            setSearchValue("");
+        })
+    }, [navigation])
     
     const _handleSearch = ( ) => {
         setSearchResultList([]);
@@ -40,7 +47,10 @@ export const SearchScreen = ( ) => {
                 
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     
-                    <View>
+                    <View
+                        style={{
+                            flex: 1
+                        }}>
                         
                         {/* search bar */}
                         <View
@@ -58,8 +68,7 @@ export const SearchScreen = ( ) => {
                                 value={searchValue}
                                 setValue={setSearchValue}/>
                             
-                            <TouchableOpacity
-                                onPress={() => _handleSearch()}>
+                            <TouchableOpacity onPress={() => _handleSearch()}>
                                 
                                 <Icon name={"search"} size={hp(2.4)} color={"gray"} />
                             
