@@ -184,7 +184,7 @@ export const ProfileScreen = (props) => {
                                                 style={{
                                                     width: wp(30),
                                                     height: wp(30),
-                                                    borderRadius: 99,
+                                                    borderRadius: 999,
                                                     borderWidth: 2,
                                                     borderColor: theme.mainColor,
                                                     marginTop: -45,

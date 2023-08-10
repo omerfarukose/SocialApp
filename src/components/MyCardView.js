@@ -5,6 +5,7 @@ import {GetPostDataById, GetUserInfoById, HandleLike, HandleRepost} from "../hel
 import { navigate } from "../pages/Router/RootNavigation";
 import { ThemeContext } from "../contexts/ThemeContext";
 import {UserContext} from "../contexts/UserContext";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 
 export const MyCardView = ( props ) => {
 
@@ -71,88 +72,101 @@ export const MyCardView = ( props ) => {
     return(
         <View
             style={{
-                padding: 10,
-                paddingTop: 20,
+                padding: wp(5),
                 borderBottomWidth: 1,
                 borderBottomColor: "#d7d5d5",
                 backgroundColor: "white",
             }}>
-
-            {/*image & text*/}
+            
+            {/*image & username & time? */}
             <View
                 style={{
                     flexDirection: "row",
-                    marginBottom: 20,
-                    alignItems: "flex-start",
+                    alignItems: "center",
                 }}>
-
+                
                 <TouchableOpacity
                     onPress={() => navigate("UserProfile", {userId: userId})}>
-
+                    
                     <Image
                         source={{uri: avatarUri}}
                         style={{
-                            width: 60,
-                            height: 60,
+                            width: hp(6),
+                            height: hp(6),
                             borderRadius: 99,
                             borderWidth: 1,
                             borderColor: theme.mainColor,
                         }}/>
-
+                
                 </TouchableOpacity>
-
-                <View>
-
-                    <Text
-                        style={{
-                            flex: 1,
-                            paddingLeft: 10,
-                            paddingTop: 0,
-                            fontWeight: "bold",
-                            fontSize: 20,
-                        }}>
-
-                        { username }
-
-                    </Text>
-
-                    <Text
-                        style={{
-                            flex: 1,
-                            padding: 10,
-                            paddingTop: 0,
-                            fontWeight: "400",
-                            fontSize: 15,
-                        }}>
-
-                        { cardText }
-
-                    </Text>
-
-
-                </View>
-
+                
+                <Text
+                    style={{
+                        flex: 1,
+                        paddingLeft: 10,
+                        paddingTop: 0,
+                        fontWeight: "bold",
+                        fontSize: hp(2.4),
+                    }}>
+                    
+                    { username }
+                
+                </Text>
+                
+                <Text
+                    style={{
+                        fontSize: hp(1.6),
+                    }}>
+                    
+                    1 saat önce
+                
+                </Text>
+            
             </View>
-
+            
+            {/* post content */}
+            <View
+                style={{
+                    marginVertical: hp(2),
+                    minHeight: hp(8),
+                }}>
+                
+                <Text
+                    style={{
+                        flex: 1,
+                        padding: 10,
+                        paddingTop: 0,
+                        fontWeight: "400",
+                        fontSize: hp(2.3),
+                    }}>
+                    
+                    { cardText }
+                
+                </Text>
+            
+            </View>
+            
             {/*button group*/}
             <View
                 style={{
-                    width: "100%",
+                    width: "90%",
+                    alignSelf: "center",
                     flexDirection: "row",
                     alignItems: "center",
-                    justifyContent: "space-evenly",
+                    justifyContent: "flex-end",
+                    gap: wp(15),
                 }}>
-
+                
                 <MyIconButton
                     onPress={() => _handleIconPress("repost")}
                     iconColor={isPosted ? theme.secondColor : "gray"}
                     iconName={"retweet"}/>
-
+                
                 <MyIconButton
                     onPress={() => _handleIconPress("like")}
                     iconColor={isLiked ? "red" : "gray"}
                     iconName={"heart"}/>
-
+            
             </View>
 
         </View>
