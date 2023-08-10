@@ -49,7 +49,6 @@ export const Router = ( ) => {
                     setUserPosts(userInfo.posts);
                 })
         }
-
     }
     
     const _initStorage = async ( ) => {

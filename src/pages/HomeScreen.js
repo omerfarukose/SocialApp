@@ -1,6 +1,6 @@
 import { MyCardView } from "../components/MyCardView";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
-import React, { useEffect, useState } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {ActivityIndicator, FlatList, RefreshControl, View} from "react-native";
 import { GetAllPosts } from "../helper/functions/firebase/Firestore";
 
@@ -8,7 +8,8 @@ export const HomeScreen = (props) => {
 
     const [postList, setPostList] =  useState([]);
     const [isReady, setIsReady] = useState(false);
-
+    const [refreshing, setRefreshing] = useState(false);
+    
     useEffect(() => {
         _getPosts();
     }, [props])
@@ -20,6 +21,16 @@ export const HomeScreen = (props) => {
                 setIsReady(true)
             })
     }
+    
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        
+        GetAllPosts()
+            .then((res) => {
+                setPostList(res);
+                setRefreshing(false);
+            })
+    }, []);
 
     return(
         <MyMainLayout>
@@ -30,6 +41,9 @@ export const HomeScreen = (props) => {
                     <FlatList
                         overScrollMode={"never"}
                         data={postList}
+                        refreshControl={
+                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                        }
                         renderItem={({item}) => <MyCardView postId={item.data().id}/>}
                         keyExtractor={(item, index) => item.id}/>
                     

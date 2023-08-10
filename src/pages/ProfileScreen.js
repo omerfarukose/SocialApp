@@ -1,9 +1,19 @@
-import React, { useContext, useEffect, useState } from "react";
-import {ActivityIndicator, FlatList, Image, Modal, ScrollView, Text, TouchableOpacity, View} from "react-native";
+import React, {useCallback, useContext, useEffect, useState} from "react";
+import {
+    ActivityIndicator,
+    FlatList,
+    Image,
+    Modal,
+    RefreshControl,
+    ScrollView,
+    Text,
+    TouchableOpacity,
+    View
+} from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { navigate } from "./Router/RootNavigation";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
-import {GetCurrentUserInfo, UpdateUserProfileImage} from "../helper/functions/firebase/Firestore";
+import {GetAllPosts, GetCurrentUserInfo, UpdateUserProfileImage} from "../helper/functions/firebase/Firestore";
 import { MyCardView } from "../components/MyCardView";
 import { ThemeContext } from "../contexts/ThemeContext";
 import * as ImagePicker from 'react-native-image-picker';
@@ -23,6 +33,7 @@ export const ProfileScreen = (props) => {
     const [isImageModalVisible, setIsImageModalVisible] = useState(false);
     const [isReady, setIsReady] = useState(false);
     const [postsSelected, setPostSelected] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
     
     useEffect(() => {
 
@@ -88,6 +99,22 @@ export const ProfileScreen = (props) => {
             </TouchableOpacity>
         )
     }
+    
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        
+        GetCurrentUserInfo()
+            .then((userInfo) => {
+                setUserId(userInfo.id)
+                setUsername(userInfo.username);
+                setAvatarUrl(userInfo.avatar);
+                setFollowerList(userInfo.followers);
+                setFollowingList(userInfo.following);
+                setPostList(userInfo.posts);
+                setLikeList(userInfo.likes);
+            })
+            .finally(() => setRefreshing(false))
+    }, []);
 
     return(
         <MyMainLayout showLogout={true}>
@@ -97,6 +124,9 @@ export const ProfileScreen = (props) => {
                     
                     <ScrollView
                         overScrollMode={"never"}
+                        refreshControl={
+                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                        }
                         style={{
                             flex: 1,
                         }}>
