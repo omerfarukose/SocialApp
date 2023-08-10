@@ -60,6 +60,27 @@ export function GetUserInfoByEmail(email) {
     }))
 }
 
+export function GetUserInfoByUsername(username) {
+    console.log("Firestore : GetUserInfoByUsername username - ", username);
+    
+    return new Promise(((resolve, reject) => {
+        firestore()
+            .collection('Users')
+            .where('username', '==', username)
+            .get()
+            .then(querySnapshot => {
+                let userInfo = querySnapshot.docs[0].data();
+                console.log("Firestore : GetUserInfoByUsername - response : ", userInfo);
+                
+                resolve(userInfo);
+            })
+            .catch((err) => {
+                console.log("Firestore : GetUserInfoByUsername error : ", err);
+                reject(err);
+            })
+    }))
+}
+
 export function GetUserInfoById(userId) {
     console.log("Firestore : GetUserInfoById userId - ", userId);
 
