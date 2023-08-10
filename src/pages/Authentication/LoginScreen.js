@@ -9,7 +9,7 @@ import Toast from 'react-native-toast-message';
 import { validateEmail } from "../../helper/functions/MyHelperFunctions";
 import { navigate } from "../Router/RootNavigation";
 import { SignIn } from "../../helper/functions/firebase/Auth";
-import { GetUserInfoByEmail } from "../../helper/functions/firebase/Firestore";
+import {GetUserInfoByEmail, GetUserInfoByUsername} from "../../helper/functions/firebase/Firestore";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 import SyncStorage from 'sync-storage';
@@ -20,7 +20,6 @@ export const LoginScreen = ({navigation}) => {
     let { theme } = useContext(ThemeContext);
     let { setUserAvatar, setUserLikes, setUserPosts } = useContext(UserContext);
 
-
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -30,6 +29,29 @@ export const LoginScreen = ({navigation}) => {
             text2: text
         });
     }
+    
+    const _signIn = (mail) => {
+        SignIn(mail, password)
+            .then(() => {
+                setPassword("");
+                setEmail("");
+                
+                GetUserInfoByEmail(mail)
+                    .then((userInfo) => {
+                        SyncStorage.set('userId', userInfo.id);
+                        SyncStorage.set('username', userInfo.username);
+                        console.log("login user info : ", userInfo)
+                        setUserAvatar(userInfo.avatar);
+                        setUserLikes(userInfo.likes);
+                        setUserPosts(userInfo.posts);
+                    })
+                
+                navigate("HomeTabs")
+            })
+            .catch(() => {
+                showToast("Kullanıcı Adı & Parola hatalı");
+            })
+    }
 
     const _handleLoginPress = ( ) => {
 
@@ -37,26 +59,7 @@ export const LoginScreen = ({navigation}) => {
 
             if (password) {
 
-                SignIn(email, password)
-                    .then(() => {
-                        setPassword("");
-                        setEmail("");
-
-                        GetUserInfoByEmail(email)
-                            .then((userInfo) => {
-                                SyncStorage.set('userId', userInfo.id);
-                                SyncStorage.set('username', userInfo.username);
-                                console.log("login user info : ", userInfo)
-                                setUserAvatar(userInfo.avatar);
-                                setUserLikes(userInfo.likes);
-                                setUserPosts(userInfo.posts);
-                            })
-
-                        navigate("HomeTabs")
-                    })
-                    .catch(() => {
-                        showToast("Kullanıcı Adı & Parola hatalı");
-                    })
+                _signIn(email);
 
             } else {
                 // show password alert !
@@ -64,8 +67,17 @@ export const LoginScreen = ({navigation}) => {
             }
 
         } else {
-            // show username alert !
-            showToast("Geçersiz E-mail");
+            
+            GetUserInfoByUsername(email)
+                .then((userInfo) => {
+                    // sign in
+                    _signIn(userInfo.email);
+                })
+                .catch(() => {
+                    // show username alert !
+                    showToast("Kullanıcı Bulunamadı");
+                })
+
         }
 
     }
