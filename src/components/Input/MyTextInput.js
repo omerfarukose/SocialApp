@@ -3,7 +3,7 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-nat
 
 export const MyTextInput = ( props ) => {
 
-    let { value, setValue, placeholder, inputStyle, secureText } = props;
+    let { value, setValue, placeholder, inputStyle, secureText, multiline, autoFocus } = props;
 
     return(
         <View
@@ -18,10 +18,12 @@ export const MyTextInput = ( props ) => {
             }}>
 
             <TextInput
+                autoFocus={autoFocus}
                 value={value}
                 autoCorrect={false}
                 autoCapitalize={"none"}
                 onChangeText={setValue}
+                multiline={multiline}
                 placeholder={placeholder}
                 secureTextEntry={secureText}/>
 

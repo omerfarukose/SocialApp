@@ -1,16 +1,19 @@
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, View } from "react-native";
 import { MyTextInput } from "../components/Input/MyTextInput";
-import { useState } from "react";
-import { heightPercentageToDP, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import {useContext, useEffect, useState} from "react";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { MyButton } from "../components/MyButton";
-import { navigate } from "./Router/RootNavigation";
+import {goBack, navigate} from "./Router/RootNavigation";
 import Toast from "react-native-toast-message";
 import { CreatePost } from "../helper/functions/firebase/Firestore";
+import {ThemeContext} from "../contexts/ThemeContext";
 
 export const  AddPostScreen = ( ) => {
 
-    const [post, setPost] = useState("")
+    const {theme} = useContext(ThemeContext);
+    
+    const [post, setPost] = useState("");
 
     const showToast = (text, type = "success") => {
         Toast.show({
@@ -30,10 +33,7 @@ export const  AddPostScreen = ( ) => {
     }
 
     return(
-        <MyMainLayout
-            layoutStyle={{
-                padding: 20,
-            }}>
+        <MyMainLayout>
 
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -45,28 +45,63 @@ export const  AddPostScreen = ( ) => {
                         style={{
                             flex: 1,
                             alignItems: "center",
-                            justifyContent: "space-evenly"
                         }}>
-
+                        
+                        {/*button group*/}
+                        <View
+                            style={{
+                                width: "80%",
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                marginVertical: hp(3)
+                            }}>
+                            
+                            <MyButton
+                                onPress={() => {
+                                    goBack();
+                                    setPost("");
+                                }}
+                                title={"İptal"}
+                                textStyle={{
+                                    fontWeight: "bold",
+                                    color: "red",
+                                }}
+                                style={{
+                                    width: wp(30),
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    backgroundColor: "white",
+                                    borderColor: "red",
+                                    borderWidth: 1
+                                }}/>
+                            
+                            <MyButton
+                                onPress={() => _handleAddPost()}
+                                title={"Paylaş"}
+                                textStyle={{
+                                    fontWeight: "bold",
+                                    color: theme.mainColor,
+                                }}
+                                style={{
+                                    width: wp(30),
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    backgroundColor: "white",
+                                    borderColor: theme.mainColor,
+                                    borderWidth: 1
+                                }}/>
+                            
+                        </View>
+                        
+                        {/*input*/}
                         <MyTextInput
                             value={post}
+                            multiline={true}
                             setValue={setPost}
                             placeholder={"Post Mesajı..."}
                             inputStyle={{
-                                borderWidth: 1,
-                                borderColor: "gray",
-                                alignSelf: "center",
-                                textAlignVertical: "top",
-                                height: heightPercentageToDP(40),
-                            }}/>
-
-                        <MyButton
-                            onPress={() => _handleAddPost()}
-                            title={"Paylaş"}
-                            style={{
-                                width: wp(30),
-                                alignItems: "center",
-                                justifyContent: "center"
+                                justifyContent: "flex-start",
+                                height: hp(40),
                             }}/>
 
                     </View>
