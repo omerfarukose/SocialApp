@@ -11,6 +11,7 @@ export async function CreateUser(username, email) {
     let userData = {
         id: userId,
         username: username,
+        usernameForSearch: username.toLowerCase(),
         email: email,
         avatar: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
         followers: [],

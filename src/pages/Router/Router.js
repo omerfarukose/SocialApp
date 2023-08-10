@@ -19,6 +19,7 @@ import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 import SyncStorage from "sync-storage";
 import {GetUserInfoByEmail} from "../../helper/functions/firebase/Firestore";
 import {UserContext} from "../../contexts/UserContext";
+import {SearchScreen} from "../SearchScreen";
 
 export const Router = ( ) => {
 
@@ -63,6 +64,9 @@ export const Router = ( ) => {
             case 'HomeStack':
                 iconName = 'home';
                 break;
+            case 'Search':
+                iconName = 'search';
+                break;
             case 'AddPost':
                 iconName = 'plus';
                 break;
@@ -101,6 +105,8 @@ export const Router = ( ) => {
                     })}
                     name="HomeStack"
                     component={HomeStack}/>
+                
+                <Tab.Screen name="Search" component={SearchScreen} />
                 
                 <Tab.Screen name="AddPost" component={AddPostScreen} />
                 

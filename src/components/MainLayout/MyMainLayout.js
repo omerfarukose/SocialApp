@@ -37,6 +37,8 @@ export const MyMainLayout = ( props ) => {
                 }
 
             </View>
+            
+            
 
         </SafeAreaView>
     )
