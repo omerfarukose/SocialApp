@@ -119,7 +119,7 @@ export function GetCurrentUserInfo() {
     }))
 }
 
-export function HandleRepost(postId) {
+export function HandleRepost(postId, postOwnerId) {
     console.log("Firestore : HandleRepost postId - ", postId);
 
     return new Promise(((resolve, reject) => {
@@ -147,7 +147,17 @@ export function HandleRepost(postId) {
                     UpdateUserParameter(userInfo.id, updateData)
                         .then(() => {
                             console.log("Firestore : HandleRepost - success");
-                            resolve();
+                            
+                            let requestData = {
+                                userId: postOwnerId,
+                                postId: postId,
+                                type: "repost"
+                            }
+                            
+                            // add notification to post owner
+                            AddNotification(requestData)
+                                .then(() => resolve())
+                                .catch(() => reject())
                         })
                         .catch(() => {
                             console.log("Firestore : HandleRepost - error");
@@ -163,7 +173,7 @@ export function HandleRepost(postId) {
     }))
 }
 
-export function HandleLike(postId) {
+export function HandleLike(postId, postOwnerId) {
     console.log("Firestore : HandleLike postId - ", postId);
     
     return new Promise(((resolve, reject) => {
@@ -190,11 +200,21 @@ export function HandleLike(postId) {
                     
                     UpdateUserParameter(userInfo.id, updateData)
                         .then(() => {
-                            console.log("Firestore : HandleRepost - success");
-                            resolve();
+                            console.log("Firestore : HandleLike - success");
+                            
+                            let requestData = {
+                                userId: postOwnerId,
+                                postId: postId,
+                                type: "repost"
+                            }
+                            
+                            // add notification to post owner
+                            AddNotification(requestData)
+                                .then(() => resolve())
+                                .catch(() => reject())
                         })
                         .catch(() => {
-                            console.log("Firestore : HandleRepost - error");
+                            console.log("Firestore : HandleLike - error");
                             reject();
                         })
                     
@@ -258,7 +278,18 @@ export async function HandleFollow(userIdToFollow){
 
                             UpdateUserFollowerList(userIdToFollow, userInfo.id)
                                 .then(() => {
-                                    resolve();
+                                    
+                                    let requestData = {
+                                        userId: userIdToFollow,
+                                        postId: 0,
+                                        type: "follow"
+                                    }
+                                    
+                                    // add notification to followed user
+                                    AddNotification(requestData)
+                                        .then(() => resolve())
+                                        .catch(() => reject())
+                                    
                                 })
                                 .catch(() => {
                                     reject();
@@ -354,6 +385,46 @@ export async function UpdateUserProfileImage(uri){
             
         });
     }))
+}
+
+export async function AddNotification( requestData ){
+    
+    let currentUserId = GetUserId();
+
+    let data = {
+        userId: currentUserId,
+        postId: requestData.postId,
+        type: requestData.type
+    }
+    
+    return new Promise(((resolve, reject) => {
+        GetUserInfoById(requestData.userId)
+            .then((userInfo) => {
+                let currentNotificationList = userInfo.notifications;
+                let finalNotificationList = [];
+                
+                if (currentNotificationList) {
+                    finalNotificationList = [data, ...currentNotificationList]
+                } else {
+                    finalNotificationList.push(data)
+                }
+                
+                let updateData = {
+                    'notifications' : finalNotificationList
+                }
+                
+                UpdateUserParameter(userInfo.id, updateData)
+                    .then(() => {
+                        console.log("Firestore : AddNotification - success");
+                        resolve();
+                    })
+                    .catch(() => {
+                        console.log("Firestore : AddNotification - error");
+                        reject();
+                    })
+            })
+    }))
+    
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - -

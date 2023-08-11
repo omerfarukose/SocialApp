@@ -48,22 +48,12 @@ export const MyCardView = ( props ) => {
     const _handleIconPress = async ( type ) => {
         switch (type) {
             case "repost":
-                HandleRepost(postId)
-                    .then(() => {
-                        console.log("_handleRepost then");
-                    })
-                    .catch(() => {
-                        console.log("_handleRepost catch");
-                    })
+                HandleRepost(postId, userId)
+                    .then(() => setIsPosted(true))
                 break;
             case "like":
-                HandleLike(postId)
-                    .then(() => {
-                        console.log("_handleRepost then");
-                    })
-                    .catch(() => {
-                        console.log("_handleRepost catch");
-                    })
+                HandleLike(postId, userId)
+                    .then(() => setIsLiked(true))
                 break;
         }
 
