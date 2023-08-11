@@ -148,16 +148,23 @@ export function HandleRepost(postId, postOwnerId) {
                         .then(() => {
                             console.log("Firestore : HandleRepost - success");
                             
-                            let requestData = {
-                                userId: postOwnerId,
-                                postId: postId,
-                                type: "repost"
+                            
+                            if (postOwnerId) { // repost
+                                let requestData = {
+                                    userId: postOwnerId,
+                                    postId: postId,
+                                    type: "repost"
+                                }
+                                
+                                // add notification to post owner
+                                AddNotification(requestData)
+                                    .then(() => resolve())
+                                    .catch(() => reject())
+                                
+                            } else { // create post
+                                resolve()
                             }
                             
-                            // add notification to post owner
-                            AddNotification(requestData)
-                                .then(() => resolve())
-                                .catch(() => reject())
                         })
                         .catch(() => {
                             console.log("Firestore : HandleRepost - error");
