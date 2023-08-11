@@ -20,6 +20,7 @@ import SyncStorage from "sync-storage";
 import {GetUserInfoByEmail} from "../../helper/functions/firebase/Firestore";
 import {UserContext} from "../../contexts/UserContext";
 import {SearchScreen} from "../SearchScreen";
+import {NotificationsScreen} from "../NotificationsScreen";
 
 export const Router = ( ) => {
 
@@ -70,6 +71,9 @@ export const Router = ( ) => {
             case 'AddPost':
                 iconName = 'plus';
                 break;
+            case 'Notifications':
+                iconName = 'bell';
+                break;
             case 'ProfileStack':
                 iconName = 'user-alt';
                 break;
@@ -109,6 +113,8 @@ export const Router = ( ) => {
                 <Tab.Screen name="Search" component={SearchScreen} />
                 
                 <Tab.Screen name="AddPost" component={AddPostScreen} />
+                
+                <Tab.Screen name="Notifications" component={NotificationsScreen} />
                 
                 <Tab.Screen
                     listeners={({ navigation }) => ({
