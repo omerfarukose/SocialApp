@@ -1,15 +1,10 @@
 import {MyMainLayout} from "../components/MainLayout/MyMainLayout";
 import {FlatList, RefreshControl} from "react-native";
-import React, {useContext, useEffect, useState} from "react";
-import {ThemeContext} from "../contexts/ThemeContext";
+import React, {useEffect, useState} from "react";
 import {GetCurrentUserInfo} from "../helper/functions/firebase/Firestore";
 import {MyNotificationItem} from "../components/MyNotificationItem";
 
-export const NotificationsScreen = ( props ) => {
-    
-    let { data } = props;
-    
-    let { theme } = useContext(ThemeContext);
+export const NotificationsScreen = ( ) => {
     
     const [refreshing, setRefreshing] = useState(false);
     const [notificationList, setNotificationList] = useState([]);
@@ -27,9 +22,8 @@ export const NotificationsScreen = ( props ) => {
         GetCurrentUserInfo()
             .then((userInfo) => {
                 setNotificationList(userInfo.notifications);
-                console.log("us : ", userInfo.notifications)
                 setRefreshing(false);
-            })
+            });
     }
     
     return(

@@ -1,7 +1,7 @@
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, View } from "react-native";
 import { MyTextInput } from "../components/Input/MyTextInput";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useState} from "react";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { MyButton } from "../components/MyButton";
 import {goBack, navigate} from "./Router/RootNavigation";

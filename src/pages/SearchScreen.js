@@ -13,7 +13,6 @@ import {MyTextInput} from "../components/Input/MyTextInput";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import React, {useEffect, useState} from "react";
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
-import {MyCardView} from "../components/MyCardView";
 import {GetUserInfoByUsername} from "../helper/functions/firebase/Firestore";
 import {MyUserItem} from "../components/MyUserItem";
 
@@ -22,6 +21,9 @@ export const SearchScreen = ({ navigation }) => {
     const [searchValue, setSearchValue] = useState("");
     const [searchResultList, setSearchResultList] = useState([]);
     
+    // bottom tab navigator ile sayfa geçişlerince useEffect'in return
+    // fonksiyonunu çalıştırmak için dependencies listesine
+    // navigation eklendi
     useEffect(() => {
         return(() => {
             setSearchResultList([]);
@@ -29,6 +31,7 @@ export const SearchScreen = ({ navigation }) => {
         })
     }, [navigation])
     
+    // check is username exist in database
     const _handleSearch = ( ) => {
         setSearchResultList([]);
         

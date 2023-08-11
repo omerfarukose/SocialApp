@@ -40,12 +40,17 @@ export const Router = ( ) => {
     }, []);
     
     const _checkUser = ( ) => {
+        
+        // mevcut kullanıcı var mı kontrol et (firebase authentication)
+        // authentication'dan çektiğimiz user email ile
+        // databaseden kullanıcı bilgilerini çek
+        
         if (currentUser) {
             GetUserInfoByEmail(currentUser.email)
                 .then((userInfo) => {
                     SyncStorage.set('userId', userInfo.id);
                     SyncStorage.set('username', userInfo.username);
-                    console.log("login user info : ", userInfo)
+
                     setUserAvatar(userInfo.avatar);
                     setUserLikes(userInfo.likes);
                     setUserPosts(userInfo.posts);
@@ -58,6 +63,7 @@ export const Router = ( ) => {
         console.log('AsyncStorage is ready!', data);
     }
 
+    // get icons for bottom tab bar by route name
     const getTabBarIcon = ( routeName ) => {
         let iconName;
 
@@ -105,6 +111,9 @@ export const Router = ( ) => {
                     listeners={({ navigation }) => ({
                         tabPress: e => {
                             onTabPress("Home")
+                            // bottom tab tıklamalarında
+                            // stack'te en üstte olan sayfaya değil de
+                            // her tıklamada seçtiğimiz sayfaya yönlendirme işlemi
                         },
                     })}
                     name="HomeStack"
@@ -119,7 +128,10 @@ export const Router = ( ) => {
                 <Tab.Screen
                     listeners={({ navigation }) => ({
                         tabPress: e => {
-                            onTabPress("Profile")
+                            onTabPress("Profile");
+                            // bottom tab tıklamalarında
+                            // stack'te en üstte olan sayfaya değil de
+                            // her tıklamada seçtiğimiz sayfaya yönlendirme işlemi
                         },
                     })}
                     name="ProfileStack" component={ProfileStack} />
@@ -166,6 +178,8 @@ export const Router = ( ) => {
 
             <Stack.Navigator
                 initialRouteName={currentUser ? "HomeTabs" : "Login"}
+                // eger firebase authentication'da mevcut kullanıcı varsa
+                // anasayfaya yoksa giris sayfasına yönlendir
                 screenOptions={{
                     headerShown: false
                 }}>

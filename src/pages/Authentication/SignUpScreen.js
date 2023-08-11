@@ -40,6 +40,7 @@ export const SignUpScreen = ( ) => {
 
         if (myUsername) {
 
+            // check is valid e-mail
             if (validateEmail(email)) {
 
                 // least 6 char
@@ -47,26 +48,22 @@ export const SignUpScreen = ( ) => {
 
                     if (password.length >= 6) {
 
+                        // firebase authentication e-mail & password sign in method
                         SignUp(email, password)
                             .then(() => {
+                                
+                                // create user to database
                                 CreateUser(myUsername, email).then(() => {
                                     showToast("Kullanıcı Oluşturuldu", "success");
                                     navigate("Login");
                                 });
+                                
                             })
                             .catch((errorCode) => {
-                                switch (errorCode) {
-                                    case 'auth/email-already-in-use':
-                                        console.log('That email address is already in use!');
-                                        showToast("E-mail adresi zaten kullanılıyor");
-                                        break;
-                                    case 'auth/invalid-email':
-                                        console.log('That email address is invalid');
-                                        showToast("Geçersiz e-mail");
-                                        break;
-                                    default:
-                                        showToast("Kullanıcı oluşturulamadı");
-                                }
+                                
+                                // handle firebase authentication error by code
+                                _handleAuthenticationError(errorCode);
+                                
                             });
 
                     } else {
@@ -80,7 +77,7 @@ export const SignUpScreen = ( ) => {
                 }
 
             } else {
-                // show username alert !
+                // show email alert !
                 showToast("Geçersiz E-mail")
             }
 
@@ -89,6 +86,22 @@ export const SignUpScreen = ( ) => {
             showToast("Kullanıcı Adı Giriniz")
         }
 
+    }
+    
+    const _handleAuthenticationError  = ( errorCode ) => {
+        
+            switch (errorCode) {
+                case 'auth/email-already-in-use':
+                    console.log('That email address is already in use!');
+                    showToast("E-mail adresi zaten kullanılıyor");
+                    break;
+                case 'auth/invalid-email':
+                    console.log('That email address is invalid');
+                    showToast("Geçersiz e-mail");
+                    break;
+                default:
+                    showToast("Kullanıcı oluşturulamadı");
+            }
     }
 
     return(

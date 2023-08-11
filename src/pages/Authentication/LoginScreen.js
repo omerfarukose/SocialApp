@@ -31,16 +31,22 @@ export const LoginScreen = ({navigation}) => {
     }
     
     const _signIn = (mail) => {
+        
+        // firebase authentication email & password login method
         SignIn(mail, password)
             .then(() => {
                 setPassword("");
                 setEmail("");
                 
+                // get user info to setting user context
+                // set likes & posts to check is post exist in likes & posts list
                 GetUserInfoByEmail(mail)
                     .then((userInfo) => {
+                        
+                        // set local user id & name
                         SyncStorage.set('userId', userInfo.id);
                         SyncStorage.set('username', userInfo.username);
-                        console.log("login user info : ", userInfo)
+                        
                         setUserAvatar(userInfo.avatar);
                         setUserLikes(userInfo.likes);
                         setUserPosts(userInfo.posts);
@@ -68,6 +74,7 @@ export const LoginScreen = ({navigation}) => {
 
         } else {
             
+            // check username if e-mail is not valid
             GetUserInfoByUsername(email)
                 .then((userInfo) => {
                     // sign in

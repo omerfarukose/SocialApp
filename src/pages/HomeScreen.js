@@ -1,9 +1,9 @@
 import { MyCardView } from "../components/MyCardView";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
-import React, {useCallback, useEffect, useState} from "react";
-import {ActivityIndicator, FlatList, RefreshControl, View} from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { FlatList, RefreshControl } from "react-native";
 import { GetAllPosts } from "../helper/functions/firebase/Firestore";
-import {MyActivityIndicator} from "../components/MyActivityIndicator";
+import { MyActivityIndicator } from "../components/MyActivityIndicator";
 
 export const HomeScreen = (props) => {
 
@@ -12,6 +12,7 @@ export const HomeScreen = (props) => {
     const [refreshing, setRefreshing] = useState(false);
     
     useEffect(() => {
+        // get all posts
         _getPosts();
     }, [props])
     
@@ -23,6 +24,7 @@ export const HomeScreen = (props) => {
             })
     }
     
+    // swipe to refresh function
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         

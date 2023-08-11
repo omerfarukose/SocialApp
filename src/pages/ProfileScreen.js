@@ -1,6 +1,5 @@
 import React, {useCallback, useContext, useEffect, useState} from "react";
 import {
-    ActivityIndicator,
     FlatList,
     Image,
     Modal,
@@ -13,7 +12,7 @@ import {
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { navigate } from "./Router/RootNavigation";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
-import {GetAllPosts, GetCurrentUserInfo, UpdateUserProfileImage} from "../helper/functions/firebase/Firestore";
+import { GetCurrentUserInfo, UpdateUserProfileImage } from "../helper/functions/firebase/Firestore";
 import { MyCardView } from "../components/MyCardView";
 import { ThemeContext } from "../contexts/ThemeContext";
 import * as ImagePicker from 'react-native-image-picker';
@@ -24,7 +23,6 @@ export const ProfileScreen = (props) => {
 
     let { theme } = useContext(ThemeContext);
 
-    const [userId, setUserId] = useState("");
     const [username, setUsername] = useState("")
     const [avatarUrl, setAvatarUrl] = useState("https://cdn-icons-png.flaticon.com/512/1053/1053244.png");
     const [followerList, setFollowerList] = useState([]);
@@ -40,7 +38,6 @@ export const ProfileScreen = (props) => {
 
         GetCurrentUserInfo()
             .then((userInfo) => {
-                setUserId(userInfo.id)
                 setUsername(userInfo.username);
                 setAvatarUrl(userInfo.avatar);
                 setFollowerList(userInfo.followers);
@@ -55,6 +52,7 @@ export const ProfileScreen = (props) => {
     const chooseFile = async  () => {
         const path = await ImagePicker.launchImageLibrary(ImagePicker.ImageLibraryOptions);
 
+        // dosya yollarının başından "file://" kısmı silenerek yükleme işleminde alınan hata çözüldü
         let uri = path.assets[0].uri.replace('file://', '');
         
         setIsImageModalVisible(false);
@@ -106,7 +104,6 @@ export const ProfileScreen = (props) => {
         
         GetCurrentUserInfo()
             .then((userInfo) => {
-                setUserId(userInfo.id)
                 setUsername(userInfo.username);
                 setAvatarUrl(userInfo.avatar);
                 setFollowerList(userInfo.followers);
@@ -114,7 +111,8 @@ export const ProfileScreen = (props) => {
                 setPostList(userInfo.posts);
                 setLikeList(userInfo.likes);
             })
-            .finally(() => setRefreshing(false))
+            .finally(() => setRefreshing(false));
+        
     }, []);
 
     return(

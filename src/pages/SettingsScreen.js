@@ -2,7 +2,7 @@ import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import { MyButton } from "../components/MyButton";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { Switch, Text, View } from "react-native";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { Logout } from "../helper/functions/firebase/Auth";
 import { navigate } from "./Router/RootNavigation";
