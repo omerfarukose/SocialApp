@@ -136,7 +136,16 @@ export const SearchScreen = ({ navigation }) => {
                                 <FlatList
                                     overScrollMode={"never"}
                                     data={searchResultList}
-                                    renderItem={({item}) => <MyUserItem userInfo={item}/>}
+                                    renderItem={({item}) => {
+                                        return(
+                                            <MyUserItem
+                                                showDelete={true}
+                                                userInfo={item}
+                                                onDeletePress={() => {
+                                                    setSearchResultList([]);
+                                                }}/>
+                                        )
+                                    }}
                                     keyExtractor={(item, index) => item}/>
                                 
                                 :

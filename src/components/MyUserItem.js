@@ -1,13 +1,14 @@
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-import { Image, Text, TouchableOpacity } from "react-native";
+import {Image, Text, TouchableOpacity, View} from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { navigate } from "../pages/Router/RootNavigation";
 import { GetUserInfoById } from "../helper/functions/firebase/Firestore";
 import { ThemeContext } from "../contexts/ThemeContext";
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 export const MyUserItem = (params) => {
 
-    let { userId, userInfo } = params;
+    let { userId, userInfo, showDelete, onDeletePress } = params;
 
     let { theme } = useContext(ThemeContext);
 
@@ -40,6 +41,7 @@ export const MyUserItem = (params) => {
                 height: hp(10),
                 flexDirection: "row",
                 alignItems: "center",
+                width: "100%",
             }}>
 
             <Image
@@ -57,11 +59,26 @@ export const MyUserItem = (params) => {
                 style={{
                     fontSize: hp(2.6),
                     color: theme.mainColor,
+                    flex: 1
                 }}>
 
                 { username }
 
             </Text>
+            
+            {
+                showDelete &&
+                
+                <TouchableOpacity
+                    onPress={onDeletePress}
+                    style={{
+                        marginRight: hp(3),
+                    }}>
+                    
+                    <Icon name={"times"} size={hp(2.4)} color={"gray"} />
+                
+                </TouchableOpacity>
+            }
 
         </TouchableOpacity>
     )
