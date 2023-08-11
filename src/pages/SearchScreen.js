@@ -11,15 +11,21 @@ import {
 } from "react-native";
 import {MyTextInput} from "../components/Input/MyTextInput";
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 import {GetUserInfoByUsername} from "../helper/functions/firebase/Firestore";
 import {MyUserItem} from "../components/MyUserItem";
+import {ThemeContext} from "../contexts/ThemeContext";
+import {MyActivityIndicator} from "../components/MyActivityIndicator";
 
 export const SearchScreen = ({ navigation }) => {
     
+    let { theme } = useContext(ThemeContext);
+    
     const [searchValue, setSearchValue] = useState("");
     const [searchResultList, setSearchResultList] = useState([]);
+    const [isReady, setIsReady] = useState(true);
+    const [showUserNotFound, setShowUserNotFound] = useState(false);
     
     // bottom tab navigator ile sayfa geçişlerince useEffect'in return
     // fonksiyonunu çalıştırmak için dependencies listesine
@@ -33,12 +39,18 @@ export const SearchScreen = ({ navigation }) => {
     
     // check is username exist in database
     const _handleSearch = ( ) => {
+        setIsReady(false);
         setSearchResultList([]);
+        setShowUserNotFound(false);
         
         GetUserInfoByUsername(searchValue)
             .then((userInfo) => {
-                setSearchResultList(current => [...current, userInfo])
+                setSearchResultList(current => [...current, userInfo]);
             })
+            .catch(() => {
+                setShowUserNotFound(true);
+            })
+            .finally(() => setIsReady(true))
     }
     
     return(
@@ -71,19 +83,67 @@ export const SearchScreen = ({ navigation }) => {
                                 value={searchValue}
                                 setValue={setSearchValue}/>
                             
-                            <TouchableOpacity onPress={() => _handleSearch()}>
-                                
-                                <Icon name={"search"} size={hp(2.4)} color={"gray"} />
-                            
-                            </TouchableOpacity>
+                            {
+                                searchValue ?
+                                    
+                                    <TouchableOpacity onPress={() => _handleSearch()}>
+                                        
+                                        <Text
+                                            style={{
+                                                fontWeight: "bold",
+                                                color: theme.secondColor
+                                            }}>
+                                            
+                                            Ara
+                                            
+                                        </Text>
+                                    
+                                    </TouchableOpacity>
+                                    
+                                    :
+                                    
+                                    <Icon name={"search"} size={hp(2.4)} color={"gray"} />
+                                    
+                            }
                         
                         </View>
                         
-                        <FlatList
-                            overScrollMode={"never"}
-                            data={searchResultList}
-                            renderItem={({item}) => <MyUserItem userInfo={item}/>}
-                            keyExtractor={(item, index) => item}/>
+                        {
+                            showUserNotFound &&
+                            
+                            <View
+                                style={{
+                                    width: "100%",
+                                    alignItems: "center",
+                                }}>
+                                
+                                <Text
+                                    style={{
+                                        fontSize: hp(2)
+                                    }}>
+                                    
+                                    Kullanıcı bulunamadı
+                                
+                                </Text>
+                            
+                            </View>
+                            
+                        }
+                        
+                        {
+                            isReady ?
+                                
+                                <FlatList
+                                    overScrollMode={"never"}
+                                    data={searchResultList}
+                                    renderItem={({item}) => <MyUserItem userInfo={item}/>}
+                                    keyExtractor={(item, index) => item}/>
+                                
+                                :
+                                
+                                <MyActivityIndicator/>
+                                
+                        }
                         
                     </View>
                 

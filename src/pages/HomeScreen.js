@@ -20,7 +20,7 @@ export const HomeScreen = (props) => {
         GetAllPosts()
             .then((res) => {
                 setPostList(res);
-                setIsReady(true)
+                setIsReady(true);
             })
     }
     
