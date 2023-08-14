@@ -127,7 +127,7 @@ export const LoginScreen = ({navigation}) => {
                             <MyTextInput
                                 value={email}
                                 setValue={setEmail}
-                                placeholder={"E-mail"}/>
+                                placeholder={"Kullanıcı Adı & E-mail"}/>
 
                             <MyTextInput
                                 value={password}
