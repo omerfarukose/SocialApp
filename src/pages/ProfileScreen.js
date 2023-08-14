@@ -128,6 +128,7 @@ export const ProfileScreen = (props) => {
                         }
                         style={{
                             flex: 1,
+                            backgroundColor: theme.mainBackgroundColor
                         }}>
                         
                         <View
@@ -235,12 +236,11 @@ export const ProfileScreen = (props) => {
                                     alignItems: "center",
                                     justifyContent: "center",
                                     borderBottomWidth: postsSelected ? 2 : 0,
-                                    borderColor: theme.mainColor
+                                    borderColor: theme.borderColor
                                 }}>
                                 
                                 <Text
                                     style={{
-                                        color: theme.mainColor,
                                         fontSize: hp(2.3)
                                     }}>
                                     
@@ -257,7 +257,7 @@ export const ProfileScreen = (props) => {
                                     alignItems: "center",
                                     justifyContent: "center",
                                     borderBottomWidth: !postsSelected ? 2 : 0,
-                                    borderColor: theme.mainColor
+                                    borderColor: theme.borderColor
                                 }}>
                                 
                                 <Text

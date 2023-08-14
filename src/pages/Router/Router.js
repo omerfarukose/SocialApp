@@ -98,7 +98,7 @@ export const Router = ( ) => {
                 screenOptions={({ route }) => ({
                     headerShown: false,
                     tabBarShowLabel: false,
-                    tabBarActiveTintColor: "#086767",
+                    tabBarActiveTintColor: theme.tabIconColor,
                     tabBarInactiveTintColor: 'white',
                     tabBarStyle:{
                         backgroundColor: theme.mainColor,

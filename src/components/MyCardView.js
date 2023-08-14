@@ -64,8 +64,8 @@ export const MyCardView = ( props ) => {
             style={{
                 padding: wp(5),
                 borderBottomWidth: 1,
-                borderBottomColor: "#d7d5d5",
-                backgroundColor: "white",
+                borderBottomColor: theme.borderColor,
+                backgroundColor: theme.mainBackgroundColor,
             }}>
             
             {/*image & username & time? */}
@@ -97,6 +97,7 @@ export const MyCardView = ( props ) => {
                         paddingTop: 0,
                         fontWeight: "bold",
                         fontSize: hp(2.4),
+                        color: theme.darkTextColor
                     }}>
                     
                     { username }
@@ -106,6 +107,7 @@ export const MyCardView = ( props ) => {
                 <Text
                     style={{
                         fontSize: hp(1.6),
+                        color: theme.textColor
                     }}>
                     
                     1 saat önce
@@ -128,6 +130,7 @@ export const MyCardView = ( props ) => {
                         paddingTop: 0,
                         fontWeight: "400",
                         fontSize: hp(2.3),
+                        color: theme.textColor
                     }}>
                     
                     { cardText }

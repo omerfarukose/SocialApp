@@ -18,7 +18,7 @@ export const MyMainLayout = ( props ) => {
 
             <StatusBar
                 animated={true}
-                backgroundColor="#4655F6"
+                backgroundColor={theme.mainColor}
                 barStyle={"light-content"}
                 showHideTransition={"fade"}
                 hidden={false}/>

@@ -148,7 +148,6 @@ export function HandleRepost(postId, postOwnerId) {
                         .then(() => {
                             console.log("Firestore : HandleRepost - success");
                             
-                            
                             if (postOwnerId) { // repost
                                 let requestData = {
                                     userId: postOwnerId,
@@ -513,4 +512,40 @@ export function GetPostDataById(postId) {
                 reject(err);
             })
     }))
+}
+
+export async function GetFollowingPosts( ) {
+    let finalPostList = [];
+    
+    return new Promise(((resolve, reject) => {
+        GetCurrentUserInfo()
+            .then( async (userInfo) => {
+                let following = userInfo.following;
+                
+                await Promise.all(following.map((userId, index) => {
+                    
+                    GetUserInfoById(userId)
+                        .then((userInfo) => {
+                            let postList = userInfo.posts;
+                            
+                            console.log("GetFollowingPosts post : ", postList)
+                            
+                            finalPostList.concat(postList);
+                            
+                            console.log("GetFollowingPosts finalPostList list : ", finalPostList)
+                        })
+                        .catch(() => {
+                            reject();
+                        });
+                    
+                }))
+                
+/*                console.log("GetFollowingPosts finalPostList : ", finalPostList)
+                resolve(finalPostList);*/
+            })
+            .catch(() => {
+                reject();
+            })
+    }))
+    
 }
