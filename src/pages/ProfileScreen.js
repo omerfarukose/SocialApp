@@ -6,7 +6,7 @@ import {
     RefreshControl,
     ScrollView,
     Text,
-    TouchableOpacity,
+    TouchableOpacity, TouchableWithoutFeedback,
     View
 } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
@@ -18,6 +18,9 @@ import { ThemeContext } from "../contexts/ThemeContext";
 import * as ImagePicker from 'react-native-image-picker';
 import {MyIconButton} from "../components/MyIconButton";
 import {MyActivityIndicator} from "../components/MyActivityIndicator";
+import Icon from "react-native-vector-icons/FontAwesome5";
+import {MyButton} from "../components/MyButton";
+import {MyTextInput} from "../components/Input/MyTextInput";
 
 export const ProfileScreen = (props) => {
 
@@ -33,6 +36,9 @@ export const ProfileScreen = (props) => {
     const [isReady, setIsReady] = useState(false);
     const [postsSelected, setPostSelected] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
+    const [newUsername, setNewUsername] = useState("");
+    const [newAvatar, setNewAvatar] = useState("");
+    const [isProfileImageVisible, setIsProfileImageVisible] = useState(false);
     
     useEffect(() => {
 
@@ -44,26 +50,41 @@ export const ProfileScreen = (props) => {
                 setFollowingList(userInfo.following);
                 setPostList(userInfo.posts);
                 setLikeList(userInfo.likes);
+                setNewAvatar(userInfo.avatar);
             })
             .finally(() => setIsReady(true))
 
     },[props])
 
-    const chooseFile = async  () => {
+    const chooseFile = async  (type) => {
         const path = await ImagePicker.launchImageLibrary(ImagePicker.ImageLibraryOptions);
 
         // dosya yollarının başından "file://" kısmı silenerek yükleme işleminde alınan hata çözüldü
-        let uri = path.assets[0].uri.replace('file://', '');
         
-        setIsImageModalVisible(false);
+        console.log("file url : ", path.assets[0].uri);
         
-        UpdateUserProfileImage(uri)
-            .then((imageUrl) => {
-                setAvatarUrl(imageUrl);
-            })
-
+        setNewAvatar(path.assets[0].uri);
     };
-
+    
+    const _updateProfile  = ( ) => {
+        
+        // upload profile picture if new picture selected
+        if (avatarUrl !== newAvatar) {
+            let uri = newAvatar.replace('file://', '');
+            
+            UpdateUserProfileImage(uri)
+                .then((imageUrl) => {
+                    setAvatarUrl(imageUrl);
+                });
+        }
+        
+        if(username !== newUsername) {
+            // TODO: update username
+        }
+        
+        // TODO: add banner update method
+    }
+    
     const _renderFollowInfoText = ( title, list ) => {
         return(
             <TouchableOpacity
@@ -170,37 +191,43 @@ export const ProfileScreen = (props) => {
                                     { _renderFollowInfoText("Follower", followerList) }
                                     
                                     <TouchableOpacity
-                                        onPress={() => setIsImageModalVisible(true)}>
+                                        onPress={() => setIsProfileImageVisible(true)}
+                                        style={{
+                                            width: wp(50),
+                                            alignItems: "center"
+                                        }}>
                                         
-                                        <View
+                                        <Image
+                                            source={{uri: avatarUrl}}
                                             style={{
-                                                width: wp(50),
-                                                alignItems: "center"
-                                            }}>
-                                            
-                                            <Image
-                                                source={{uri: avatarUrl}}
-                                                style={{
-                                                    width: wp(30),
-                                                    height: wp(30),
-                                                    borderRadius: 999,
-                                                    borderWidth: 2,
-                                                    borderColor: theme.mainColor,
-                                                    marginTop: -45,
-                                                }}/>
-                                        
-                                        </View>
+                                                width: wp(30),
+                                                height: wp(30),
+                                                borderRadius: 999,
+                                                borderWidth: 2,
+                                                borderColor: theme.mainColor,
+                                                marginTop: -45,
+                                            }}/>
                                     
                                     </TouchableOpacity>
                                     
                                     { _renderFollowInfoText("Following", followingList) }
                                 
-                                
                                 </View>
+                                
+                                {/* edit profile button */}
+                                <TouchableOpacity
+                                    onPress={() => setIsImageModalVisible(true)}
+                                    style={{
+                                        marginTop: hp(1.5),
+                                    }}>
+                                    
+                                    <Icon name={"edit"} size={hp(2.4)} color={theme.mainColor} />
+                                    
+                                </TouchableOpacity>
                                 
                                 <View
                                     style={{
-                                        marginTop: 20,
+                                        marginTop: hp(1),
                                     }}>
                                     
                                     <Text
@@ -292,11 +319,46 @@ export const ProfileScreen = (props) => {
                     <MyActivityIndicator/>
                     
             }
+            
+            <Modal
+                transparent={true}
+                visible={isProfileImageVisible}>
+                
+                {/*full screen view*/}
+                <View
+                    style={{
+                        flex: 1,
+                        backgroundColor: 'rgba(52, 52, 52, 0.9)' // transparent background
+                    }}>
+                    
+                    <TouchableOpacity
+                        onPress={() => setIsProfileImageVisible(false)}
+                        style={{
+                            flex: 1,
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}>
+                        
+                        <Image
+                            source={{uri: avatarUrl}}
+                            style={{
+                                width: wp(100),
+                                height: wp(100),
+                                borderWidth: 2,
+                                borderColor: theme.mainColor
+                            }}/>
+                        
+                    </TouchableOpacity>
+                    
+                </View>
+                
+            </Modal>
 
             <Modal
                 transparent={true}
                 visible={isImageModalVisible}>
 
+                {/*full screen view*/}
                 <View
                     style={{
                         flex: 1,
@@ -305,10 +367,11 @@ export const ProfileScreen = (props) => {
                         backgroundColor: 'rgba(52, 52, 52, 0.4)' // transparent background
                     }}>
 
+                    {/*modal view*/}
                     <View
                         style={{
-                            width: wp(80),
-                            height: hp(40),
+                            width: wp(90),
+                            height: hp(70),
                             justifyContent: "space-evenly",
                             alignSelf: "center",
                             borderRadius: 20,
@@ -317,6 +380,7 @@ export const ProfileScreen = (props) => {
                             borderWidth: 1
                         }}>
                         
+                        {/*close button*/}
                         <MyIconButton
                             onPress={() => setIsImageModalVisible(false)}
                             iconName={"times-circle"}
@@ -326,17 +390,65 @@ export const ProfileScreen = (props) => {
                                 top: 10,
                                 right: 10,
                             }}/>
+                        
+                        {/*profile image*/}
+                        <TouchableOpacity
+                            onPress={() => chooseFile()}>
+                            
+                            <Image
+                                source={require("../assets/images/banner.jpg")}
+                                style={{
+                                    width: "100%",
+                                    height: wp(40),
+                                    alignSelf: "center"
+                                }}/>
+                            
+                        </TouchableOpacity>
 
-                        <Image
-                            source={{uri: avatarUrl}}
+                        {/*profile image*/}
+                        
+                        <TouchableOpacity
+                            onPress={() => chooseFile()}>
+                            
+                            <Image
+                                source={{uri: newAvatar}}
+                                style={{
+                                    width: wp(30),
+                                    height: wp(30),
+                                    borderRadius: hp(2),
+                                    borderWidth: 2,
+                                    borderColor: theme.mainColor,
+                                    alignSelf: "center"
+                                }}/>
+                            
+                        </TouchableOpacity>
+                        
+                        <View
                             style={{
-                                width: wp(50),
-                                height: wp(50),
-                                borderRadius: 99,
-                                borderWidth: 2,
-                                borderColor: theme.mainColor,
-                                alignSelf: "center"
-                            }}/>
+                                flexDirection: "row",
+                                alignItems: "center",
+                                paddingHorizontal: wp(5),
+                            }}>
+                            
+                            <Text
+                                style={{
+                                    fontWeight: "bold",
+                                    fontSize: hp(2)
+                                }}>
+                                
+                                Kullanıcı Adı
+                                
+                            </Text>
+                            
+                            <MyTextInput
+                                placeholder={username}
+                                value={newUsername}
+                                setValue={setNewUsername}
+                                inputStyle={{
+                                    width: wp(50)
+                                }}/>
+                            
+                        </View>
                         
                         <View
                             style={{
@@ -346,15 +458,9 @@ export const ProfileScreen = (props) => {
                                 justifyContent: "space-evenly",
                             }}>
                             
-{/*                            <MyIconButton
-                                onPress={() => chooseFile()}
-                                iconName={"trash-alt"}
-                                iconSize={wp(6)}/>*/}
-                            
-                            <MyIconButton
-                                onPress={() => chooseFile()}
-                                iconName={"photo-video"}
-                                iconSize={wp(6)}/>
+                            <MyButton
+                                title={"Kaydet"}
+                                onPress={() => _updateProfile()}/>
                             
                         </View>
                         

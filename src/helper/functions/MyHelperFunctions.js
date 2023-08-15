@@ -15,9 +15,8 @@ export const removePunctuation = (text) => {
     return newText;
 }
 
-
 export const _calculateTime  = ( time ) => {
-    return moment(time, "MMMM Do YYYY, h:mm:ss a").fromNow()
+    return moment(time, "MMMM Do YYYY, h:mm:ss a").fromNow();
 }
 
 export const GetTime = ( ) => {
