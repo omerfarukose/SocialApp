@@ -28,6 +28,7 @@ export const SettingsScreen = ( ) => {
 
     return(
         <MyMainLayout
+            showGoBack={true}
             layoutStyle={{
                 padding: hp(3)
             }}>
