@@ -135,13 +135,13 @@ export const LoginScreen = ({navigation}) => {
                                 placeholder={"Parola"}/>
 
                             <MyButton
+                                title={"Giriş"}
                                 onPress={() => _handleLoginPress()}
                                 style={{
                                     backgroundColor: theme.mainColor,
                                     width: wp(30),
                                     alignItems: "center"
-                                }}
-                                title={"Giriş"}/>
+                                }}/>
 
                             <TouchableOpacity
                                 onPress={() => navigation.navigate("SignUp")}>

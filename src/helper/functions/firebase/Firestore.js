@@ -2,6 +2,8 @@ import firestore from "@react-native-firebase/firestore";
 import { GetUserId } from "../UserInfo";
 import uuid from "react-native-uuid";
 import storage from "@react-native-firebase/storage";
+import moment from "moment";
+import {GetTime} from "../MyHelperFunctions";
 
 // - - - USERS COLLECTION FUNCTIONS - - -
 
@@ -465,7 +467,8 @@ export function CreatePost(text) {
     let postData = {
         id: postId,
         text: text,
-        userId: userId
+        userId: userId,
+        time: GetTime(),
     }
 
     console.log('Firestore : CreatePost - post data : ', postData);

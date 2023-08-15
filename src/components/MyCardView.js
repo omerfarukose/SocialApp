@@ -6,6 +6,7 @@ import { navigate } from "../pages/Router/RootNavigation";
 import { ThemeContext } from "../contexts/ThemeContext";
 import {UserContext} from "../contexts/UserContext";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
+import {_calculateTime} from "../helper/functions/MyHelperFunctions";
 
 export const MyCardView = ( props ) => {
 
@@ -20,12 +21,15 @@ export const MyCardView = ( props ) => {
     const [cardText, setCardText] = useState("");
     const [isLiked, setIsLiked] = useState(false);
     const [isPosted, setIsPosted] = useState(false);
-
+    const [time, setTime] = useState("");
+    
     useEffect(() => {
 
         GetPostDataById(postId)
             .then((postData) => {
-                setCardText(postData.text)
+                setCardText(postData.text);
+                
+                setTime(postData?.time ? _calculateTime(postData?.time) : "");
 
                 GetUserInfoById(postData.userId)
                     .then((userInfo) => {
@@ -110,7 +114,7 @@ export const MyCardView = ( props ) => {
                         color: theme.textColor
                     }}>
                     
-                    1 saat önce
+                    {time}
                 
                 </Text>
             

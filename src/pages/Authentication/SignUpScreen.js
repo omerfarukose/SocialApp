@@ -28,7 +28,7 @@ export const SignUpScreen = ( ) => {
     const [myUsername, setMyUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
+    
     const showToast = (text, type = "error") => {
         Toast.show({
             type: type,
