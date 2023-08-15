@@ -1,9 +1,11 @@
 import { MyCardView } from "../components/MyCardView";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import React, { useCallback, useEffect, useState } from "react";
-import { FlatList, RefreshControl } from "react-native";
+import {FlatList, Image, RefreshControl, Text, View} from "react-native";
 import { GetAllPosts } from "../helper/functions/firebase/Firestore";
 import { MyActivityIndicator } from "../components/MyActivityIndicator";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
+import {MyNoDataView} from "../components/MyNoDataView";
 
 export const HomeScreen = (props) => {
 
@@ -41,14 +43,20 @@ export const HomeScreen = (props) => {
             {
                 isReady ?
                     
-                    <FlatList
-                        overScrollMode={"never"}
-                        data={postList}
-                        refreshControl={
-                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                        }
-                        renderItem={({item}) => <MyCardView postId={item.data().id}/>}
-                        keyExtractor={(item, index) => item.id}/>
+                    postList.length > 0 ?
+                        
+                        <FlatList
+                            overScrollMode={"never"}
+                            data={postList}
+                            refreshControl={
+                                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                            }
+                            renderItem={({item}) => <MyCardView postId={item.data().id}/>}
+                            keyExtractor={(item, index) => item.id}/>
+                        
+                        :
+                        
+                        <MyNoDataView/>
                     
                     :
                     
