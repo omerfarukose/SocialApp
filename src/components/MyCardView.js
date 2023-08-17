@@ -24,28 +24,27 @@ export const MyCardView = ( props ) => {
     const [time, setTime] = useState("");
     
     useEffect(() => {
+        
+        if (postId){
+            GetPostDataById(postId)
+                .then((postData) => {
+                    setCardText(postData.text);
+                    
+                    setTime(postData?.time ? _calculateTime(postData?.time) : "");
+                    
+                    GetUserInfoById(postData.userId)
+                        .then((userInfo) => {
+                            setUsername(userInfo.username);
+                            setAvatarUri(userInfo.avatar);
+                            setUserId(userInfo.id);
+                            
+                            setIsLiked(userLikes.includes(postId))
+                            setIsPosted(userPosts.includes(postId))
+                        });
+                    
+                });
+        }
 
-        GetPostDataById(postId)
-            .then((postData) => {
-                setCardText(postData.text);
-                
-                setTime(postData?.time ? _calculateTime(postData?.time) : "");
-
-                GetUserInfoById(postData.userId)
-                    .then((userInfo) => {
-                        setUsername(userInfo.username);
-                        setAvatarUri(userInfo.avatar);
-                        setUserId(userInfo.id);
-                        
-                        console.log("posts id : ", postId)
-                        console.log("posts : ", userPosts)
-                        console.log("likes : ", userPosts)
-                        
-                        setIsLiked(userLikes.includes(postId))
-                        setIsPosted(userPosts.includes(postId))
-                    });
-
-            });
 
     },[])
 
@@ -62,9 +61,25 @@ export const MyCardView = ( props ) => {
         }
 
     }
+    
+    const _handlePostDetailNavigation = ( ) => {
+        
+        let data = {
+            text: cardText,
+            time: time,
+            username: username,
+            avatar: avatarUri,
+            isLiked: isLiked,
+            isPosted: isPosted,
+            userId: userId
+        }
+        
+        navigate("PostDetail", {postData: data, omer: "omer"})
+    }
 
     return(
-        <View
+        <TouchableOpacity
+            onPress={() => _handlePostDetailNavigation()}
             style={{
                 padding: wp(5),
                 borderBottomWidth: 1,
@@ -166,6 +181,6 @@ export const MyCardView = ( props ) => {
             
             </View>
 
-        </View>
+        </TouchableOpacity>
     )
 }

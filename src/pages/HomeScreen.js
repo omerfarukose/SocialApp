@@ -1,10 +1,9 @@
 import { MyCardView } from "../components/MyCardView";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import React, { useCallback, useEffect, useState } from "react";
-import {FlatList, Image, RefreshControl, Text, View} from "react-native";
+import {FlatList, RefreshControl} from "react-native";
 import { GetAllPosts } from "../helper/functions/firebase/Firestore";
 import { MyActivityIndicator } from "../components/MyActivityIndicator";
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import {MyNoDataView} from "../components/MyNoDataView";
 
 export const HomeScreen = (props) => {

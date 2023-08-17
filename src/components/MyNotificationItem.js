@@ -7,9 +7,9 @@ import {GetUserInfoById} from "../helper/functions/firebase/Firestore";
 
 export const MyNotificationItem = ( props ) => {
     
-    let { data } = props;
+    let { data, onNotificationPress } = props;
     
-    console.log("data : ", data)
+    console.log("data : ", data) // -> omer
     
     let { theme } = useContext(ThemeContext);
     
@@ -45,6 +45,7 @@ export const MyNotificationItem = ( props ) => {
     
     return(
         <TouchableOpacity
+            onPress={onNotificationPress}
             style={{
                 flexDirection: "row",
                 alignItems: "center",

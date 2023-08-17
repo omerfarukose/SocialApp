@@ -1,18 +1,19 @@
 import {MyMainLayout} from "../components/MainLayout/MyMainLayout";
-import {FlatList, RefreshControl} from "react-native";
+import {FlatList, RefreshControl, Modal, TouchableOpacity} from "react-native";
 import React, {useEffect, useState} from "react";
 import {GetCurrentUserInfo} from "../helper/functions/firebase/Firestore";
 import {MyNotificationItem} from "../components/MyNotificationItem";
-import {MyCardView} from "../components/MyCardView";
 import {MyNoDataView} from "../components/MyNoDataView";
 import {MyActivityIndicator} from "../components/MyActivityIndicator";
+import {MyCardView} from "../components/MyCardView";
 
 export const NotificationsScreen = ( ) => {
     
     const [refreshing, setRefreshing] = useState(false);
     const [notificationList, setNotificationList] = useState([]);
     const [isReady, setIsReady] = useState(false);
-    
+    const [isPostDetailModalVisible, setIsPostDetailModalVisible] = useState(false);
+    const [selectedPostId, setSelectedPostId] = useState("");
     
     useEffect(() => {
         GetCurrentUserInfo()
@@ -47,7 +48,17 @@ export const NotificationsScreen = ( ) => {
                             refreshControl={
                                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                             }
-                            renderItem={({item}) => <MyNotificationItem data={item}/>}
+                            renderItem={({item}) => {
+                                return(
+                                    <MyNotificationItem
+                                        data={item}
+                                        onNotificationPress={() => {
+                                            setSelectedPostId(item?.postId)
+                                            setIsPostDetailModalVisible(true)
+                                        }}/>
+                                )
+                                
+                            }}
                             keyExtractor={(item, index) => item}/>
                         
                         :
@@ -58,6 +69,26 @@ export const NotificationsScreen = ( ) => {
                     
                     <MyActivityIndicator/>
             }
+            
+            <Modal
+                transparent={true}
+                visible={isPostDetailModalVisible}>
+                
+                {/*full screen view*/}
+                <TouchableOpacity
+                    onPress={() => setIsPostDetailModalVisible(false)}
+                    style={{
+                        flex: 1,
+                        backgroundColor: 'rgba(52, 52, 52, 0.9)', // transparent background,
+                        alignItems: "center",
+                        justifyContent: "center"
+                    }}>
+                    
+                    <MyCardView postId={selectedPostId}/>
+                    
+                </TouchableOpacity>
+            
+            </Modal>
             
         </MyMainLayout>
     )
