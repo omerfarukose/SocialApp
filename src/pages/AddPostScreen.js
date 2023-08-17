@@ -1,13 +1,13 @@
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, View } from "react-native";
 import { MyTextInput } from "../components/Input/MyTextInput";
-import {useContext, useState} from "react";
+import { useContext, useState } from "react";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { MyButton } from "../components/MyButton";
-import {goBack, navigate} from "./Router/RootNavigation";
+import { goBack, navigate } from "./Router/RootNavigation";
 import Toast from "react-native-toast-message";
 import { CreatePost } from "../helper/functions/firebase/Firestore";
-import {ThemeContext} from "../contexts/ThemeContext";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 export const  AddPostScreen = ( ) => {
 
@@ -26,7 +26,6 @@ export const  AddPostScreen = ( ) => {
         CreatePost(post)
             .then(() => {
                 setPost("");
-
                 showToast("Post paylaşıldı !");
                 navigate("Home");
             })
@@ -57,11 +56,11 @@ export const  AddPostScreen = ( ) => {
                             }}>
                             
                             <MyButton
+                                title={"İptal"}
                                 onPress={() => {
                                     goBack();
                                     setPost("");
                                 }}
-                                title={"İptal"}
                                 textStyle={{
                                     fontWeight: "bold",
                                     color: "red",
@@ -76,8 +75,8 @@ export const  AddPostScreen = ( ) => {
                                 }}/>
                             
                             <MyButton
-                                onPress={() => _handleAddPost()}
                                 title={"Paylaş"}
+                                onPress={() => _handleAddPost()}
                                 textStyle={{
                                     fontWeight: "bold",
                                     color: theme.mainColor,

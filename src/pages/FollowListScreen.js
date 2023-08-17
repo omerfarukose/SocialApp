@@ -8,8 +8,7 @@ export const FollowListScreen = ({ route }) => {
     let { userList } = route.params;
     
     return(
-        <MyMainLayout
-            showGoBack={true}>
+        <MyMainLayout showGoBack={true}>
 
             <FlatList
                 overScrollMode={"never"}

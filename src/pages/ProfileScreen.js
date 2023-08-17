@@ -1,13 +1,7 @@
-import React, {useCallback, useContext, useEffect, useState} from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import {
-    FlatList,
-    Image,
-    Modal,
-    RefreshControl,
-    ScrollView,
-    Text,
-    TouchableOpacity, TouchableWithoutFeedback,
-    View
+    FlatList, Image, Modal, RefreshControl, 
+    ScrollView, Text,  TouchableOpacity, View
 } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { navigate } from "./Router/RootNavigation";
@@ -15,12 +9,12 @@ import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import { GetCurrentUserInfo, UpdateUserProfileImage } from "../helper/functions/firebase/Firestore";
 import { MyCardView } from "../components/MyCardView";
 import { ThemeContext } from "../contexts/ThemeContext";
+import { MyIconButton } from "../components/MyIconButton";
+import { MyActivityIndicator } from "../components/MyActivityIndicator";
+import { MyButton } from "../components/MyButton";
+import { MyTextInput } from "../components/Input/MyTextInput";
 import * as ImagePicker from 'react-native-image-picker';
-import {MyIconButton} from "../components/MyIconButton";
-import {MyActivityIndicator} from "../components/MyActivityIndicator";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import {MyButton} from "../components/MyButton";
-import {MyTextInput} from "../components/Input/MyTextInput";
 
 export const ProfileScreen = (props) => {
 
@@ -58,10 +52,6 @@ export const ProfileScreen = (props) => {
 
     const chooseFile = async  (type) => {
         const path = await ImagePicker.launchImageLibrary(ImagePicker.ImageLibraryOptions);
-
-        // dosya yollarının başından "file://" kısmı silenerek yükleme işleminde alınan hata çözüldü
-        
-        console.log("file url : ", path.assets[0].uri);
         
         setNewAvatar(path.assets[0].uri);
     };

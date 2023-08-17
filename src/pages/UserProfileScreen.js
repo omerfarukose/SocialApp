@@ -7,16 +7,13 @@ import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import { GetUserInfoById, HandleFollow } from "../helper/functions/firebase/Firestore";
 import { MyCardView } from "../components/MyCardView";
 import { ThemeContext } from "../contexts/ThemeContext";
-import {GetUserId} from "../helper/functions/UserInfo";
+import { GetUserId } from "../helper/functions/UserInfo";
 
 export const UserProfileScreen = ({route}) => {
 
     const { userId } = route.params;
 
-    console.log("UserProfileScreen userID : ", userId);
-
-    let { theme } = useContext(ThemeContext);
-
+    let { theme } = useContext(ThemeContext);       
 
     const [profileId, setProfileId] = useState("");
     const [username, setUsername] = useState("")

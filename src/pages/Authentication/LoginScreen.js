@@ -1,29 +1,26 @@
 import {
-    Image, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, Text,
+    Image, Keyboard, KeyboardAvoidingView, Platform, Text,
     TouchableOpacity, TouchableWithoutFeedback, View,
 } from "react-native";
-import {useContext, useEffect, useState} from "react";
+import { useContext, useState } from "react";
 import { MyButton } from "../../components/MyButton";
 import { MyTextInput } from "../../components/Input/MyTextInput";
-import Toast from 'react-native-toast-message';
 import { validateEmail } from "../../helper/functions/MyHelperFunctions";
 import { navigate } from "../Router/RootNavigation";
 import { SignIn } from "../../helper/functions/firebase/Auth";
-import {GetUserInfoByEmail, GetUserInfoByUsername} from "../../helper/functions/firebase/Firestore";
+import { GetUserInfoByEmail, GetUserInfoByUsername } from "../../helper/functions/firebase/Firestore";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import {widthPercentageToDP as wp} from "react-native-responsive-screen";
+import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { UserContext } from "../../contexts/UserContext";
+import { MyMainLayout } from "../../components/MainLayout/MyMainLayout";
 import SyncStorage from 'sync-storage';
-import {UserContext} from "../../contexts/UserContext";
-import {MyMainLayout} from "../../components/MainLayout/MyMainLayout";
+import Toast from 'react-native-toast-message';
 
 export const LoginScreen = (props) => {
     
-    // contexts
     let { theme } = useContext(ThemeContext);
-    
     let { setUserAvatar, setUserLikes, setUserPosts } = useContext(UserContext);
 
-    // states
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -94,7 +91,11 @@ export const LoginScreen = (props) => {
     }
 
     return(
-        <MyMainLayout showNavbar={false}>
+        <MyMainLayout 
+            showNavbar={false}
+            mainViewStyle={{
+                backgroundColor: theme.secondColor
+            }}>
             
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -135,6 +136,7 @@ export const LoginScreen = (props) => {
                             <MyTextInput
                                 value={password}
                                 setValue={setPassword}
+                                secureText
                                 placeholder={"Parola"}/>
 
                             <MyButton
@@ -146,13 +148,10 @@ export const LoginScreen = (props) => {
                                     alignItems: "center"
                                 }}/>
 
-                            <TouchableOpacity
-                                onPress={() => navigate("SignUp")}>
+                            <TouchableOpacity onPress={() => navigate("SignUp")}>
 
                                 <Text
-                                    style={{
-                                        color: "white",
-                                    }}>
+                                    style={{ color: "white" }}>
 
                                     Hesabın yok mu? Hesap Oluştur!
 

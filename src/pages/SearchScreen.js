@@ -1,22 +1,16 @@
-import {MyMainLayout} from "../components/MainLayout/MyMainLayout";
-import {
-    FlatList,
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-    Text,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    View
-} from "react-native";
-import {MyTextInput} from "../components/Input/MyTextInput";
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import React, {useContext, useEffect, useState} from "react";
-import {heightPercentageToDP as hp} from "react-native-responsive-screen";
-import {GetUserInfoByUsername} from "../helper/functions/firebase/Firestore";
-import {MyUserItem} from "../components/MyUserItem";
-import {ThemeContext} from "../contexts/ThemeContext";
-import {MyActivityIndicator} from "../components/MyActivityIndicator";
+import {
+    FlatList, Keyboard, KeyboardAvoidingView, View,
+    Platform, Text, TouchableOpacity, TouchableWithoutFeedback,
+} from "react-native";
+import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
+import { MyTextInput } from "../components/Input/MyTextInput";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { GetUserInfoByUsername } from "../helper/functions/firebase/Firestore";
+import { MyUserItem } from "../components/MyUserItem";
+import { ThemeContext } from "../contexts/ThemeContext";
+import { MyActivityIndicator } from "../components/MyActivityIndicator";
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 export const SearchScreen = ({ navigation }) => {
     
@@ -27,9 +21,6 @@ export const SearchScreen = ({ navigation }) => {
     const [isReady, setIsReady] = useState(true);
     const [showUserNotFound, setShowUserNotFound] = useState(false);
     
-    // bottom tab navigator ile sayfa geçişlerince useEffect'in return
-    // fonksiyonunu çalıştırmak için dependencies listesine
-    // navigation eklendi
     useEffect(() => {
         return(() => {
             setSearchResultList([]);
@@ -47,9 +38,7 @@ export const SearchScreen = ({ navigation }) => {
             .then((userInfo) => {
                 setSearchResultList(current => [...current, userInfo]);
             })
-            .catch(() => {
-                setShowUserNotFound(true);
-            })
+            .catch(() => setShowUserNotFound(true))
             .finally(() => setIsReady(true))
     }
     
@@ -136,6 +125,7 @@ export const SearchScreen = ({ navigation }) => {
                                 <FlatList
                                     overScrollMode={"never"}
                                     data={searchResultList}
+                                    keyExtractor={(item, index) => item}
                                     renderItem={({item}) => {
                                         return(
                                             <MyUserItem
@@ -145,8 +135,7 @@ export const SearchScreen = ({ navigation }) => {
                                                     setSearchResultList([]);
                                                 }}/>
                                         )
-                                    }}
-                                    keyExtractor={(item, index) => item}/>
+                                    }}/>
                                 
                                 :
                                 

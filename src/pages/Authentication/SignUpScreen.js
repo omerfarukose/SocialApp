@@ -1,13 +1,6 @@
 import {
-    Image,
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-    SafeAreaView,
-    Text,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    View,
+    Image, Keyboard, KeyboardAvoidingView,  Platform,
+    SafeAreaView, Text, TouchableOpacity, TouchableWithoutFeedback, View,
 } from "react-native";
 import { useContext, useState } from "react";
 import { MyTextInput } from "../../components/Input/MyTextInput";
@@ -18,12 +11,11 @@ import { validateEmail } from "../../helper/functions/MyHelperFunctions";
 import { CreateUser } from "../../helper/functions/firebase/Firestore";
 import { SignUp } from "../../helper/functions/firebase/Auth";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import {widthPercentageToDP as wp} from "react-native-responsive-screen";
+import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 
 export const SignUpScreen = ( ) => {
 
     let { theme } = useContext(ThemeContext);
-
 
     const [myUsername, setMyUsername] = useState("");
     const [email, setEmail] = useState("");

@@ -21,9 +21,7 @@ export const SettingsScreen = ( ) => {
 
     const _handleLogout = ( ) => {
         Logout()
-            .then(() => {
-                navigate("Login");
-            })
+            .then(() => navigate("Login"))
     }
 
     return(

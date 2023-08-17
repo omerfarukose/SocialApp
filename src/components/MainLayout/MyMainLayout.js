@@ -7,13 +7,14 @@ export const MyMainLayout = ( props ) => {
 
     let { theme } = useContext(ThemeContext);
 
-    let { showGoBack, showLogout, showSettings, layoutStyle, showNavbar = true } = props;
+    let { showGoBack, showLogout, showSettings, layoutStyle, mainViewStyle, showNavbar = true } = props;
 
     return(
         <SafeAreaView
             style={{
                 flex: 1,
                 backgroundColor: theme.mainColor,
+                ...mainViewStyle
             }}>
 
             <StatusBar

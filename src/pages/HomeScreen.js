@@ -1,10 +1,10 @@
+import React, { useCallback, useEffect, useState } from "react";
 import { MyCardView } from "../components/MyCardView";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
-import React, { useCallback, useEffect, useState } from "react";
-import {FlatList, RefreshControl} from "react-native";
+import { FlatList, RefreshControl } from "react-native";
 import { GetAllPosts } from "../helper/functions/firebase/Firestore";
 import { MyActivityIndicator } from "../components/MyActivityIndicator";
-import {MyNoDataView} from "../components/MyNoDataView";
+import { MyNoDataView } from "../components/MyNoDataView";
 
 export const HomeScreen = () => {
 
