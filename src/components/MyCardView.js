@@ -1,12 +1,13 @@
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import {Image, Modal, Text, TouchableOpacity, View} from "react-native";
 import { MyIconButton } from "./MyIconButton";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {GetPostDataById, GetUserInfoById, HandleLike, HandleRepost} from "../helper/functions/firebase/Firestore";
 import { navigate } from "../pages/Router/RootNavigation";
 import { ThemeContext } from "../contexts/ThemeContext";
 import {UserContext} from "../contexts/UserContext";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import {_calculateTime} from "../helper/functions/MyHelperFunctions";
+import {MyButton} from "./MyButton";
 
 export const MyCardView = ( props ) => {
 
@@ -22,6 +23,7 @@ export const MyCardView = ( props ) => {
     const [isLiked, setIsLiked] = useState(false);
     const [isPosted, setIsPosted] = useState(false);
     const [time, setTime] = useState("");
+    const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     
     useEffect(() => {
         
@@ -61,25 +63,9 @@ export const MyCardView = ( props ) => {
         }
 
     }
-    
-    const _handlePostDetailNavigation = ( ) => {
-        
-        let data = {
-            text: cardText,
-            time: time,
-            username: username,
-            avatar: avatarUri,
-            isLiked: isLiked,
-            isPosted: isPosted,
-            userId: userId
-        }
-        
-        navigate("PostDetail", {postData: data, omer: "omer"})
-    }
 
     return(
-        <TouchableOpacity
-            onPress={() => _handlePostDetailNavigation()}
+        <View
             style={{
                 padding: wp(5),
                 borderBottomWidth: 1,
@@ -129,7 +115,7 @@ export const MyCardView = ( props ) => {
                         color: theme.textColor
                     }}>
                     
-                    {time}
+                    {"1 saat önce"}
                 
                 </Text>
             
@@ -165,22 +151,111 @@ export const MyCardView = ( props ) => {
                     alignSelf: "center",
                     flexDirection: "row",
                     alignItems: "center",
-                    justifyContent: "flex-end",
-                    gap: wp(15),
+                    justifyContent: "space-between",
                 }}>
                 
-                <MyIconButton
-                    onPress={() => _handleIconPress("repost")}
-                    iconColor={isPosted ? theme.secondColor : "gray"}
-                    iconName={"retweet"}/>
+                <View>
+                    {
+                        userPosts.includes(postId) &&
+                        <MyIconButton
+                            onPress={() => setIsDeleteModalVisible(true)}
+                            iconColor={isPosted ? theme.secondColor : "gray"}
+                            iconName={"trash"}/>
+                    }
+                </View>
                 
-                <MyIconButton
-                    onPress={() => _handleIconPress("like")}
-                    iconColor={isLiked ? "red" : "gray"}
-                    iconName={"heart"}/>
-            
+                <View
+                    style={{
+                        flexDirection: "row",
+                        gap: wp(15)
+                    }}>
+                    
+                    <MyIconButton
+                        onPress={() => _handleIconPress("repost")}
+                        iconColor={isPosted ? theme.secondColor : "gray"}
+                        iconName={"retweet"}/>
+                    
+                    <MyIconButton
+                        onPress={() => _handleIconPress("like")}
+                        iconColor={isLiked ? "red" : "gray"}
+                        iconName={"heart"}/>
+                    
+                </View>
+                
             </View>
+            
+            <Modal
+                transparent={true}
+                visible={isDeleteModalVisible}>
+                
+                <View
+                    style={{
+                        flex: 1,
+                        backgroundColor: 'rgba(52, 52, 52, 0.9)', // transparent background
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}>
+                    
+                    {/*modal view*/}
+                    <View
+                        style={{
+                            width: wp(90),
+                            height: hp(40),
+                            justifyContent: "space-evenly",
+                            alignSelf: "center",
+                            borderRadius: 20,
+                            backgroundColor: "white",
+                            borderColor: "#eceff1",
+                            borderWidth: 1
+                        }}>
+                        
+                        {/*close button*/}
+                        <MyIconButton
+                            onPress={() => setIsDeleteModalVisible(false)}
+                            iconName={"times-circle"}
+                            iconSize={wp(6)}
+                            style={{
+                                position: "absolute",
+                                top: 10,
+                                right: 10,
+                            }}/>
+                        
+                        <Text
+                            style={{
+                                textAlign: "center",
+                                color: "black",
+                                fontSize: hp(2.4),
+                            }}>
+                            
+                            Postu silmek istediğinden emin misin ?
+                            
+                        </Text>
+                        
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                justifyContent: "space-evenly",
+                            }}>
+                            
+                            <MyButton
+                                title={"İptal"}
+                                onPress={() => setIsDeleteModalVisible(false)}/>
+                            
+                            <MyButton
+                                title={"Sil"}
+                                color={"red"}
+                                onPress={() => {
+                                    // TODO: handle firebase delete post
+                                }}/>
+                            
+                        </View>
+                        
+                    </View>
+                    
+                </View>
+                
+            </Modal>
 
-        </TouchableOpacity>
+        </View>
     )
 }
