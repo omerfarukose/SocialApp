@@ -6,7 +6,7 @@ import { GetAllPosts } from "../helper/functions/firebase/Firestore";
 import { MyActivityIndicator } from "../components/MyActivityIndicator";
 import {MyNoDataView} from "../components/MyNoDataView";
 
-export const HomeScreen = (props) => {
+export const HomeScreen = () => {
 
     const [postList, setPostList] =  useState([]);
     const [isReady, setIsReady] = useState(false);
@@ -15,7 +15,7 @@ export const HomeScreen = (props) => {
     useEffect(() => {
         // get all posts
         _getPosts();
-    }, [props])
+    }, [])
     
     const _getPosts = ( ) => {
         GetAllPosts()

@@ -7,7 +7,7 @@ export const MyMainLayout = ( props ) => {
 
     let { theme } = useContext(ThemeContext);
 
-    let { showGoBack, showLogout, showSettings, layoutStyle } = props;
+    let { showGoBack, showLogout, showSettings, layoutStyle, showNavbar = true } = props;
 
     return(
         <SafeAreaView
@@ -22,8 +22,11 @@ export const MyMainLayout = ( props ) => {
                 barStyle={"light-content"}
                 showHideTransition={"fade"}
                 hidden={false}/>
-
-            <MyNavbar showGoBack={showGoBack} showSettings={showSettings} showLogout={showLogout}/>
+            
+            {
+                showNavbar &&
+                <MyNavbar showGoBack={showGoBack} showSettings={showSettings} showLogout={showLogout}/>
+            }
 
             <View
                 style={{

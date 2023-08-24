@@ -2,7 +2,7 @@ import {
     Image, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, Text,
     TouchableOpacity, TouchableWithoutFeedback, View,
 } from "react-native";
-import { useContext, useState } from "react";
+import {useContext, useEffect, useState} from "react";
 import { MyButton } from "../../components/MyButton";
 import { MyTextInput } from "../../components/Input/MyTextInput";
 import Toast from 'react-native-toast-message';
@@ -14,12 +14,16 @@ import { ThemeContext } from "../../contexts/ThemeContext";
 import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 import SyncStorage from 'sync-storage';
 import {UserContext} from "../../contexts/UserContext";
+import {MyMainLayout} from "../../components/MainLayout/MyMainLayout";
 
-export const LoginScreen = ({navigation}) => {
-
+export const LoginScreen = (props) => {
+    
+    // contexts
     let { theme } = useContext(ThemeContext);
+    
     let { setUserAvatar, setUserLikes, setUserPosts } = useContext(UserContext);
 
+    // states
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -80,7 +84,7 @@ export const LoginScreen = ({navigation}) => {
                     // sign in
                     _signIn(userInfo.email);
                 })
-                .catch(() => {
+                .catch((error) => {
                     // show username alert !
                     showToast("Kullanıcı Bulunamadı");
                 })
@@ -90,15 +94,14 @@ export const LoginScreen = ({navigation}) => {
     }
 
     return(
-        <SafeAreaView
-            style={{
-                flex: 1,
-                backgroundColor: theme.secondColor,
-            }}>
-
+        <MyMainLayout showNavbar={false}>
+            
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={{ flex: 1 }}>
+                style={{
+                    flex: 1,
+                    backgroundColor: theme.secondColor,
+                }}>
 
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
@@ -144,7 +147,7 @@ export const LoginScreen = ({navigation}) => {
                                 }}/>
 
                             <TouchableOpacity
-                                onPress={() => navigation.navigate("SignUp")}>
+                                onPress={() => navigate("SignUp")}>
 
                                 <Text
                                     style={{
@@ -164,7 +167,7 @@ export const LoginScreen = ({navigation}) => {
                 </TouchableWithoutFeedback>
 
             </KeyboardAvoidingView>
-
-        </SafeAreaView>
+        
+        </MyMainLayout>
     )
 }
