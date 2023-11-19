@@ -6,6 +6,7 @@ import { ThemeContextProvider } from "./src/contexts/ThemeContext";
 import {useEffect} from "react";
 import {LogBox} from "react-native";
 import moment from "moment";
+import { CommonContextProvider } from './src/contexts/CommonContext';
 
 export const App = ( ) => {
     
@@ -30,8 +31,10 @@ export const App = ( ) => {
     return(
         <ThemeContextProvider>
             <UserContextProvider>
-                <Router/>
-                <Toast config={toastConfig} />
+                <CommonContextProvider>
+                    <Router/>
+                    <Toast config={toastConfig} />
+                </CommonContextProvider>
             </UserContextProvider>
         </ThemeContextProvider>
     )

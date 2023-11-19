@@ -63,7 +63,7 @@ export const SearchScreen = ({ navigation }) => {
                                 margin: hp(2),
                                 alignItems: "center",
                                 borderColor: "gray",
-                                borderWidth: 1,
+                                borderBottomWidth: 0.5,
                                 borderRadius: 10
                             }}>
                             

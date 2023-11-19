@@ -2,6 +2,7 @@ import {SafeAreaView, StatusBar, View} from "react-native";
 import { MyNavbar } from "../MyNavbar";
 import React, {useContext} from "react";
 import {ThemeContext} from "../../contexts/ThemeContext";
+import { DeletePostModal } from "../Modal/DeletePostModal";
 
 export const MyMainLayout = ( props ) => {
 
@@ -42,7 +43,7 @@ export const MyMainLayout = ( props ) => {
 
             </View>
             
-            
+            <DeletePostModal/>
 
         </SafeAreaView>
     )

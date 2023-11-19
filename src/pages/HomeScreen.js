@@ -1,16 +1,20 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useContext } from "react";
 import { MyCardView } from "../components/MyCardView";
 import { MyMainLayout } from "../components/MainLayout/MyMainLayout";
 import { FlatList, RefreshControl } from "react-native";
 import { GetAllPosts } from "../helper/functions/firebase/Firestore";
 import { MyActivityIndicator } from "../components/MyActivityIndicator";
 import { MyNoDataView } from "../components/MyNoDataView";
+import { MyButton } from "../components/MyButton";
+import { CommonContext } from "../contexts/CommonContext";
 
 export const HomeScreen = () => {
 
     const [postList, setPostList] =  useState([]);
     const [isReady, setIsReady] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
+
+    let {setIsDeleteModalVisible} = useContext(CommonContext);
     
     useEffect(() => {
         // get all posts
@@ -38,6 +42,9 @@ export const HomeScreen = () => {
 
     return(
         <MyMainLayout>
+
+            <MyButton
+                onPress={() => setIsDeleteModalVisible(true)}/>
             
             {
                 isReady ?

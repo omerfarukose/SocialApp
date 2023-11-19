@@ -1,4 +1,4 @@
-import {Image, Modal, Text, TouchableOpacity, View} from "react-native";
+import {Image, Text, TouchableOpacity, View} from "react-native";
 import { MyIconButton } from "./MyIconButton";
 import React, { useContext, useEffect, useState } from "react";
 import {GetPostDataById, GetUserInfoById, HandleLike, HandleRepost} from "../helper/functions/firebase/Firestore";
@@ -7,7 +7,7 @@ import { ThemeContext } from "../contexts/ThemeContext";
 import {UserContext} from "../contexts/UserContext";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import {_calculateTime} from "../helper/functions/MyHelperFunctions";
-import {MyButton} from "./MyButton";
+import { CommonContext } from "../contexts/CommonContext";
 
 export const MyCardView = ( props ) => {
 
@@ -16,6 +16,8 @@ export const MyCardView = ( props ) => {
     let { theme } = useContext(ThemeContext);
     let { userPosts, userLikes } = useContext(UserContext);
 
+    let {setIsDeleteModalVisible} = useContext(CommonContext);
+
     const [userId,setUserId] = useState("");
     const [username, setUsername] = useState("");
     const [avatarUri, setAvatarUri] = useState("https://cdn-icons-png.flaticon.com/512/149/149071.png");
@@ -23,7 +25,6 @@ export const MyCardView = ( props ) => {
     const [isLiked, setIsLiked] = useState(false);
     const [isPosted, setIsPosted] = useState(false);
     const [time, setTime] = useState("");
-    const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     
     useEffect(() => {
         
@@ -115,7 +116,7 @@ export const MyCardView = ( props ) => {
                         color: theme.textColor
                     }}>
                     
-                    {"1 saat önce"}
+                    {time}
                 
                 </Text>
             
@@ -127,6 +128,7 @@ export const MyCardView = ( props ) => {
                     marginVertical: hp(2),
                     minHeight: hp(8),
                 }}>
+                    
                 
                 <Text
                     style={{
@@ -183,78 +185,6 @@ export const MyCardView = ( props ) => {
                 </View>
                 
             </View>
-            
-            <Modal
-                transparent={true}
-                visible={isDeleteModalVisible}>
-                
-                <View
-                    style={{
-                        flex: 1,
-                        backgroundColor: 'rgba(52, 52, 52, 0.9)', // transparent background
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}>
-                    
-                    {/*modal view*/}
-                    <View
-                        style={{
-                            width: wp(90),
-                            height: hp(40),
-                            justifyContent: "space-evenly",
-                            alignSelf: "center",
-                            borderRadius: 20,
-                            backgroundColor: "white",
-                            borderColor: "#eceff1",
-                            borderWidth: 1
-                        }}>
-                        
-                        {/*close button*/}
-                        <MyIconButton
-                            onPress={() => setIsDeleteModalVisible(false)}
-                            iconName={"times-circle"}
-                            iconSize={wp(6)}
-                            style={{
-                                position: "absolute",
-                                top: 10,
-                                right: 10,
-                            }}/>
-                        
-                        <Text
-                            style={{
-                                textAlign: "center",
-                                color: "black",
-                                fontSize: hp(2.4),
-                            }}>
-                            
-                            Postu silmek istediğinden emin misin ?
-                            
-                        </Text>
-                        
-                        <View
-                            style={{
-                                flexDirection: "row",
-                                justifyContent: "space-evenly",
-                            }}>
-                            
-                            <MyButton
-                                title={"İptal"}
-                                onPress={() => setIsDeleteModalVisible(false)}/>
-                            
-                            <MyButton
-                                title={"Sil"}
-                                color={"red"}
-                                onPress={() => {
-                                    // TODO: handle firebase delete post
-                                }}/>
-                            
-                        </View>
-                        
-                    </View>
-                    
-                </View>
-                
-            </Modal>
 
         </View>
     )

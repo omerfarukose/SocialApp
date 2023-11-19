@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import {
-    FlatList, Image, Modal, RefreshControl, 
-    ScrollView, Text,  TouchableOpacity, View
+    FlatList, Image, Keyboard, KeyboardAvoidingView, RefreshControl, 
+    ScrollView, Text,  TouchableOpacity, TouchableWithoutFeedback, View
 } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { navigate } from "./Router/RootNavigation";
@@ -15,18 +15,21 @@ import { MyButton } from "../components/MyButton";
 import { MyTextInput } from "../components/Input/MyTextInput";
 import * as ImagePicker from 'react-native-image-picker';
 import Icon from "react-native-vector-icons/FontAwesome5";
+import Feather from "react-native-vector-icons/Feather";
+import Modal from "react-native-modal";
 
 export const ProfileScreen = (props) => {
 
     let { theme } = useContext(ThemeContext);
 
+    const [bio, setBio] = useState("")
     const [username, setUsername] = useState("")
     const [avatarUrl, setAvatarUrl] = useState("https://cdn-icons-png.flaticon.com/512/1053/1053244.png");
     const [followerList, setFollowerList] = useState([]);
     const [followingList, setFollowingList] = useState([]);
     const [postList, setPostList] = useState([]);
     const [likeList, setLikeList] = useState([]);
-    const [isImageModalVisible, setIsImageModalVisible] = useState(false);
+    const [isImageModalVisible, setIsImageModalVisible] = useState(true);
     const [isReady, setIsReady] = useState(false);
     const [postsSelected, setPostSelected] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
@@ -309,156 +312,192 @@ export const ProfileScreen = (props) => {
                     <MyActivityIndicator/>
                     
             }
-            
+
+            {/* banner modal */}
             <Modal
-                transparent={true}
-                visible={isProfileImageVisible}>
-                
-                {/*full screen view*/}
-                <View
-                    style={{
-                        flex: 1,
-                        backgroundColor: 'rgba(52, 52, 52, 0.9)' // transparent background
-                    }}>
-                    
-                    <TouchableOpacity
-                        onPress={() => setIsProfileImageVisible(false)}
-                        style={{
-                            flex: 1,
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}>
-                        
-                        <Image
-                            source={{uri: avatarUrl}}
-                            style={{
-                                width: wp(100),
-                                height: wp(100),
-                                borderWidth: 2,
-                                borderColor: theme.mainColor
-                            }}/>
-                        
-                    </TouchableOpacity>
-                    
-                </View>
-                
+                isVisible={false}
+                onBackdropPress={() => setIsImageModalVisible(false)}
+                onSwipeComplete={() => setIsImageModalVisible(false)}
+                swipeDirection="down"
+                propagateSwipe
+                swipeThreshold={100}
+                backdropOpacity={0.4}
+                style={{
+                    justifyContent: 'flex-end',
+                    margin: 0,
+                }}>
+
             </Modal>
 
             <Modal
-                transparent={true}
-                visible={isImageModalVisible}>
+                isVisible={false}
+                onBackdropPress={() => setIsImageModalVisible(false)}
+                onSwipeComplete={() => setIsImageModalVisible(false)}
+                swipeDirection="down"
+                propagateSwipe
+                swipeThreshold={100}
+                backdropOpacity={0.4}
+                style={{
+                    justifyContent: 'flex-end',
+                    margin: 0,
+                }}>
 
-                {/*full screen view*/}
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    style={{ flex: 1}}>
+
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+
+                {/*modal view*/}
                 <View
                     style={{
-                        flex: 1,
+                        width: wp(100),
+                        height: hp(75),
                         alignItems: "center",
-                        justifyContent: "center",
-                        backgroundColor: 'rgba(52, 52, 52, 0.4)' // transparent background
+                        borderRadius: 20,
+                        backgroundColor: "white",
+                        borderColor: "#eceff1",
+                        borderWidth: 1,
                     }}>
-
-                    {/*modal view*/}
+                        
+                    {/* swipe line */}
                     <View
                         style={{
-                            width: wp(90),
-                            height: hp(70),
-                            justifyContent: "space-evenly",
-                            alignSelf: "center",
-                            borderRadius: 20,
-                            backgroundColor: "white",
-                            borderColor: "#eceff1",
-                            borderWidth: 1
+                            backgroundColor: theme.mainColor,
+                            height: hp(3),
+                            width: "100%",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderTopRightRadius: 20,
+                            borderTopLeftRadius: 20,
                         }}>
-                        
-                        {/*close button*/}
-                        <MyIconButton
-                            onPress={() => setIsImageModalVisible(false)}
-                            iconName={"times-circle"}
-                            iconSize={wp(6)}
+
+                        {/* line */}
+                        <View
                             style={{
-                                position: "absolute",
-                                top: 10,
-                                right: 10,
+                                width: "30%",
+                                height: 5,
+                                backgroundColor: "white",
+                                borderRadius: 100
+                            }}/>
+
+                    </View>
+
+                    {/* banner */}
+                    <TouchableOpacity
+                        onPress={() => chooseFile()}
+                        style={{
+                            alignItems: "center",
+                            justifyContent: "center"
+                        }}>
+
+                        <Image
+                            source={require("../assets/images/banner.jpg")}
+                            style={{
+                                alignSelf: "center",
+                                width: wp(100),
+                                height: wp(40),
                             }}/>
                         
-                        {/*profile image*/}
-                        <TouchableOpacity
-                            onPress={() => chooseFile()}>
-                            
-                            <Image
-                                source={require("../assets/images/banner.jpg")}
-                                style={{
-                                    width: "100%",
-                                    height: wp(40),
-                                    alignSelf: "center"
-                                }}/>
-                            
-                        </TouchableOpacity>
+                    </TouchableOpacity>
 
-                        {/*profile image*/}
-                        
-                        <TouchableOpacity
-                            onPress={() => chooseFile()}>
-                            
-                            <Image
-                                source={{uri: newAvatar}}
-                                style={{
-                                    width: wp(30),
-                                    height: wp(30),
-                                    borderRadius: hp(2),
-                                    borderWidth: 2,
-                                    borderColor: theme.mainColor,
-                                    alignSelf: "center"
-                                }}/>
-                            
-                        </TouchableOpacity>
-                        
-                        <View
+                    {/* profile image */}
+                    <TouchableOpacity
+                        onPress={() => chooseFile()}
+                        style={{
+                            alignItems: "center",
+                            justifyContent: "center",
+                            marginTop: -wp(10)
+                        }}>
+
+                        <Image
+                            source={{uri: newAvatar}}
                             style={{
-                                flexDirection: "row",
-                                alignItems: "center",
-                                paddingHorizontal: wp(5),
+                                width: wp(30),
+                                height: wp(30),
+                                borderRadius: 100,
+                                borderWidth: 2,
+                                borderColor: theme.mainColor,
+                                alignSelf: "center"
+                            }}/>
+                        
+                    </TouchableOpacity>
+
+                    {/* username */}
+                    <View 
+                        style={{
+                            height: hp(25),
+                            justifyContent: "space-evenly"
+                        }}>
+
+                        <View
+                        style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            borderBottomWidth: 0.3,
+                            justifyContent: "space-between",
+                            width: wp(75)
+                        }}>
+                        
+                        <Text
+                            style={{
+                                fontWeight: "bold",
+                                fontSize: hp(2)
                             }}>
                             
-                            <Text
-                                style={{
-                                    fontWeight: "bold",
-                                    fontSize: hp(2)
-                                }}>
-                                
-                                Kullanıcı Adı
-                                
-                            </Text>
+                            Kullanıcı Adı
                             
-                            <MyTextInput
-                                placeholder={username}
-                                value={newUsername}
-                                setValue={setNewUsername}
-                                inputStyle={{
-                                    width: wp(50)
-                                }}/>
-                            
-                        </View>
+                        </Text>
                         
-                        <View
+                        <MyTextInput
+                            placeholder={username}
+                            value={newUsername}
+                            setValue={setNewUsername}
+                            inputStyle={{
+                                width: wp(50)
+                            }}/>
+                        
+                    </View>
+
+                    {/* bio */}
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            borderBottomWidth: 0.3,
+                            justifyContent: "space-between",
+                            width: wp(75),
+                        }}>
+                        
+                        <Text
                             style={{
-                                flexDirection: "row",
-                                width: wp(50),
-                                alignSelf: "center",
-                                justifyContent: "space-evenly",
+                                fontWeight: "bold",
+                                fontSize: hp(2)
                             }}>
                             
-                            <MyButton
-                                title={"Kaydet"}
-                                onPress={() => _updateProfile()}/>
+                            Biyografi
                             
-                        </View>
+                        </Text>
                         
+                        <MyTextInput
+                            placeholder={"Biyografi"}
+                            value={bio}
+                            setValue={setBio}
+                            inputStyle={{
+                                width: wp(50)
+                            }}/>
+                        
+                    </View>
+
                     </View>
 
                 </View>
 
-            </Modal>
+                </TouchableWithoutFeedback>
+
+    </KeyboardAvoidingView>
+            
+        </Modal>
 
         </MyMainLayout>
     )

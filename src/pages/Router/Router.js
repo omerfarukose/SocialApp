@@ -104,24 +104,24 @@ export const Router = ( ) => {
                         height: Platform.OS === "ios" ? hp(9) : hp(6.3),
 
                     },
-                })}>
+                })}>""
 
                 <Tab.Screen
                     listeners={({ navigation }) => ({tabPress: e => {onTabPress("Home")}})}
                     name="HomeStack"
                     component={HomeStack}/>
-                
-                <Tab.Screen name="Search" component={SearchScreen}/>
 
+                <Tab.Screen name="Search" component={SearchScreen}/>
+                
                 <Tab.Screen name="AddPost" component={AddPostScreen}/>
-                
+
                 <Tab.Screen name="Notifications" component={NotificationsScreen}/>
-                
+
                 <Tab.Screen
                     listeners={({ navigation }) => ({tabPress: e => {onTabPress("Profile")}})}
                     name="ProfileStack" 
                     component={ProfileStack}/>
-
+                
             </Tab.Navigator>
         )
     }
@@ -163,7 +163,7 @@ export const Router = ( ) => {
             ref={navigationRef}>
 
             <Stack.Navigator
-                initialRouteName={currentUser ? "HomeTabs" : "Login"}
+                initialRouteName={currentUser ? "HomeTabs" : "HomeTabs"}
                 screenOptions={{ headerShown: false }}>
 
                 <Stack.Screen name={"HomeTabs"} component={HomeTabs}/>
